@@ -24,7 +24,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   body { background: var(--bg); color: var(--text); padding-bottom: 40px; -webkit-tap-highlight-color: transparent; }
 
-  /* Header & DPA Counter */
   header {
     background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
     padding: 16px;
@@ -53,7 +52,6 @@
   .dot.used { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
   .dpa-count { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
 
-  /* Map Container */
   .map-section { padding: 12px 16px 0; }
   .map-wrapper {
     background: #131c31;
@@ -65,7 +63,6 @@
   }
   svg { width: 100%; height: auto; display: block; touch-action: manipulation; }
   
-  /* SVG Animations */
   @keyframes dashMove { to { stroke-dashoffset: -24; } }
   .nav-route {
     stroke: #38bdf8;
@@ -83,7 +80,6 @@
   .pin-group { cursor: pointer; transition: transform 0.2s; }
   .pin-group:hover { transform: scale(1.1); }
 
-  /* Navigation Instruction Banner */
   .nav-banner {
     margin: 12px 16px;
     background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
@@ -102,7 +98,6 @@
   .dir-arrow { font-size: 1.3rem; line-height: 1; }
   .nav-tip { font-size: 0.8rem; color: #e0f2fe; margin-top: 8px; }
 
-  /* Timeline List */
   .timeline { padding: 4px 16px; }
   .phase-title {
     font-size: 0.8rem;
@@ -178,64 +173,46 @@
 <div class="map-section">
   <div class="map-wrapper">
     <svg id="parkMap" viewBox="0 0 400 320">
-      <!-- Background Land & Pathways -->
       <rect width="400" height="320" fill="#0f172a"/>
       
-      <!-- Zone Polygons -->
-      <!-- World of Frozen (Top Left) -->
       <path d="M 15,15 L 155,15 L 145,95 L 25,95 Z" fill="#1e3a8a" opacity="0.45" stroke="#3b82f6" stroke-width="1"/>
       <text x="85" y="30" fill="#93c5fd" font-size="9" font-weight="bold" text-anchor="middle">WORLD OF FROZEN</text>
 
-      <!-- Fantasyland (Top Center) -->
       <path d="M 160,15 L 275,15 L 265,115 L 150,115 Z" fill="#581c87" opacity="0.45" stroke="#a855f7" stroke-width="1"/>
       <text x="215" y="30" fill="#d8b4fe" font-size="9" font-weight="bold" text-anchor="middle">FANTASYLAND</text>
 
-      <!-- Tomorrowland (Right) -->
       <path d="M 280,55 L 385,55 L 385,215 L 265,205 Z" fill="#0e7490" opacity="0.45" stroke="#06b6d4" stroke-width="1"/>
       <text x="332" y="72" fill="#67e8f9" font-size="9" font-weight="bold" text-anchor="middle">TOMORROWLAND</text>
 
-      <!-- Toy Story Land (Mid Left) -->
       <path d="M 15,102 L 125,102 L 125,170 L 15,170 Z" fill="#9a3412" opacity="0.45" stroke="#f97316" stroke-width="1"/>
       <text x="70" y="116" fill="#fdba74" font-size="8.5" font-weight="bold" text-anchor="middle">TOY STORY LAND</text>
 
-      <!-- Mystic Point (Lower Left) -->
       <path d="M 15,176 L 115,176 L 115,232 L 15,232 Z" fill="#3f6212" opacity="0.45" stroke="#84cc16" stroke-width="1"/>
       <text x="65" y="190" fill="#bef264" font-size="8.5" font-weight="bold" text-anchor="middle">MYSTIC POINT</text>
 
-      <!-- Grizzly Gulch (Bottom Left) -->
       <path d="M 15,238 L 130,238 L 130,305 L 15,305 Z" fill="#78350f" opacity="0.5" stroke="#d97706" stroke-width="1"/>
       <text x="72" y="252" fill="#fcd34d" font-size="8.5" font-weight="bold" text-anchor="middle">GRIZZLY GULCH</text>
 
-      <!-- Adventureland (Bottom Center-Left) -->
       <path d="M 136,180 L 210,180 L 210,275 L 136,275 Z" fill="#065f46" opacity="0.45" stroke="#10b981" stroke-width="1"/>
-      <text x="173" y="195" fill="#6ee7b7" font-size="8" font-weight="bold" text-anchor="middle">ADVENTURE</text>
+      <text x="173" y="195" fill="#6ee7b7" font-size="8.5" font-weight="bold" text-anchor="middle">ADVENTURE</text>
 
-      <!-- Castle Hub & Main Street (Center to Bottom) -->
       <circle cx="215" cy="148" r="24" fill="#be185d" opacity="0.5" stroke="#f472b6" stroke-width="1.5"/>
       <text x="215" y="151" fill="#fbcfe8" font-size="8" font-weight="bold" text-anchor="middle">CASTLE</text>
       <rect x="198" y="176" width="34" height="125" rx="6" fill="#334155" opacity="0.7" stroke="#64748b" stroke-width="1"/>
       <text x="215" y="245" fill="#cbd5e1" font-size="8" font-weight="bold" text-anchor="middle" transform="rotate(-90 215,245)">MAIN STREET U.S.A.</text>
 
-      <!-- Entrance Gate -->
       <rect x="180" y="302" width="70" height="14" rx="4" fill="#ef4444"/>
       <text x="215" y="312" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">ทางเข้า / ออก (GATE)</text>
 
-      <!-- Main Walking Paths -->
       <path d="M 215,302 L 215,172 M 215,148 L 115,65 M 215,148 L 215,75 M 215,148 L 315,130 M 215,148 L 105,140 M 105,140 L 85,205 L 85,270 M 215,172 L 173,225" stroke="#475569" stroke-width="2" fill="none" opacity="0.6"/>
 
-      <!-- Dynamic Route Layer -->
       <g id="routeLayer"></g>
-
-      <!-- Pins Layer -->
       <g id="pinsLayer"></g>
     </svg>
   </div>
 </div>
 
-<!-- Active Step Navigation Card -->
 <div class="nav-banner" id="navBanner"></div>
-
-<!-- Full Itinerary -->
 <div class="timeline" id="timelineContainer"></div>
 
 <script>
@@ -382,7 +359,6 @@ function toggleDone(e, id) {
     completedIds = completedIds.filter(item => item !== id);
   } else {
     completedIds.push(id);
-    // Auto advance to next uncompleted step
     const nextStep = itinerary.find(item => item.id > id && !completedIds.includes(item.id));
     if (nextStep) selectedId = nextStep.id;
   }
@@ -428,7 +404,6 @@ function renderMap() {
   const currentStep = itinerary[currentIdx];
   const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 215, y: 302 };
 
-  // Draw animated navigation path from previous point to selected point
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   line.setAttribute("x1", prevStep.x);
   line.setAttribute("y1", prevStep.y);
@@ -437,7 +412,6 @@ function renderMap() {
   line.setAttribute("class", "nav-route");
   routeLayer.appendChild(line);
 
-  // Draw directional arrowhead near target
   const angle = Math.atan2(currentStep.y - prevStep.y, currentStep.x - prevStep.x);
   const arrowDist = 14;
   const ax = currentStep.x - Math.cos(angle) * arrowDist;
@@ -450,7 +424,6 @@ function renderMap() {
   arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${deg})`);
   routeLayer.appendChild(arrow);
 
-  // Render all pins
   itinerary.forEach(item => {
     const isDone = completedIds.includes(item.id);
     const isSelected = item.id === selectedId;
@@ -472,8 +445,104 @@ function renderMap() {
     circle.setAttribute("cy", item.y);
     circle.setAttribute("r", isSelected ? "10" : "8");
     
-    let fill = "#38bdf8"; // std
+    let fill = "#38bdf8";
     if (item.type === 'dpa') fill = "#f59e0b";
     if (item.type === 'food') fill = "#10b981";
     if (isDone) fill = "#475569";
+
+    circle.setAttribute("fill", fill);
+    circle.setAttribute("stroke", isSelected ? "#ffffff" : "#0f172a");
+    circle.setAttribute("stroke-width", isSelected ? "2.5" : "1.5");
+    g.appendChild(circle);
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", item.x);
+    text.setAttribute("y", item.y + 3);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("font-size", "8.5");
+    text.setAttribute("font-weight", "bold");
+    text.setAttribute("fill", isDone ? "#94a3b8" : "#000000");
+    text.textContent = isDone ? "✓" : item.id;
+    g.appendChild(text);
+
+    pinsLayer.appendChild(g);
+  });
+}
+
+function renderBanner() {
+  const step = itinerary.find(i => i.id === selectedId);
+  const banner = document.getElementById('navBanner');
   
+  let badgeHtml = `<span class="nav-badge badge-std">ต่อคิวปกติ (Standby)</span>`;
+  if (step.type === 'dpa') {
+    badgeHtml = `<span class="nav-badge badge-dpa">⚡ ใช้บัตร Premier Access (สิทธิ์ที่ ${step.dpaNum}/8)</span>`;
+  } else if (step.type === 'food') {
+    badgeHtml = `<span class="nav-badge badge-std">🍽️ พักทานอาหาร</span>`;
+  }
+
+  banner.innerHTML = `
+    <div class="nav-header">
+      <span class="nav-time">⏰ ควรเข้าเวลา ${step.time}</span>
+      ${badgeHtml}
+    </div>
+    <div class="nav-title">${step.id}. ${step.name}</div>
+    <div class="nav-dir">
+      <span class="dir-arrow">${step.arrow}</span>
+      <span><strong>เส้นทางเดิน:</strong> ${step.direction}</span>
+    </div>
+    <div class="nav-tip">💡 ${step.note}</div>
+  `;
+}
+
+function renderTimeline() {
+  const container = document.getElementById('timelineContainer');
+  container.innerHTML = '';
+  let currentPhase = '';
+
+  itinerary.forEach(item => {
+    if (item.phase !== currentPhase) {
+      currentPhase = item.phase;
+      const pDiv = document.createElement('div');
+      pDiv.className = 'phase-title';
+      pDiv.innerHTML = `📍 ${currentPhase}`;
+      container.appendChild(pDiv);
+    }
+
+    const isDone = completedIds.includes(item.id);
+    const isSelected = item.id === selectedId;
+
+    let tagHtml = `<span class="tag-std">ต่อคิวปกติ</span>`;
+    if (item.type === 'dpa') tagHtml = `<span class="tag-dpa">⚡ Premier Access #${item.dpaNum}</span>`;
+    if (item.type === 'food') tagHtml = `<span class="tag-food">🍽️ พักกลางวัน</span>`;
+
+    const card = document.createElement('div');
+    card.className = `card ${isSelected ? 'selected' : ''} ${isDone ? 'done' : ''}`;
+    card.onclick = () => selectStep(item.id);
+
+    card.innerHTML = `
+      <div class="check-box" onclick="toggleDone(event, ${item.id})">✓</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="time-tag">${item.time} • ลำดับที่ ${item.id}</span>
+          ${tagHtml}
+        </div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-zone">โซน: ${item.zone}</div>
+        <div class="item-note">${item.note}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderAll() {
+  renderDPA();
+  renderMap();
+  renderBanner();
+  renderTimeline();
+}
+
+renderAll();
+</script>
+</body>
+</html>
