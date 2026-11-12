@@ -262,8 +262,8 @@
   <!-- ลิ้นชักเลือกเครื่องเล่น: เรียงปุ่ม แสดงทั้งหมด | 8 Premier | 3 คิวปกติ -->
   <div class="ride-drawer" id="rideDrawer">
     <div class="drawer-tabs">
-      <button class="drawer-tab-btn" id="tab-all" onclick="setDrawerTab('all')">แสดงทั้งหมด</button>
-      <button class="drawer-tab-btn tab-premier active" id="tab-premier" onclick="setDrawerTab('premier')">8 Premier</button>
+      <button class="drawer-tab-btn active" id="tab-all" onclick="setDrawerTab('all')">แสดงทั้งหมด</button>
+      <button class="drawer-tab-btn tab-premier" id="tab-premier" onclick="setDrawerTab('premier')">8 Premier</button>
       <button class="drawer-tab-btn" id="tab-normal" onclick="setDrawerTab('normal')">3 คิวปกติ</button>
     </div>
     <div class="ride-chips" id="rideChips"></div>
@@ -515,7 +515,6 @@ const itinerary = [
   }
 ];
 
-// รายชื่อชิปเครื่องเล่นสำหรับกดเลือก (8 Premier + 3 คิวปกติ)
 const rideChipCatalog = [
   // 8 Premier
   { key: "mystic", label: "👁️ Mystic Manor", group: "premier", defaultId: 5 },
@@ -545,7 +544,8 @@ const facilities = [
 let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
 let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
 let highlightedRideKeys = [];
-let drawerTab = 'premier'; // ค่าเริ่มต้นคือ 8 Premier
+let drawerTab = 'all';
+let isExploreMode = false; // โหมดสำรวจตำแหน่ง (ซ่อนเส้นปะสีแดงจนกว่าจะกดปุ่มแผนที่เพื่อกลับโหมดปกติ)
 let currentFilter = 'all';
 let showFacilities = false;
 let is3DMap = true;
@@ -561,8 +561,9 @@ function toggleTheme() {
   localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
 }
 
+// กดปุ่มแผนที่ 3D: หากอยู่ในโหมดสำรวจ/กรองจุด จะคืนค่า 14 จุดและแสดงเส้นปะกลับมาทันที
 function handleMapToggleBtn() {
-  if (currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideKeys.length > 0 || document.getElementById('rideDrawer').classList.contains('open')) {
+  if (isExploreMode || currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideKeys.length > 0 || document.getElementById('rideDrawer').classList.contains('open')) {
     document.getElementById('rideDrawer').classList.remove('open');
     document.getElementById('ridePickerBtn').classList.remove('active');
     clearHighlightRides();
@@ -584,25 +585,26 @@ function toggleFacilities() {
   layer.style.display = showFacilities ? 'block' : 'none';
 }
 
-// เปิด/ปิดลิ้นชักเลือกเครื่องเล่น (ทุกครั้งที่เปิดจะ Default ที่ 8 Premier เสมอ)
+// เปิด/ปิดลิ้นชักเลือกเครื่องเล่น: ไม่รีเซ็ตค่า Default และซ่อนเส้นปะทันที
 function toggleRideDrawer() {
   const drawer = document.getElementById('rideDrawer');
   const btn = document.getElementById('ridePickerBtn');
   const isOpen = drawer.classList.toggle('open');
+  
   if (isOpen) {
-    setDrawerTab('premier');
-  } else {
-    highlightedRideKeys = [];
-    setFilter('all');
-    renderMap();
+    isExploreMode = true; // เข้าโหมดสำรวจตำแหน่ง (เส้นปะหายไป)
   }
-  btn.classList.toggle('active', isOpen);
+  
+  // คงไฟปุ่มสีส้มไว้หากลิ้นชักเปิดอยู่ หรือยังอยู่ในโหมดสำรวจ/กรองเครื่องเล่น
+  btn.classList.toggle('active', isOpen || isExploreMode || highlightedRideKeys.length > 0 || drawerTab !== 'all');
+  renderMap();
 }
 
 // สลับแท็บภายในลิ้นชัก: แสดงทั้งหมด | 8 Premier | 3 คิวปกติ
 function setDrawerTab(tabName) {
   drawerTab = tabName;
-  highlightedRideKeys = []; // ล้างการเลือกเจาะจงรายตัวเมื่อเปลี่ยนหมวดหมู่
+  highlightedRideKeys = [];
+  isExploreMode = true;
 
   document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`tab-${tabName}`).classList.add('active');
@@ -619,8 +621,9 @@ function setDrawerTab(tabName) {
   renderMap();
 }
 
-// กดเลือกเครื่องเล่นรายตัว (เช่น Frozen จะเน้นทั้งรอบเช้าและรอบบ่ายพร้อมกัน)
+// กดเลือกเครื่องเล่นรายตัว
 function toggleHighlightRide(rideKey, defaultId) {
+  isExploreMode = true;
   const idx = highlightedRideKeys.indexOf(rideKey);
   if (idx === -1) {
     highlightedRideKeys.push(rideKey);
@@ -637,7 +640,6 @@ function toggleHighlightRide(rideKey, defaultId) {
     singleBtn.innerText = `🎯 เฉพาะที่เลือก (${highlightedRideKeys.length})`;
     singleBtn.classList.add('active');
   } else {
-    // ถ้ายกเลิกการเลือกหมด ให้กลับไปแสดงตามหมวดแท็บปัจจุบัน
     if (drawerTab === 'premier') setFilter('dpa');
     else if (drawerTab === 'normal') setFilter('normal');
     else setFilter('all');
@@ -649,9 +651,14 @@ function toggleHighlightRide(rideKey, defaultId) {
   renderTimeline();
 }
 
+// ล้างโหมดสำรวจ กลับสู่โหมดนำทางปกติครบ 14 จุด + แสดงเส้นปะสีแดง
 function clearHighlightRides() {
   highlightedRideKeys = [];
   drawerTab = 'all';
+  isExploreMode = false;
+  document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-all').classList.add('active');
+  document.getElementById('ridePickerBtn').classList.remove('active');
   setFilter('all');
   renderRideChips();
   renderMap();
@@ -844,9 +851,8 @@ function selectStep(id, fromMap = false) {
 
 function resetProgress() {
   if (confirm('⚠️ คำเตือน: ต้องการล้างข้อมูลที่ติ๊กไว้และสิทธิ์บัตร Premier Access ทั้งหมดใช่หรือไม่?')) {
-    completedIds = []; selectedId = 1; highlightedRideKeys = [];
+    completedIds = []; selectedId = 1;
     document.getElementById('rideDrawer').classList.remove('open');
-    document.getElementById('ridePickerBtn').classList.remove('active');
     saveState(); clearHighlightRides(); renderAll();
   }
 }
@@ -858,7 +864,7 @@ function renderRideChips() {
   const visibleChips = rideChipCatalog.filter(chip => {
     if (drawerTab === 'premier') return chip.group === 'premier';
     if (drawerTab === 'normal') return chip.group === 'normal';
-    return true; // แสดงทั้งหมดเรียง 8 Premier + 3 คิวปกติ
+    return true;
   });
 
   visibleChips.forEach(chip => {
@@ -911,47 +917,48 @@ function renderMap() {
   const currentStep = itinerary[currentIdx];
   const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 200, y: 232 };
 
-  const pathData = currentStep.routePath || `M ${prevStep.x},${prevStep.y} L ${currentStep.x},${currentStep.y}`;
-  const pathNode = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  pathNode.setAttribute("d", pathData);
-  pathNode.setAttribute("class", "nav-route");
-  routeLayer.appendChild(pathNode);
+  // วาดเส้นปะสีแดงเฉพาะเมื่อไม่ได้อยู่ในโหมดสำรวจตำแหน่งเครื่องเล่น
+  if (!isExploreMode) {
+    const pathData = currentStep.routePath || `M ${prevStep.x},${prevStep.y} L ${currentStep.x},${currentStep.y}`;
+    const pathNode = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathNode.setAttribute("d", pathData);
+    pathNode.setAttribute("class", "nav-route");
+    routeLayer.appendChild(pathNode);
 
-  const points = pathData.trim().split(/[ML\s]+/).filter(Boolean);
-  let arrowAngle = 0;
-  if (points.length >= 2) {
-    const prevPt = points[points.length - 2].split(',');
-    const currPt = points[points.length - 1].split(',');
-    const dx = parseFloat(currPt[0]) - parseFloat(prevPt[0]);
-    const dy = parseFloat(currPt[1]) - parseFloat(prevPt[1]);
-    arrowAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const points = pathData.trim().split(/[ML\s]+/).filter(Boolean);
+    let arrowAngle = 0;
+    if (points.length >= 2) {
+      const prevPt = points[points.length - 2].split(',');
+      const currPt = points[points.length - 1].split(',');
+      const dx = parseFloat(currPt[0]) - parseFloat(prevPt[0]);
+      const dy = parseFloat(currPt[1]) - parseFloat(prevPt[1]);
+      arrowAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+    }
+    
+    const arrowDist = 13;
+    const ax = currentStep.x - Math.cos(arrowAngle * Math.PI / 180) * arrowDist;
+    const ay = currentStep.y - Math.sin(arrowAngle * Math.PI / 180) * arrowDist;
+    
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    arrow.setAttribute("points", "-5,-4 5,0 -5,4");
+    arrow.setAttribute("fill", "#ef4444");
+    arrow.setAttribute("stroke", "#ffffff");
+    arrow.setAttribute("stroke-width", "0.8");
+    arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${arrowAngle})`);
+    routeLayer.appendChild(arrow);
   }
-  
-  const arrowDist = 13;
-  const ax = currentStep.x - Math.cos(arrowAngle * Math.PI / 180) * arrowDist;
-  const ay = currentStep.y - Math.sin(arrowAngle * Math.PI / 180) * arrowDist;
-  
-  const arrow = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-  arrow.setAttribute("points", "-5,-4 5,0 -5,4");
-  arrow.setAttribute("fill", "#ef4444");
-  arrow.setAttribute("stroke", "#ffffff");
-  arrow.setAttribute("stroke-width", "0.8");
-  arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${arrowAngle})`);
-  routeLayer.appendChild(arrow);
 
-  const isDrawerOpen = document.getElementById('rideDrawer').classList.contains('open');
   const hasSpecificRideSelected = highlightedRideKeys.length > 0;
 
-  // คำนวณว่าหมุดแต่ละตัวควรถูกเน้น (สว่างชัด) หรือจางลง
   const isItemActiveOnMap = (item) => {
     if (hasSpecificRideSelected) {
       return highlightedRideKeys.includes(item.rideKey);
     }
-    if (isDrawerOpen) {
-      if (drawerTab === 'premier') return item.rideGroup === 'premier'; // 8 Premier (9 หมุด รวม Frozen 2 รอบ)
-      if (drawerTab === 'normal') return item.rideGroup === 'normal';   // 3 คิวปกติ (3 หมุด)
+    if (isExploreMode) {
+      if (drawerTab === 'premier') return item.rideGroup === 'premier';
+      if (drawerTab === 'normal') return item.rideGroup === 'normal';
     }
-    return true; // แสดงทั้งหมดสว่างเท่ากัน
+    return true;
   };
 
   const sortedPins = [...itinerary].sort((a, b) => {
@@ -962,7 +969,7 @@ function renderMap() {
 
   sortedPins.forEach(item => {
     const isDone = completedIds.includes(item.id);
-    const isSelected = item.id === selectedId;
+    const isSelected = !isExploreMode && (item.id === selectedId);
     const isActive = isItemActiveOnMap(item);
     const isHighlighted = hasSpecificRideSelected && highlightedRideKeys.includes(item.rideKey);
 
@@ -1095,7 +1102,6 @@ function renderTimeline() {
     showAllBtn.innerText = '📋 แสดงตารางเวลาทั้งหมด (14 รายการ)';
     showAllBtn.onclick = () => {
       document.getElementById('rideDrawer').classList.remove('open');
-      document.getElementById('ridePickerBtn').classList.remove('active');
       clearHighlightRides();
     };
     container.appendChild(showAllBtn);
