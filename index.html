@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HK Disneyland VIP Guide & DPA Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-active: #27354f;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --gold: #f59e0b;
+    --gold-bg: rgba(245, 158, 11, 0.15);
+    --blue: #38bdf8;
+    --blue-bg: rgba(56, 189, 248, 0.15);
+    --green: #10b981;
+    --green-bg: rgba(16, 185, 129, 0.15);
+    --purple: #a855f7;
+    --danger: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 40px; -webkit-tap-highlight-color: transparent; }
+
+  /* Header & DPA Counter */
+  header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  h1 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .reset-btn { background: rgba(255,255,255,0.1); border: none; color: #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+  
+  .dpa-bar {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .dpa-label { font-size: 0.85rem; color: #fde68a; font-weight: 600; }
+  .dpa-dots { display: flex; gap: 5px; margin-top: 4px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: #334155; border: 1.5px solid var(--gold); transition: 0.3s; }
+  .dot.used { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+  .dpa-count { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+
+  /* Map Container */
+  .map-section { padding: 12px 16px 0; }
+  .map-wrapper {
+    background: #131c31;
+    border-radius: 16px;
+    border: 1px solid #334155;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  svg { width: 100%; height: auto; display: block; touch-action: manipulation; }
+  
+  /* SVG Animations */
+  @keyframes dashMove { to { stroke-dashoffset: -24; } }
+  .nav-route {
+    stroke: #38bdf8;
+    stroke-width: 3.5;
+    stroke-dasharray: 6, 6;
+    fill: none;
+    animation: dashMove 1s linear infinite;
+    filter: drop-shadow(0 0 4px #38bdf8);
+  }
+  @keyframes pulseRing {
+    0% { r: 8; opacity: 0.9; }
+    100% { r: 20; opacity: 0; }
+  }
+  .pulse-circle { fill: none; stroke: #38bdf8; stroke-width: 2.5; animation: pulseRing 1.5s infinite; }
+  .pin-group { cursor: pointer; transition: transform 0.2s; }
+  .pin-group:hover { transform: scale(1.1); }
+
+  /* Navigation Instruction Banner */
+  .nav-banner {
+    margin: 12px 16px;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .nav-time { background: #fff; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px; font-size: 0.85rem; }
+  .nav-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+  .badge-dpa { background: var(--gold); color: #000; }
+  .badge-std { background: rgba(255,255,255,0.2); color: #fff; }
+  .nav-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+  .nav-dir { display: flex; align-items: flex-start; gap: 8px; background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; line-height: 1.4; }
+  .dir-arrow { font-size: 1.3rem; line-height: 1; }
+  .nav-tip { font-size: 0.8rem; color: #e0f2fe; margin-top: 8px; }
+
+  /* Timeline List */
+  .timeline { padding: 4px 16px; }
+  .phase-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+    margin: 16px 0 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #334155;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  .card.selected { background: var(--card-active); border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+  .card.done { opacity: 0.55; background: #0f172a; }
+  .card.done .item-name { text-decoration: line-through; }
+
+  .check-box {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 2px solid #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: bold;
+    color: transparent;
+    transition: 0.2s;
+  }
+  .card.done .check-box { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .card-body { flex: 1; }
+  .card-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+  .time-tag { font-size: 0.8rem; font-weight: 700; color: var(--blue); }
+  .tag-dpa { background: var(--gold-bg); color: var(--gold); border: 1px solid rgba(245,158,11,0.4); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 700; }
+  .tag-std { background: var(--blue-bg); color: var(--blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  .tag-food { background: var(--green-bg); color: var(--green); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  
+  .item-name { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .item-zone { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; }
+  .item-note { font-size: 0.8rem; color: #cbd5e1; line-height: 1.35; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>🏰 HK Disneyland VIP Plan</h1>
+    <button class="reset-btn" onclick="resetProgress()">รีเซ็ตทั้งหมด</button>
+  </div>
+  <div class="dpa-bar">
+    <div>
+      <div class="dpa-label">🎟️ สิทธิ์ Premier Access (8 เครื่องเล่น)</div>
+      <div class="dpa-dots" id="dpaDots"></div>
+    </div>
+    <div class="dpa-count" id="dpaCount">0 / 8</div>
+  </div>
+</header>
+
+<div class="map-section">
+  <div class="map-wrapper">
+    <svg id="parkMap" viewBox="0 0 400 320">
+      <!-- Background Land & Pathways -->
+      <rect width="400" height="320" fill="#0f172a"/>
+      
+      <!-- Zone Polygons -->
+      <!-- World of Frozen (Top Left) -->
+      <path d="M 15,15 L 155,15 L 145,95 L 25,95 Z" fill="#1e3a8a" opacity="0.45" stroke="#3b82f6" stroke-width="1"/>
+      <text x="85" y="30" fill="#93c5fd" font-size="9" font-weight="bold" text-anchor="middle">WORLD OF FROZEN</text>
+
+      <!-- Fantasyland (Top Center) -->
+      <path d="M 160,15 L 275,15 L 265,115 L 150,115 Z" fill="#581c87" opacity="0.45" stroke="#a855f7" stroke-width="1"/>
+      <text x="215" y="30" fill="#d8b4fe" font-size="9" font-weight="bold" text-anchor="middle">FANTASYLAND</text>
+
+      <!-- Tomorrowland (Right) -->
+      <path d="M 280,55 L 385,55 L 385,215 L 265,205 Z" fill="#0e7490" opacity="0.45" stroke="#06b6d4" stroke-width="1"/>
+      <text x="332" y="72" fill="#67e8f9" font-size="9" font-weight="bold" text-anchor="middle">TOMORROWLAND</text>
+
+      <!-- Toy Story Land (Mid Left) -->
+      <path d="M 15,102 L 125,102 L 125,170 L 15,170 Z" fill="#9a3412" opacity="0.45" stroke="#f97316" stroke-width="1"/>
+      <text x="70" y="116" fill="#fdba74" font-size="8.5" font-weight="bold" text-anchor="middle">TOY STORY LAND</text>
+
+      <!-- Mystic Point (Lower Left) -->
+      <path d="M 15,176 L 115,176 L 115,232 L 15,232 Z" fill="#3f6212" opacity="0.45" stroke="#84cc16" stroke-width="1"/>
+      <text x="65" y="190" fill="#bef264" font-size="8.5" font-weight="bold" text-anchor="middle">MYSTIC POINT</text>
+
+      <!-- Grizzly Gulch (Bottom Left) -->
+      <path d="M 15,238 L 130,238 L 130,305 L 15,305 Z" fill="#78350f" opacity="0.5" stroke="#d97706" stroke-width="1"/>
+      <text x="72" y="252" fill="#fcd34d" font-size="8.5" font-weight="bold" text-anchor="middle">GRIZZLY GULCH</text>
+
+      <!-- Adventureland (Bottom Center-Left) -->
+      <path d="M 136,180 L 210,180 L 210,275 L 136,275 Z" fill="#065f46" opacity="0.45" stroke="#10b981" stroke-width="1"/>
+      <text x="173" y="195" fill="#6ee7b7" font-size="8" font-weight="bold" text-anchor="middle">ADVENTURE</text>
+
+      <!-- Castle Hub & Main Street (Center to Bottom) -->
+      <circle cx="215" cy="148" r="24" fill="#be185d" opacity="0.5" stroke="#f472b6" stroke-width="1.5"/>
+      <text x="215" y="151" fill="#fbcfe8" font-size="8" font-weight="bold" text-anchor="middle">CASTLE</text>
+      <rect x="198" y="176" width="34" height="125" rx="6" fill="#334155" opacity="0.7" stroke="#64748b" stroke-width="1"/>
+      <text x="215" y="245" fill="#cbd5e1" font-size="8" font-weight="bold" text-anchor="middle" transform="rotate(-90 215,245)">MAIN STREET U.S.A.</text>
+
+      <!-- Entrance Gate -->
+      <rect x="180" y="302" width="70" height="14" rx="4" fill="#ef4444"/>
+      <text x="215" y="312" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">ทางเข้า / ออก (GATE)</text>
+
+      <!-- Main Walking Paths -->
+      <path d="M 215,302 L 215,172 M 215,148 L 115,65 M 215,148 L 215,75 M 215,148 L 315,130 M 215,148 L 105,140 M 105,140 L 85,205 L 85,270 M 215,172 L 173,225" stroke="#475569" stroke-width="2" fill="none" opacity="0.6"/>
+
+      <!-- Dynamic Route Layer -->
+      <g id="routeLayer"></g>
+
+      <!-- Pins Layer -->
+      <g id="pinsLayer"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- Active Step Navigation Card -->
+<div class="nav-banner" id="navBanner"></div>
+
+<!-- Full Itinerary -->
+<div class="timeline" id="timelineContainer"></div>
+
+<script>
+const itinerary = [
+  {
+    id: 1, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:00 น.", name: "Wandering Oaken's Sliding Sleighs",
+    zone: "World of Frozen", type: "std", dpaNum: null,
+    x: 55, y: 65,
+    arrow: "⬆️",
+    direction: "จากทางเข้าหลัก เดินตรงผ่านถนน Main Street ทะลุกลางปราสาท ตรงดิ่งไปโซน World of Frozen ด้านซ้ายบนสุดทันที",
+    note: "ไม่มีในบัตร Premier Access ต้องต่อคิวปกติเป็นเครื่องเล่นแรกของวัน (ถึงหน้าประตู 08:30 น.)"
+  },
+  {
+    id: 2, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)",
+    zone: "World of Frozen", type: "std", dpaNum: null,
+    x: 110, y: 60,
+    arrow: "➡️",
+    direction: "เดินขยับมาทางขวาภายในโซน World of Frozen (ใกล้ปราสาทเอเรนเดลล์และน้ำพุ)",
+    note: "ต่อคิวปกติช่วงเช้าคนน้อยมาก เก็บสิทธิ์ Premier Access ไว้เล่นซ้ำรอบสองตอนบ่าย + แวะถ่ายรูปปราสาทโล่งๆ"
+  },
+  {
+    id: 3, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh",
+    zone: "Fantasyland", type: "std", dpaNum: null,
+    x: 235, y: 65,
+    arrow: "➡️",
+    direction: "เดินออกจากโซน Frozen มาทางขวา เข้าสู่โซน Fantasyland",
+    note: "ไม่มีในบัตร Premier Access ช่วงเวลานี้คิวสั้นมาก รีบเก็บก่อนสวนสนุกเปิดเต็มรูปแบบ"
+  },
+  {
+    id: 4, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop",
+    zone: "Toy Story Land", type: "std", dpaNum: null,
+    x: 70, y: 142,
+    arrow: "↙️",
+    direction: "เดินตัดลงมาทางซ้ายของปราสาท เข้าสู่โซน Toy Story Land ทันทีที่เชือกกั้นเปิด 10:00 น.",
+    note: "โซนนี้ใช้บัตร Premier Access ไม่ได้ รีบเล่นให้เสร็จช่วง 10:00–10:45 น. ก่อนคิวยาวกลางแดด"
+  },
+  {
+    id: 5, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "11:00 น.", name: "Mystic Manor",
+    zone: "Mystic Point", type: "dpa", dpaNum: 1,
+    x: 65, y: 210,
+    arrow: "⬇️",
+    direction: "เดินลงใต้ต่อเนื่องจากโซน Toy Story Land เข้าสู่โซน Mystic Point ที่อยู่ติดกัน",
+    note: "เริ่มใช้บัตร Premier Access สิทธิ์ที่ 1 เดินเข้าช่องทางด่วน (Premier Access Entrance) ได้เลย"
+  },
+  {
+    id: 6, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars",
+    zone: "Grizzly Gulch", type: "dpa", dpaNum: 2,
+    x: 75, y: 278,
+    arrow: "⬇️",
+    direction: "เดินลงใต้ต่อจาก Mystic Point เข้าสู่โซนเหมืองแร่ Grizzly Gulch",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 2 ลัดคิวรถไฟเหาะเหมืองแร่"
+  },
+  {
+    id: 7, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)",
+    zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
+    x: 98, y: 210,
+    arrow: "⬆️",
+    direction: "เดินย้อนกลับขึ้นมาทานที่ Explorer's Club (โซน Mystic Point) หรือเดินไป Royal Banquet Hall (Fantasyland)",
+    note: "พักหลบแดดและเติมพลังช่วงเที่ยงที่คนในสวนสนุกหนาแน่นที่สุด"
+  },
+  {
+    id: 8, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "13:15 น.", name: "\"it's a small world\"",
+    zone: "Fantasyland", type: "dpa", dpaNum: 3,
+    x: 235, y: 45,
+    arrow: "↗️",
+    direction: "เดินขึ้นไปด้านบนสุดของโซน Fantasyland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 3 ล่องเรือตากแอร์เย็นๆ แบบไม่ต้องรอคิว"
+  },
+  {
+    id: 9, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "13:35 น.", name: "Mickey's PhilharMagic",
+    zone: "Fantasyland", type: "dpa", dpaNum: 4,
+    x: 190, y: 85,
+    arrow: "↙️",
+    direction: "เดินลงมาใจกลางโซน Fantasyland ใกล้ด้านหลังปราสาท",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 4 ดูหนัง 4 มิติ นั่งพักขาในห้องแอร์ 15 นาที"
+  },
+  {
+    id: 10, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "14:00 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)",
+    zone: "World of Frozen", type: "dpa", dpaNum: 5,
+    x: 110, y: 60,
+    arrow: "↖️",
+    direction: "เดินกลับเข้าไปในโซน World of Frozen ทางซ้ายมือ",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 5 สแกนเข้าช่องทางด่วน เล่นซ้ำรอบสองแบบไม่ต้องต่อคิว 60-90 นาที"
+  },
+  {
+    id: 11, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "14:30 น.", name: "Hyperspace Mountain",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 6,
+    x: 345, y: 95,
+    arrow: "➡️",
+    direction: "เดินตัดข้ามฝั่งสวนสนุกจากซ้ายไปขวาสุด เข้าสู่โซน Tomorrowland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 6 รถไฟเหาะในความมืด (เหมาใช้สิทธิ์รวดเดียว 3 เครื่องเล่นในโซนนี้)"
+  },
+  {
+    id: 12, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "15:00 น.", name: "Iron Man Experience",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 7,
+    x: 345, y: 140,
+    arrow: "⬇️",
+    direction: "เดินถัดลงมาด้านในโซน Tomorrowland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 7 ซิมูเลเตอร์ 3 มิติ"
+  },
+  {
+    id: 13, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "15:30 น.", name: "Ant-Man and The Wasp: Nano Battle!",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 8,
+    x: 315, y: 175,
+    arrow: "↙️",
+    direction: "เดินขยับมาทางทางออกของโซน Tomorrowland (ฝั่งใกล้ปราสาท)",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 8 (ใบสุดท้าย) ยิงปืนเลเซอร์เก็บแต้ม"
+  },
+  {
+    id: 14, phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
+    time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง",
+    zone: "Castle Hub / Adventureland / Main Street", type: "std", dpaNum: null,
+    x: 215, y: 155,
+    arrow: "⬇️",
+    direction: "เดินออกมาที่ลานหน้าปราสาท Castle of Magical Dreams แวะล่องเรือ Adventureland (ถ้าคิวสั้น) แล้วเดินช้อปปิ้งถนน Main Street มุ่งหน้าออกประตู 17:00 น.",
+    note: "เล่นครบทุกเครื่องเล่นหลักแล้ว เหลือเวลา 1 ชั่วโมงเต็มสำหรับถ่ายรูปและซื้อของที่ระลึก"
+  }
+];
+
+let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
+let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
+
+function saveState() {
+  localStorage.setItem('hkdl_done', JSON.stringify(completedIds));
+  localStorage.setItem('hkdl_selected', selectedId);
+}
+
+function toggleDone(e, id) {
+  e.stopPropagation();
+  if (completedIds.includes(id)) {
+    completedIds = completedIds.filter(item => item !== id);
+  } else {
+    completedIds.push(id);
+    // Auto advance to next uncompleted step
+    const nextStep = itinerary.find(item => item.id > id && !completedIds.includes(item.id));
+    if (nextStep) selectedId = nextStep.id;
+  }
+  saveState();
+  renderAll();
+}
+
+function selectStep(id) {
+  selectedId = id;
+  saveState();
+  renderAll();
+}
+
+function resetProgress() {
+  if (confirm('ต้องการรีเซ็ตสถานะการเล่นและสิทธิ์บัตร Premier Access ทั้งหมดใช่ไหม?')) {
+    completedIds = [];
+    selectedId = 1;
+    saveState();
+    renderAll();
+  }
+}
+
+function renderDPA() {
+  const usedDpaCount = itinerary.filter(i => i.type === 'dpa' && completedIds.includes(i.id)).length;
+  document.getElementById('dpaCount').innerText = `${usedDpaCount} / 8`;
+  
+  const dotsContainer = document.getElementById('dpaDots');
+  dotsContainer.innerHTML = '';
+  for (let i = 1; i <= 8; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i <= usedDpaCount ? ' used' : '');
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function renderMap() {
+  const routeLayer = document.getElementById('routeLayer');
+  const pinsLayer = document.getElementById('pinsLayer');
+  routeLayer.innerHTML = '';
+  pinsLayer.innerHTML = '';
+
+  const currentIdx = itinerary.findIndex(i => i.id === selectedId);
+  const currentStep = itinerary[currentIdx];
+  const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 215, y: 302 };
+
+  // Draw animated navigation path from previous point to selected point
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("x1", prevStep.x);
+  line.setAttribute("y1", prevStep.y);
+  line.setAttribute("x2", currentStep.x);
+  line.setAttribute("y2", currentStep.y);
+  line.setAttribute("class", "nav-route");
+  routeLayer.appendChild(line);
+
+  // Draw directional arrowhead near target
+  const angle = Math.atan2(currentStep.y - prevStep.y, currentStep.x - prevStep.x);
+  const arrowDist = 14;
+  const ax = currentStep.x - Math.cos(angle) * arrowDist;
+  const ay = currentStep.y - Math.sin(angle) * arrowDist;
+  const deg = angle * (180 / Math.PI);
+
+  const arrow = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  arrow.setAttribute("points", "-6,-5 6,0 -6,5");
+  arrow.setAttribute("fill", "#38bdf8");
+  arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${deg})`);
+  routeLayer.appendChild(arrow);
+
+  // Render all pins
+  itinerary.forEach(item => {
+    const isDone = completedIds.includes(item.id);
+    const isSelected = item.id === selectedId;
+
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "pin-group");
+    g.onclick = () => selectStep(item.id);
+
+    if (isSelected) {
+      const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      pulse.setAttribute("cx", item.x);
+      pulse.setAttribute("cy", item.y);
+      pulse.setAttribute("class", "pulse-circle");
+      g.appendChild(pulse);
+    }
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", item.x);
+    circle.setAttribute("cy", item.y);
+    circle.setAttribute("r", isSelected ? "10" : "8");
+    
+    let fill = "#38bdf8"; // std
+    if (item.type === 'dpa') fill = "#f59e0b";
+    if (item.type === 'food') fill = "#10b981";
+    if (isDone) fill = "#475569";
+  
