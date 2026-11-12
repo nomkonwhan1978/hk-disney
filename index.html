@@ -70,7 +70,6 @@
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
-  /* ลิ้นชักเลือกเครื่องเล่นทั้ง 8 */
   .ride-drawer {
     display: none;
     background: var(--card);
@@ -125,29 +124,44 @@
 
   svg { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
   
-  /* ปุ่มควบคุมมุมขวาล่างของแผนที่ */
   .zoom-controls { position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; z-index: 50; }
-  .bottom-btn-row { display: flex; gap: 5px; }
+  .bottom-btn-row { display: flex; gap: 6px; align-items: center; }
   .zoom-btn { background: rgba(15, 23, 42, 0.88); border: 1px solid #64748b; color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .fs-icon-btn { background: rgba(245, 158, 11, 0.92); border: 1px solid #ffffff; color: #000000; font-size: 1.05rem; }
   
+  /* ปุ่มเต็มจอ: กรอบสี่เหลี่ยมเส้นสีดำ ไม่มีพื้นหลัง */
+  .fs-icon-btn {
+    background: transparent;
+    border: 2px solid #000000;
+    color: #000000;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.65);
+  }
+  
+  /* ปุ่มปิดเต็มจอ: เครื่องหมายกากบาทสีดำ ไม่มีพื้นหลัง วางตำแหน่งปลอดภัยกดง่าย */
   .exit-fs-btn {
     display: none;
     position: absolute;
-    top: 14px; right: 14px;
-    background: #ef4444;
-    color: #fff;
-    border: 2px solid #fff;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.88rem;
-    font-weight: 800;
-    z-index: 100;
+    top: 16px; right: 24px;
+    background: transparent;
+    color: #000000;
+    border: 2px solid #000000;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1;
+    z-index: 200;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.8);
+    align-items: center;
+    justify-content: center;
   }
-  .map-wrapper.is-fullscreen .exit-fs-btn { display: block; }
+  .map-wrapper.is-fullscreen .exit-fs-btn { display: flex; }
   .map-wrapper.is-fullscreen .fs-icon-btn { display: none; }
+  .map-wrapper.is-fullscreen .zoom-controls { bottom: 18px; right: 24px; }
 
   .zoom-info { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.78); padding: 4px 9px; border-radius: 6px; font-size: 0.72rem; color: #38bdf8; pointer-events: none; z-index: 20; }
 
@@ -159,7 +173,6 @@
   .pin-group { cursor: pointer; transition: opacity 0.25s ease; }
   .pin-group.dimmed { opacity: 0.18; }
 
-  /* ป้ายชื่อไม่มีขอบสีส้ม และโปร่งแสงเล็กน้อย */
   .pin-label-bg { fill: var(--label-bg); stroke: none; rx: 3.5px; }
   .pin-label-text { font-size: 4.8px; font-weight: 700; fill: var(--label-text); text-anchor: middle; pointer-events: none; }
   .pin-group.done .pin-label-text { text-decoration: line-through; }
@@ -220,14 +233,12 @@
 </header>
 
 <div class="map-section">
-  <!-- แถบปุ่ม 3 ปุ่มหลัก -->
   <div class="map-toolbar">
     <button class="toolbar-btn active" id="mapToggleBtn" onclick="handleMapToggleBtn()">🗺️ แผนที่ 3D</button>
     <button class="toolbar-btn" id="facilityBtn" onclick="toggleFacilities()">🚻💧 ห้องน้ำ/น้ำ</button>
     <button class="toolbar-btn ride-picker-btn" id="ridePickerBtn" onclick="toggleRideDrawer()">🎢 เลือกเครื่องเล่น</button>
   </div>
 
-  <!-- ลิ้นชักเลือกเครื่องเล่นทั้ง 8 -->
   <div class="ride-drawer" id="rideDrawer">
     <div class="ride-drawer-header">
       <span>แตะชื่อเพื่อเน้นจุดบนแผนที่:</span>
@@ -239,15 +250,18 @@
   <div class="map-wrapper" id="mapWrapper">
     <div class="zoom-info" id="zoomInfo">ซูม: 100%</div>
     
-    <!-- ปุ่มปิดเต็มจอ (ใส่ ontouchstart stopPropagation เพื่อกันบั๊กกดไม่ติด) -->
-    <button class="exit-fs-btn" ontouchstart="event.stopPropagation()" onclick="exitFullscreen()">✕ ปิดเต็มจอ</button>
+    <!-- ปุ่มกากบาทสีดำปิดเต็มจอ (ทำงานทั้ง touch และ click) -->
+    <button class="exit-fs-btn" id="exitFsBtn" aria-label="ปิดเต็มจอ">✕</button>
     
-    <!-- ปุ่มซูม + สัญลักษณ์เต็มจอข้างปุ่ม 1x -->
-    <div class="zoom-controls" ontouchstart="event.stopPropagation()">
+    <div class="zoom-controls" id="zoomControls">
       <button class="zoom-btn" onclick="zoom(0.35)">+</button>
       <button class="zoom-btn" onclick="zoom(-0.35)">-</button>
       <div class="bottom-btn-row">
-        <button class="zoom-btn fs-icon-btn" title="เต็มจอแนวนอน" onclick="enterFullscreen()">⛶</button>
+        <button class="zoom-btn fs-icon-btn" title="ขยายเต็มจอ" onclick="enterFullscreen()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#000000" stroke-width="2">
+            <rect x="2" y="2" width="12" height="12" rx="1"/>
+          </svg>
+        </button>
         <button class="zoom-btn" onclick="resetZoom()">1x</button>
       </div>
     </div>
@@ -338,7 +352,7 @@ const itinerary = [
     id: 2, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
     time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)", shortName: "❄️ Frozen (รอบเช้า)",
     zone: "World of Frozen", type: "std", dpaNum: null,
-    x: 112, y: 34, // แยกอยู่ด้านบน
+    x: 112, y: 34,
     routePath: "M 62,52 L 112,34",
     arrow: "➡️",
     direction: "เดินขยับมาทางขวาภายในโซนหิมะ",
@@ -368,7 +382,7 @@ const itinerary = [
     id: 5, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
     time: "11:00 น.", name: "Mystic Manor", shortName: "👁️ Mystic Manor",
     zone: "Mystic Point", type: "dpa", dpaNum: 1,
-    x: 50, y: 162, // เว้นระยะห่างจากจุดที่ 7
+    x: 50, y: 162,
     routePath: "M 78,112 L 50,162",
     arrow: "⬇️",
     direction: "เดินลงใต้ต่อเนื่องจากโซนของเล่น",
@@ -388,7 +402,7 @@ const itinerary = [
     id: 7, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)", shortName: "🍽️ พักทานอาหาร",
     zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
-    x: 112, y: 174, // เว้นระยะห่างจากจุดที่ 5
+    x: 112, y: 174,
     routePath: "M 72,218 L 62,165 L 112,174",
     arrow: "⬆️",
     direction: "เดินย้อนกลับขึ้นมาทานที่ Explorer's Club บริเวณคฤหาสน์",
@@ -408,7 +422,7 @@ const itinerary = [
     id: 9, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "13:35 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (DPA)",
     zone: "World of Frozen", type: "dpa", dpaNum: 4,
-    x: 126, y: 60, // แยกอยู่ด้านล่าง ไม่ทับจุดที่ 2
+    x: 126, y: 60,
     routePath: "M 242,34 L 185,48 L 126,60",
     arrow: "⬅️",
     direction: "เดินออกจาก small world เลี้ยวซ้ายเข้าโซน World of Frozen ที่อยู่ติดกันทันที",
@@ -494,7 +508,6 @@ function toggleTheme() {
   localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
 }
 
-// กดปุ่มแผนที่ 3D: ถ้ากำลังกรองเฉพาะจุดอยู่ ให้คืนค่า 14 ลำดับทันที; ถ้าไม่ได้กรองอยู่ ให้สลับโหมดแผนที่
 function handleMapToggleBtn() {
   if (currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideIds.length > 0) {
     clearHighlightRides();
@@ -567,9 +580,6 @@ function enterFullscreen() {
   const wrapper = document.getElementById('mapWrapper');
   wrapper.classList.add('is-fullscreen');
   resetZoom();
-  if (screen.orientation && screen.orientation.lock) {
-    screen.orientation.lock('landscape').catch(() => {});
-  }
 }
 
 function exitFullscreen() {
@@ -577,10 +587,21 @@ function exitFullscreen() {
   const wrapper = document.getElementById('mapWrapper');
   wrapper.classList.remove('is-fullscreen');
   resetZoom();
-  if (screen.orientation && screen.orientation.unlock) {
-    try { screen.orientation.unlock(); } catch (e) {}
-  }
 }
+
+// ผูกปุ่มปิดเต็มจอและปุ่มควบคุมให้แยกจากการลากแผนที่อย่างเด็ดขาด
+document.getElementById('exitFsBtn').addEventListener('touchstart', (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+  exitFullscreen();
+});
+document.getElementById('exitFsBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  exitFullscreen();
+});
+document.getElementById('zoomControls').addEventListener('touchstart', (e) => {
+  e.stopPropagation();
+});
 
 function setFilter(filterType) {
   currentFilter = filterType;
@@ -593,20 +614,33 @@ function setFilter(filterType) {
   renderTimeline();
 }
 
+// ----------------- ระบบ Zoom & Pan รองรับทั้งแนวตั้งและหมุนแนวนอน -----------------
 let scale = 1, startScale = 1;
-let translateX = 0, translateY = 0, startX = 0, startY = 0;
+let translateX = 0, translateY = 0;
+let lastTouchX = 0, lastTouchY = 0;
 let isPanning = false;
-let touches = [];
 
 const mapWrapper = document.getElementById('mapWrapper');
 const parkMap = document.getElementById('parkMap');
 const zoomInfo = document.getElementById('zoomInfo');
 
+function isRotatedPortrait() {
+  return isFullscreen && window.innerHeight > window.innerWidth;
+}
+
+function getLogicalDimensions() {
+  if (isRotatedPortrait()) {
+    return { w: window.innerHeight, h: window.innerWidth };
+  }
+  const rect = mapWrapper.getBoundingClientRect();
+  return { w: rect.width, h: rect.height };
+}
+
 function updateTransform() {
   scale = Math.max(1, Math.min(scale, 5));
-  const rect = mapWrapper.getBoundingClientRect();
-  const maxX = rect.width * (scale - 1);
-  const maxY = rect.height * (scale - 1);
+  const dim = getLogicalDimensions();
+  const maxX = dim.w * (scale - 1);
+  const maxY = dim.h * (scale - 1);
   translateX = Math.max(-maxX, Math.min(0, translateX));
   translateY = Math.max(-maxY, Math.min(0, translateY));
   
@@ -615,11 +649,12 @@ function updateTransform() {
 }
 
 mapWrapper.addEventListener('touchstart', (e) => {
-  touches = Array.from(e.touches);
+  if (e.target.closest('#exitFsBtn') || e.target.closest('#zoomControls')) return;
+  const touches = Array.from(e.touches);
   if (touches.length === 1) {
     isPanning = true;
-    startX = touches[0].clientX - translateX;
-    startY = touches[0].clientY - translateY;
+    lastTouchX = touches[0].clientX;
+    lastTouchY = touches[0].clientY;
   } else if (touches.length === 2) {
     isPanning = false;
     startScale = scale;
@@ -627,26 +662,54 @@ mapWrapper.addEventListener('touchstart', (e) => {
     const dy = touches[0].clientY - touches[1].clientY;
     mapWrapper.dataset.dist = Math.sqrt(dx * dx + dy * dy);
   }
-});
+}, { passive: false });
 
 mapWrapper.addEventListener('touchmove', (e) => {
-  const currentTouches = Array.from(e.touches);
-  if (isPanning && currentTouches.length === 1) {
-    translateX = currentTouches[0].clientX - startX;
-    translateY = currentTouches[0].clientY - startY;
+  if (e.target.closest('#exitFsBtn') || e.target.closest('#zoomControls')) return;
+  e.preventDefault();
+  const touches = Array.from(e.touches);
+  if (isPanning && touches.length === 1) {
+    const rawDx = touches[0].clientX - lastTouchX;
+    const rawDy = touches[0].clientY - lastTouchY;
+    lastTouchX = touches[0].clientX;
+    lastTouchY = touches[0].clientY;
+
+    // แปลงแกนนิ้วลากให้ตรงทิศทางเมื่อกล่องแผนที่ถูกหมุน 90 องศา
+    if (isRotatedPortrait()) {
+      translateX += rawDy;
+      translateY -= rawDx;
+    } else {
+      translateX += rawDx;
+      translateY += rawDy;
+    }
     updateTransform();
-  } else if (currentTouches.length === 2) {
-    const dx = currentTouches[0].clientX - currentTouches[1].clientX;
-    const dy = currentTouches[0].clientY - currentTouches[1].clientY;
+  } else if (touches.length === 2) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
     const dist = Math.sqrt(dx * dx + dy * dy);
     const startDist = parseFloat(mapWrapper.dataset.dist) || dist;
     scale = startScale * (dist / startDist);
     updateTransform();
   }
-});
+}, { passive: false });
+
 mapWrapper.addEventListener('touchend', () => { isPanning = false; });
-function zoom(amount) { scale += amount; updateTransform(); }
-function resetZoom() { scale = 1; translateX = 0; translateY = 0; updateTransform(); }
+
+function zoom(amount) {
+  const prevScale = scale;
+  scale = Math.max(1, Math.min(scale + amount, 5));
+  const dim = getLogicalDimensions();
+  // ซูมเข้าหาจุดกึ่งกลางหน้าจอ
+  const ratio = scale / prevScale;
+  translateX = (dim.w / 2) - ((dim.w / 2) - translateX) * ratio;
+  translateY = (dim.h / 2) - ((dim.h / 2) - translateY) * ratio;
+  updateTransform();
+}
+
+function resetZoom() {
+  scale = 1; translateX = 0; translateY = 0;
+  updateTransform();
+}
 
 function saveState() {
   localStorage.setItem('hkdl_done', JSON.stringify(completedIds));
