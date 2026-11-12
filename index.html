@@ -107,14 +107,14 @@
   .map-wrapper.is-fullscreen {
     position: fixed;
     top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    width: 100vw; height: 100dvh;
     z-index: 9999;
     border-radius: 0;
     border: none;
   }
   @media screen and (orientation: portrait) {
     .map-wrapper.is-fullscreen {
-      width: 100vh;
+      width: 100dvh;
       height: 100vw;
       transform: rotate(90deg);
       transform-origin: top left;
@@ -128,34 +128,31 @@
   .bottom-btn-row { display: flex; gap: 6px; align-items: center; }
   .zoom-btn { background: rgba(15, 23, 42, 0.88); border: 1px solid #64748b; color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   
-  /* ปุ่มเต็มจอ: กรอบสี่เหลี่ยมเส้นสีดำ ไม่มีพื้นหลัง */
   .fs-icon-btn {
     background: transparent;
-    border: 2px solid #000000;
-    color: #000000;
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.65);
+    border: none;
+    box-shadow: none;
+    width: 26px;
+    height: 26px;
+    padding: 0;
   }
   
-  /* ปุ่มปิดเต็มจอ: เครื่องหมายกากบาทสีดำ ไม่มีพื้นหลัง วางตำแหน่งปลอดภัยกดง่าย */
   .exit-fs-btn {
     display: none;
     position: absolute;
-    top: 16px; right: 24px;
+    top: 16px; right: 75px;
     background: transparent;
+    border: none;
+    box-shadow: none;
     color: #000000;
-    border: 2px solid #000000;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    font-size: 1.25rem;
-    font-weight: 900;
+    width: 32px;
+    height: 32px;
+    font-size: 1.35rem;
+    font-weight: 700;
     line-height: 1;
     z-index: 200;
     cursor: pointer;
-    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.8);
+    text-shadow: 0 0 3px rgba(255,255,255,0.9);
     align-items: center;
     justify-content: center;
   }
@@ -250,7 +247,6 @@
   <div class="map-wrapper" id="mapWrapper">
     <div class="zoom-info" id="zoomInfo">ซูม: 100%</div>
     
-    <!-- ปุ่มกากบาทสีดำปิดเต็มจอ (ทำงานทั้ง touch และ click) -->
     <button class="exit-fs-btn" id="exitFsBtn" aria-label="ปิดเต็มจอ">✕</button>
     
     <div class="zoom-controls" id="zoomControls">
@@ -258,8 +254,8 @@
       <button class="zoom-btn" onclick="zoom(-0.35)">-</button>
       <div class="bottom-btn-row">
         <button class="zoom-btn fs-icon-btn" title="ขยายเต็มจอ" onclick="enterFullscreen()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#000000" stroke-width="2">
-            <rect x="2" y="2" width="12" height="12" rx="1"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
           </svg>
         </button>
         <button class="zoom-btn" onclick="resetZoom()">1x</button>
@@ -589,7 +585,6 @@ function exitFullscreen() {
   resetZoom();
 }
 
-// ผูกปุ่มปิดเต็มจอและปุ่มควบคุมให้แยกจากการลากแผนที่อย่างเด็ดขาด
 document.getElementById('exitFsBtn').addEventListener('touchstart', (e) => {
   e.stopPropagation();
   e.preventDefault();
@@ -614,7 +609,6 @@ function setFilter(filterType) {
   renderTimeline();
 }
 
-// ----------------- ระบบ Zoom & Pan รองรับทั้งแนวตั้งและหมุนแนวนอน -----------------
 let scale = 1, startScale = 1;
 let translateX = 0, translateY = 0;
 let lastTouchX = 0, lastTouchY = 0;
@@ -674,7 +668,6 @@ mapWrapper.addEventListener('touchmove', (e) => {
     lastTouchX = touches[0].clientX;
     lastTouchY = touches[0].clientY;
 
-    // แปลงแกนนิ้วลากให้ตรงทิศทางเมื่อกล่องแผนที่ถูกหมุน 90 องศา
     if (isRotatedPortrait()) {
       translateX += rawDy;
       translateY -= rawDx;
@@ -699,7 +692,6 @@ function zoom(amount) {
   const prevScale = scale;
   scale = Math.max(1, Math.min(scale + amount, 5));
   const dim = getLogicalDimensions();
-  // ซูมเข้าหาจุดกึ่งกลางหน้าจอ
   const ratio = scale / prevScale;
   translateX = (dim.w / 2) - ((dim.w / 2) - translateX) * ratio;
   translateY = (dim.h / 2) - ((dim.h / 2) - translateY) * ratio;
