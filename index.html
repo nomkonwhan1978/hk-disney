@@ -7,8 +7,10 @@
 <style>
   :root {
     --bg: #0f172a;
+    --header-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
     --card: #1e293b;
     --card-active: #27354f;
+    --border: #334155;
     --text: #f8fafc;
     --text-muted: #94a3b8;
     --gold: #f59e0b;
@@ -17,118 +19,246 @@
     --blue-bg: rgba(56, 189, 248, 0.15);
     --green: #10b981;
     --green-bg: rgba(16, 185, 129, 0.15);
-    --purple: #a855f7;
-    --danger: #ef4444;
+    --map-bg: #131c31;
+    --label-bg: rgba(15, 23, 42, 0.88);
+    --label-text: #ffffff;
+  }
+
+  /* โหมดสู้แดดกลางแจ้ง (High-Contrast Light Mode) */
+  body.light-mode {
+    --bg: #f1f5f9;
+    --header-bg: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+    --card: #ffffff;
+    --card-active: #eff6ff;
+    --border: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --gold: #d97706;
+    --gold-bg: #fef3c7;
+    --blue: #0284c7;
+    --blue-bg: #e0f2fe;
+    --green: #059669;
+    --green-bg: #d1fae5;
+    --map-bg: #e2e8f0;
+    --label-bg: rgba(255, 255, 255, 0.95);
+    --label-text: #0f172a;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: var(--bg); color: var(--text); padding-bottom: 40px; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 40px; -webkit-tap-highlight-color: transparent; transition: background 0.25s, color 0.25s; }
 
   header {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-    padding: 16px;
+    background: var(--header-bg);
+    padding: 14px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    color: #ffffff;
   }
-  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  h1 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-  .reset-btn { background: rgba(255,255,255,0.1); border: none; color: #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+  h1 { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .header-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
   
   .dpa-bar {
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.28);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    border: 1px solid rgba(251, 191, 36, 0.4);
   }
-  .dpa-label { font-size: 0.85rem; color: #fde68a; font-weight: 600; }
+  .dpa-label { font-size: 0.82rem; color: #fde68a; font-weight: 600; }
   .dpa-dots { display: flex; gap: 5px; margin-top: 4px; }
-  .dot { width: 14px; height: 14px; border-radius: 50%; background: #334155; border: 1.5px solid var(--gold); transition: 0.3s; }
-  .dot.used { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-  .dpa-count { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+  .dot { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1.5px solid #fbbf24; transition: 0.3s; }
+  .dot.used { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+  .dpa-count { font-size: 1.05rem; font-weight: 800; color: #fbbf24; }
 
-  .map-section { padding: 12px 16px 0; }
+  .map-section { padding: 12px 16px 0; position: relative; }
+  .map-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+  .facility-toggle {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.2s;
+  }
+  .facility-toggle.active {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+  }
+  .zoom-hint { font-size: 0.75rem; color: var(--text-muted); }
+
   .map-wrapper {
-    background: #131c31;
+    background: var(--map-bg);
     border-radius: 16px;
-    border: 1px solid #334155;
+    border: 1px solid var(--border);
     overflow: hidden;
     position: relative;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    touch-action: none;
+    height: 265px;
   }
-  svg { width: 100%; height: auto; display: block; touch-action: manipulation; }
+  svg { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
   
+  .zoom-controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 10;
+  }
+  .zoom-btn {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid #64748b;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .zoom-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.78);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    color: #38bdf8;
+    pointer-events: none;
+    z-index: 10;
+  }
+
   @keyframes dashMove { to { stroke-dashoffset: -24; } }
   .nav-route {
-    stroke: #38bdf8;
-    stroke-width: 3.5;
+    stroke: #ef4444;
+    stroke-width: 3;
     stroke-dasharray: 6, 6;
     fill: none;
     animation: dashMove 1s linear infinite;
-    filter: drop-shadow(0 0 4px #38bdf8);
   }
   @keyframes pulseRing {
-    0% { r: 8; opacity: 0.9; }
-    100% { r: 20; opacity: 0; }
+    0% { r: 6; opacity: 1; }
+    100% { r: 18; opacity: 0; }
   }
-  .pulse-circle { fill: none; stroke: #38bdf8; stroke-width: 2.5; animation: pulseRing 1.5s infinite; }
-  .pin-group { cursor: pointer; transition: transform 0.2s; }
-  .pin-group:hover { transform: scale(1.1); }
+  .pulse-circle { fill: none; stroke: #ef4444; stroke-width: 2.5; animation: pulseRing 1.5s infinite; }
+  .pin-group { cursor: pointer; }
+
+  .pin-label-bg {
+    fill: var(--label-bg);
+    stroke: var(--gold);
+    stroke-width: 0.8px;
+    rx: 3.5px;
+  }
+  .pin-label-text {
+    font-size: 4.8px;
+    font-weight: 700;
+    fill: var(--label-text);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+  .pin-group.done .pin-label-bg { opacity: 0.5; stroke: #64748b; }
+  .pin-group.done .pin-label-text { opacity: 0.6; text-decoration: line-through; }
 
   .nav-banner {
     margin: 12px 16px;
     background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
     border-radius: 14px;
     padding: 14px;
-    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
-    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
   }
-  .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .nav-time { background: #fff; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px; font-size: 0.85rem; }
-  .nav-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
-  .badge-dpa { background: var(--gold); color: #000; }
+  .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap; }
+  .nav-time { background: #fff; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px; font-size: 0.82rem; }
+  .nav-badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+  .badge-dpa { background: #fbbf24; color: #000; }
   .badge-std { background: rgba(255,255,255,0.2); color: #fff; }
-  .nav-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
-  .nav-dir { display: flex; align-items: flex-start; gap: 8px; background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; line-height: 1.4; }
-  .dir-arrow { font-size: 1.3rem; line-height: 1; }
-  .nav-tip { font-size: 0.8rem; color: #e0f2fe; margin-top: 8px; }
+  .nav-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .nav-dir { display: flex; align-items: flex-start; gap: 8px; background: rgba(0,0,0,0.22); padding: 8px 10px; border-radius: 8px; font-size: 0.84rem; line-height: 1.4; }
+  .dir-arrow { font-size: 1.25rem; line-height: 1; }
+  .nav-tip { font-size: 0.78rem; color: #e0f2fe; margin-top: 8px; }
 
-  .timeline { padding: 4px 16px; }
-  .phase-title {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--blue);
-    margin: 16px 0 8px;
-    font-weight: 700;
+  /* แถบตัวกรองรายการ */
+  .filter-bar {
     display: flex;
-    align-items: center;
     gap: 6px;
+    padding: 4px 16px 8px;
+    overflow-x: auto;
+  }
+  .filter-btn {
+    background: var(--card);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s;
+  }
+  .filter-btn.active {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+
+  .timeline { padding: 0 16px; }
+  .phase-title {
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+    color: var(--blue);
+    margin: 14px 0 8px;
+    font-weight: 700;
   }
   .card {
     background: var(--card);
     border-radius: 12px;
     padding: 12px;
     margin-bottom: 10px;
-    border: 1px solid #334155;
+    border: 1px solid var(--border);
     display: flex;
     gap: 12px;
     align-items: flex-start;
     transition: 0.2s;
     cursor: pointer;
   }
-  .card.selected { background: var(--card-active); border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
-  .card.done { opacity: 0.55; background: #0f172a; }
+  .card.selected { background: var(--card-active); border-color: var(--blue); box-shadow: 0 0 0 1.5px var(--blue); }
+  .card.done { opacity: 0.55; }
   .card.done .item-name { text-decoration: line-through; }
 
   .check-box {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
     border: 2px solid #64748b;
     display: flex;
@@ -144,14 +274,14 @@
 
   .card-body { flex: 1; }
   .card-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
-  .time-tag { font-size: 0.8rem; font-weight: 700; color: var(--blue); }
-  .tag-dpa { background: var(--gold-bg); color: var(--gold); border: 1px solid rgba(245,158,11,0.4); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 700; }
-  .tag-std { background: var(--blue-bg); color: var(--blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
-  .tag-food { background: var(--green-bg); color: var(--green); font-size: 0.7rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  .time-tag { font-size: 0.78rem; font-weight: 700; color: var(--blue); }
+  .tag-dpa { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 700; }
+  .tag-std { background: var(--blue-bg); color: var(--blue); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  .tag-food { background: var(--green-bg); color: var(--green); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
   
-  .item-name { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
-  .item-zone { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; }
-  .item-note { font-size: 0.8rem; color: #cbd5e1; line-height: 1.35; }
+  .item-name { font-size: 0.94rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .item-zone { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; }
+  .item-note { font-size: 0.79rem; color: var(--text-muted); line-height: 1.35; }
 </style>
 </head>
 <body>
@@ -159,7 +289,10 @@
 <header>
   <div class="header-top">
     <h1>🏰 HK Disneyland VIP Plan</h1>
-    <button class="reset-btn" onclick="resetProgress()">รีเซ็ตทั้งหมด</button>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">☀️ สู้แดด</button>
+      <button class="icon-btn" onclick="resetProgress()">รีเซ็ต</button>
+    </div>
   </div>
   <div class="dpa-bar">
     <div>
@@ -171,183 +304,334 @@
 </header>
 
 <div class="map-section">
-  <div class="map-wrapper">
-    <svg id="parkMap" viewBox="0 0 400 320">
-      <rect width="400" height="320" fill="#0f172a"/>
-      
-      <path d="M 15,15 L 155,15 L 145,95 L 25,95 Z" fill="#1e3a8a" opacity="0.45" stroke="#3b82f6" stroke-width="1"/>
-      <text x="85" y="30" fill="#93c5fd" font-size="9" font-weight="bold" text-anchor="middle">WORLD OF FROZEN</text>
+  <div class="map-toolbar">
+    <button class="facility-toggle" id="facilityBtn" onclick="toggleFacilities()">🚻💧 แสดงห้องน้ำ / จุดเติมน้ำ</button>
+    <span class="zoom-hint">ใช้ 2 นิ้วถ่างซูมแผนที่ได้</span>
+  </div>
+  <div class="map-wrapper" id="mapWrapper">
+    <div class="zoom-info" id="zoomInfo">ซูม: 100%</div>
+    <div class="zoom-controls">
+      <button class="zoom-btn" onclick="zoom(0.3)">+</button>
+      <button class="zoom-btn" onclick="zoom(-0.3)">-</button>
+      <button class="zoom-btn" onclick="resetZoom()">1x</button>
+    </div>
 
-      <path d="M 160,15 L 275,15 L 265,115 L 150,115 Z" fill="#581c87" opacity="0.45" stroke="#a855f7" stroke-width="1"/>
-      <text x="215" y="30" fill="#d8b4fe" font-size="9" font-weight="bold" text-anchor="middle">FANTASYLAND</text>
+    <!-- แผนที่ภาพวาดเวกเตอร์ 3D ครบทั้ง 8 โซน (ออฟไลน์ 100%) -->
+    <svg id="parkMap" viewBox="0 0 400 250">
+      <defs>
+        <radialGradient id="parkBg" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="#86efac" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#14532d" stop-opacity="0.35"/>
+        </radialGradient>
+      </defs>
+      <rect width="400" height="250" fill="url(#parkBg)"/>
 
-      <path d="M 280,55 L 385,55 L 385,215 L 265,205 Z" fill="#0e7490" opacity="0.45" stroke="#06b6d4" stroke-width="1"/>
-      <text x="332" y="72" fill="#67e8f9" font-size="9" font-weight="bold" text-anchor="middle">TOMORROWLAND</text>
+      <!-- 1. World of Frozen (ซ้ายบน) -->
+      <path d="M 25,15 L 155,15 L 145,78 L 20,78 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5"/>
+      <polygon points="45,55 70,18 95,55" fill="#f8fafc" stroke="#38bdf8" stroke-width="1"/>
+      <polygon points="80,55 102,24 125,55" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+      <text x="85" y="12" fill="#0369a1" font-size="6.5" font-weight="800" text-anchor="middle">WORLD OF FROZEN</text>
 
-      <path d="M 15,102 L 125,102 L 125,170 L 15,170 Z" fill="#9a3412" opacity="0.45" stroke="#f97316" stroke-width="1"/>
-      <text x="70" y="116" fill="#fdba74" font-size="8.5" font-weight="bold" text-anchor="middle">TOY STORY LAND</text>
+      <!-- 2. Fantasyland (บนกลาง) -->
+      <path d="M 162,15 L 278,15 L 268,90 L 152,90 Z" fill="#f3e8ff" stroke="#9333ea" stroke-width="1.5"/>
+      <circle cx="215" cy="42" r="14" fill="#f472b6" opacity="0.5"/>
+      <text x="215" y="12" fill="#7e22ce" font-size="6.5" font-weight="800" text-anchor="middle">FANTASYLAND</text>
 
-      <path d="M 15,176 L 115,176 L 115,232 L 15,232 Z" fill="#3f6212" opacity="0.45" stroke="#84cc16" stroke-width="1"/>
-      <text x="65" y="190" fill="#bef264" font-size="8.5" font-weight="bold" text-anchor="middle">MYSTIC POINT</text>
+      <!-- 3. Tomorrowland (ขวาทั้งหมด) -->
+      <path d="M 285,55 L 385,55 L 385,185 L 268,175 Z" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
+      <circle cx="355" cy="95" r="18" fill="#cbd5e1" stroke="#475569" stroke-width="1.2"/>
+      <text x="332" y="50" fill="#0e7490" font-size="6.5" font-weight="800" text-anchor="middle">TOMORROWLAND</text>
 
-      <path d="M 15,238 L 130,238 L 130,305 L 15,305 Z" fill="#78350f" opacity="0.5" stroke="#d97706" stroke-width="1"/>
-      <text x="72" y="252" fill="#fcd34d" font-size="8.5" font-weight="bold" text-anchor="middle">GRIZZLY GULCH</text>
+      <!-- 4. Toy Story Land (ซ้ายกลาง) -->
+      <path d="M 20,84 L 132,84 L 132,135 L 20,135 Z" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="76" y="81" fill="#c2410c" font-size="6.2" font-weight="800" text-anchor="middle">TOY STORY LAND</text>
 
-      <path d="M 136,180 L 210,180 L 210,275 L 136,275 Z" fill="#065f46" opacity="0.45" stroke="#10b981" stroke-width="1"/>
-      <text x="173" y="195" fill="#6ee7b7" font-size="8.5" font-weight="bold" text-anchor="middle">ADVENTURE</text>
+      <!-- 5. Mystic Point (ซ้ายล่างบน) -->
+      <path d="M 20,141 L 118,141 L 118,186 L 20,186 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="69" y="139" fill="#15803d" font-size="6.2" font-weight="800" text-anchor="middle">MYSTIC POINT</text>
 
-      <circle cx="215" cy="148" r="24" fill="#be185d" opacity="0.5" stroke="#f472b6" stroke-width="1.5"/>
-      <text x="215" y="151" fill="#fbcfe8" font-size="8" font-weight="bold" text-anchor="middle">CASTLE</text>
-      <rect x="198" y="176" width="34" height="125" rx="6" fill="#334155" opacity="0.7" stroke="#64748b" stroke-width="1"/>
-      <text x="215" y="245" fill="#cbd5e1" font-size="8" font-weight="bold" text-anchor="middle" transform="rotate(-90 215,245)">MAIN STREET U.S.A.</text>
+      <!-- 6. Grizzly Gulch (ซ้ายล่างสุด) -->
+      <path d="M 20,192 L 130,192 L 130,240 L 20,240 Z" fill="#fed7aa" stroke="#b45309" stroke-width="1.5"/>
+      <text x="75" y="190" fill="#92400e" font-size="6.2" font-weight="800" text-anchor="middle">GRIZZLY GULCH</text>
 
-      <rect x="180" y="302" width="70" height="14" rx="4" fill="#ef4444"/>
-      <text x="215" y="312" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">ทางเข้า / ออก (GATE)</text>
+      <!-- 7. Adventureland (ล่างกลางซ้าย) -->
+      <path d="M 136,142 L 192,142 L 192,215 L 136,215 Z" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+      <circle cx="164" cy="178" r="16" fill="#38bdf8" opacity="0.45"/>
+      <circle cx="164" cy="178" r="8" fill="#15803d"/>
+      <text x="164" y="139" fill="#047857" font-size="6" font-weight="800" text-anchor="middle">ADVENTURELAND</text>
 
-      <path d="M 215,302 L 215,172 M 215,148 L 115,65 M 215,148 L 215,75 M 215,148 L 315,130 M 215,148 L 105,140 M 105,140 L 85,205 L 85,270 M 215,172 L 173,225" stroke="#475569" stroke-width="2" fill="none" opacity="0.6"/>
+      <!-- 8. Castle & Main Street U.S.A. (แกนกลาง) -->
+      <path d="M 200,235 L 200,122 M 200,115 L 110,55 M 200,115 L 215,55 M 200,115 L 315,120 M 200,115 L 105,110 M 95,110 L 80,165 L 80,215 M 200,155 L 164,178" stroke="#cbd5e1" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <rect x="190" y="138" width="20" height="92" rx="4" fill="#fecdd3" stroke="#e11d48" stroke-width="1.2"/>
+      <text x="200" y="185" fill="#9f1239" font-size="5.5" font-weight="800" text-anchor="middle" transform="rotate(-90 200,185)">MAIN STREET U.S.A.</text>
 
+      <!-- ปราสาทตรงกลาง -->
+      <circle cx="200" cy="115" r="18" fill="#fbcfe8" stroke="#db2777" stroke-width="1.8"/>
+      <polygon points="193,120 200,100 207,120" fill="#db2777"/>
+      <text x="200" y="128" fill="#831843" font-size="5.5" font-weight="900" text-anchor="middle">CASTLE</text>
+
+      <!-- ทางเข้าหลัก -->
+      <rect x="172" y="232" width="56" height="13" rx="4" fill="#dc2626"/>
+      <text x="200" y="241" fill="#ffffff" font-size="6.5" font-weight="bold" text-anchor="middle">ทางเข้า / ออก (GATE)</text>
+
+      <!-- ชั้นข้อมูลเส้นทาง หมุดเครื่องเล่น และจุดสิ่งอำนวยความสะดวก -->
       <g id="routeLayer"></g>
+      <g id="facilitiesLayer" style="display:none;"></g>
       <g id="pinsLayer"></g>
     </svg>
   </div>
 </div>
 
 <div class="nav-banner" id="navBanner"></div>
+
+<!-- แถบตัวกรองรายการ -->
+<div class="filter-bar">
+  <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">ทั้งหมด (14)</button>
+  <button class="filter-btn" id="filter-dpa" onclick="setFilter('dpa')">🎟️ Premier Access (8)</button>
+  <button class="filter-btn" id="filter-todo" onclick="setFilter('todo')">⏳ ยังไม่เล่น</button>
+</div>
+
 <div class="timeline" id="timelineContainer"></div>
 
 <script>
 const itinerary = [
   {
     id: 1, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
-    time: "09:00 น.", name: "Wandering Oaken's Sliding Sleighs",
+    time: "09:00 น.", name: "Wandering Oaken's Sliding Sleighs", shortName: "❄️ Sliding Sleighs",
     zone: "World of Frozen", type: "std", dpaNum: null,
-    x: 55, y: 65,
+    x: 62, y: 52,
     arrow: "⬆️",
     direction: "จากทางเข้าหลัก เดินตรงผ่านถนน Main Street ทะลุกลางปราสาท ตรงดิ่งไปโซน World of Frozen ด้านซ้ายบนสุดทันที",
     note: "ไม่มีในบัตร Premier Access ต้องต่อคิวปกติเป็นเครื่องเล่นแรกของวัน (ถึงหน้าประตู 08:30 น.)"
   },
   {
     id: 2, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
-    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)",
+    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)", shortName: "❄️ Frozen Ever After",
     zone: "World of Frozen", type: "std", dpaNum: null,
-    x: 110, y: 60,
+    x: 118, y: 48,
     arrow: "➡️",
     direction: "เดินขยับมาทางขวาภายในโซน World of Frozen (ใกล้ปราสาทเอเรนเดลล์และน้ำพุ)",
     note: "ต่อคิวปกติช่วงเช้าคนน้อยมาก เก็บสิทธิ์ Premier Access ไว้เล่นซ้ำรอบสองตอนบ่าย + แวะถ่ายรูปปราสาทโล่งๆ"
   },
   {
     id: 3, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
-    time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh",
+    time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh", shortName: "🍯 Winnie the Pooh",
     zone: "Fantasyland", type: "std", dpaNum: null,
-    x: 235, y: 65,
+    x: 242, y: 64,
     arrow: "➡️",
     direction: "เดินออกจากโซน Frozen มาทางขวา เข้าสู่โซน Fantasyland",
     note: "ไม่มีในบัตร Premier Access ช่วงเวลานี้คิวสั้นมาก รีบเก็บก่อนสวนสนุกเปิดเต็มรูปแบบ"
   },
   {
     id: 4, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
-    time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop",
+    time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop", shortName: "🚀 Toy Story",
     zone: "Toy Story Land", type: "std", dpaNum: null,
-    x: 70, y: 142,
+    x: 78, y: 112,
     arrow: "↙️",
     direction: "เดินตัดลงมาทางซ้ายของปราสาท เข้าสู่โซน Toy Story Land ทันทีที่เชือกกั้นเปิด 10:00 น.",
     note: "โซนนี้ใช้บัตร Premier Access ไม่ได้ รีบเล่นให้เสร็จช่วง 10:00–10:45 น. ก่อนคิวยาวกลางแดด"
   },
   {
     id: 5, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
-    time: "11:00 น.", name: "Mystic Manor",
+    time: "11:00 น.", name: "Mystic Manor", shortName: "👁️ Mystic Manor",
     zone: "Mystic Point", type: "dpa", dpaNum: 1,
-    x: 65, y: 210,
+    x: 62, y: 165,
     arrow: "⬇️",
     direction: "เดินลงใต้ต่อเนื่องจากโซน Toy Story Land เข้าสู่โซน Mystic Point ที่อยู่ติดกัน",
     note: "เริ่มใช้บัตร Premier Access สิทธิ์ที่ 1 เดินเข้าช่องทางด่วน (Premier Access Entrance) ได้เลย"
   },
   {
     id: 6, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
-    time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars",
+    time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars", shortName: "🐻 Grizzly Mountain",
     zone: "Grizzly Gulch", type: "dpa", dpaNum: 2,
-    x: 75, y: 278,
+    x: 72, y: 218,
     arrow: "⬇️",
     direction: "เดินลงใต้ต่อจาก Mystic Point เข้าสู่โซนเหมืองแร่ Grizzly Gulch",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 2 ลัดคิวรถไฟเหาะเหมืองแร่"
   },
   {
     id: 7, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)",
+    time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)", shortName: "🍽️ พักทานอาหาร",
     zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
-    x: 98, y: 210,
+    x: 98, y: 165,
     arrow: "⬆️",
     direction: "เดินย้อนกลับขึ้นมาทานที่ Explorer's Club (โซน Mystic Point) หรือเดินไป Royal Banquet Hall (Fantasyland)",
     note: "พักหลบแดดและเติมพลังช่วงเที่ยงที่คนในสวนสนุกหนาแน่นที่สุด"
   },
   {
     id: 8, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "13:15 น.", name: "\"it's a small world\"",
+    time: "13:15 น.", name: "\"it's a small world\"", shortName: "🛶 small world",
     zone: "Fantasyland", type: "dpa", dpaNum: 3,
-    x: 235, y: 45,
+    x: 242, y: 34,
     arrow: "↗️",
     direction: "เดินขึ้นไปด้านบนสุดของโซน Fantasyland",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 3 ล่องเรือตากแอร์เย็นๆ แบบไม่ต้องรอคิว"
   },
   {
     id: 9, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "13:35 น.", name: "Mickey's PhilharMagic",
+    time: "13:35 น.", name: "Mickey's PhilharMagic", shortName: "🎭 PhilharMagic",
     zone: "Fantasyland", type: "dpa", dpaNum: 4,
-    x: 190, y: 85,
+    x: 185, y: 74,
     arrow: "↙️",
     direction: "เดินลงมาใจกลางโซน Fantasyland ใกล้ด้านหลังปราสาท",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 4 ดูหนัง 4 มิติ นั่งพักขาในห้องแอร์ 15 นาที"
   },
   {
     id: 10, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "14:00 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)",
+    time: "14:00 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (DPA)",
     zone: "World of Frozen", type: "dpa", dpaNum: 5,
-    x: 110, y: 60,
+    x: 118, y: 48,
     arrow: "↖️",
     direction: "เดินกลับเข้าไปในโซน World of Frozen ทางซ้ายมือ",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 5 สแกนเข้าช่องทางด่วน เล่นซ้ำรอบสองแบบไม่ต้องต่อคิว 60-90 นาที"
   },
   {
     id: 11, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "14:30 น.", name: "Hyperspace Mountain",
+    time: "14:30 น.", name: "Hyperspace Mountain", shortName: "🌌 Space Mountain",
     zone: "Tomorrowland", type: "dpa", dpaNum: 6,
-    x: 345, y: 95,
+    x: 348, y: 92,
     arrow: "➡️",
     direction: "เดินตัดข้ามฝั่งสวนสนุกจากซ้ายไปขวาสุด เข้าสู่โซน Tomorrowland",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 6 รถไฟเหาะในความมืด (เหมาใช้สิทธิ์รวดเดียว 3 เครื่องเล่นในโซนนี้)"
   },
   {
     id: 12, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "15:00 น.", name: "Iron Man Experience",
+    time: "15:00 น.", name: "Iron Man Experience", shortName: "🔴 Iron Man",
     zone: "Tomorrowland", type: "dpa", dpaNum: 7,
-    x: 345, y: 140,
+    x: 345, y: 132,
     arrow: "⬇️",
     direction: "เดินถัดลงมาด้านในโซน Tomorrowland",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 7 ซิมูเลเตอร์ 3 มิติ"
   },
   {
     id: 13, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "15:30 น.", name: "Ant-Man and The Wasp: Nano Battle!",
+    time: "15:30 น.", name: "Ant-Man and The Wasp: Nano Battle!", shortName: "🐜 Ant-Man",
     zone: "Tomorrowland", type: "dpa", dpaNum: 8,
-    x: 315, y: 175,
+    x: 312, y: 158,
     arrow: "↙️",
     direction: "เดินขยับมาทางทางออกของโซน Tomorrowland (ฝั่งใกล้ปราสาท)",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 8 (ใบสุดท้าย) ยิงปืนเลเซอร์เก็บแต้ม"
   },
   {
     id: 14, phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
-    time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง",
+    time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง", shortName: "📸 ปราสาท & ช้อป",
     zone: "Castle Hub / Adventureland / Main Street", type: "std", dpaNum: null,
-    x: 215, y: 155,
+    x: 200, y: 115,
     arrow: "⬇️",
     direction: "เดินออกมาที่ลานหน้าปราสาท Castle of Magical Dreams แวะล่องเรือ Adventureland (ถ้าคิวสั้น) แล้วเดินช้อปปิ้งถนน Main Street มุ่งหน้าออกประตู 17:00 น.",
     note: "เล่นครบทุกเครื่องเล่นหลักแล้ว เหลือเวลา 1 ชั่วโมงเต็มสำหรับถ่ายรูปและซื้อของที่ระลึก"
   }
 ];
 
+// พิกัดห้องน้ำและจุดเติมน้ำดื่มฟรีในสวนสนุก
+const facilities = [
+  { x: 42, y: 68, label: "🚻💧 Frozen" },
+  { x: 170, y: 42, label: "🚻💧 Fantasyland" },
+  { x: 35, y: 122, label: "🚻 Toy Story" },
+  { x: 42, y: 175, label: "🚻💧 Mystic" },
+  { x: 155, y: 152, label: "🚻💧 Adventure" },
+  { x: 292, y: 115, label: "🚻💧 Tomorrow" },
+  { x: 182, y: 215, label: "🚻💧 Main St." }
+];
+
 let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
 let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
+let currentFilter = 'all';
+let showFacilities = false;
 
+// โหลดธีมสว่าง/มืดที่เคยเลือกไว้
+if (localStorage.getItem('hkdl_theme') === 'light') {
+  document.body.classList.add('light-mode');
+  document.getElementById('themeBtn').innerText = '🌙 กลางคืน';
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('themeBtn').innerText = isLight ? '🌙 กลางคืน' : '☀️ สู้แดด';
+  localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
+}
+
+function toggleFacilities() {
+  showFacilities = !showFacilities;
+  const btn = document.getElementById('facilityBtn');
+  const layer = document.getElementById('facilitiesLayer');
+  btn.classList.toggle('active', showFacilities);
+  layer.style.display = showFacilities ? 'block' : 'none';
+}
+
+function setFilter(filterType) {
+  currentFilter = filterType;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(`filter-${filterType}`).classList.add('active');
+  renderTimeline();
+}
+
+// ----------------- ระบบ Zoom & Pan (สองนิ้วถ่างขยาย) -----------------
+let scale = 1, startScale = 1;
+let translateX = 0, translateY = 0, startX = 0, startY = 0;
+let isPanning = false;
+let touches = [];
+
+const mapWrapper = document.getElementById('mapWrapper');
+const parkMap = document.getElementById('parkMap');
+const zoomInfo = document.getElementById('zoomInfo');
+
+function updateTransform() {
+  scale = Math.max(1, Math.min(scale, 4.5));
+  const rect = mapWrapper.getBoundingClientRect();
+  const maxX = rect.width * (scale - 1);
+  const maxY = rect.height * (scale - 1);
+  translateX = Math.max(-maxX, Math.min(0, translateX));
+  translateY = Math.max(-maxY, Math.min(0, translateY));
+  
+  parkMap.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  zoomInfo.innerText = `ซูม: ${Math.round(scale * 100)}%`;
+}
+
+mapWrapper.addEventListener('touchstart', (e) => {
+  touches = Array.from(e.touches);
+  if (touches.length === 1) {
+    isPanning = true;
+    startX = touches[0].clientX - translateX;
+    startY = touches[0].clientY - translateY;
+  } else if (touches.length === 2) {
+    isPanning = false;
+    startScale = scale;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    mapWrapper.dataset.dist = Math.sqrt(dx * dx + dy * dy);
+  }
+});
+
+mapWrapper.addEventListener('touchmove', (e) => {
+  const currentTouches = Array.from(e.touches);
+  if (isPanning && currentTouches.length === 1) {
+    translateX = currentTouches[0].clientX - startX;
+    translateY = currentTouches[0].clientY - startY;
+    updateTransform();
+  } else if (currentTouches.length === 2) {
+    const dx = currentTouches[0].clientX - currentTouches[1].clientX;
+    const dy = currentTouches[0].clientY - currentTouches[1].clientY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const startDist = parseFloat(mapWrapper.dataset.dist) || dist;
+    
+    scale = startScale * (dist / startDist);
+    updateTransform();
+  }
+});
+
+mapWrapper.addEventListener('touchend', () => { isPanning = false; });
+
+function zoom(amount) {
+  scale += amount;
+  updateTransform();
+}
+function resetZoom() {
+  scale = 1; translateX = 0; translateY = 0;
+  updateTransform();
+}
+
+// ----------------- ระบบยืนยันก่อนกดทุกครั้ง -----------------
 function saveState() {
   localStorage.setItem('hkdl_done', JSON.stringify(completedIds));
   localStorage.setItem('hkdl_selected', selectedId);
@@ -355,13 +639,19 @@ function saveState() {
 
 function toggleDone(e, id) {
   e.stopPropagation();
-  if (completedIds.includes(id)) {
-    completedIds = completedIds.filter(item => item !== id);
-  } else {
+  const step = itinerary.find(item => item.id === id);
+  const isCurrentlyDone = completedIds.includes(id);
+
+  if (!isCurrentlyDone) {
+    if (!confirm(`ยืนยันว่าทำภารกิจที่ ${id} (${step.name}) สำเร็จแล้วใช่ไหม?`)) return;
     completedIds.push(id);
     const nextStep = itinerary.find(item => item.id > id && !completedIds.includes(item.id));
     if (nextStep) selectedId = nextStep.id;
+  } else {
+    if (!confirm(`ต้องการยกเลิกการติ๊กถูกภารกิจที่ ${id} (${step.name}) ใช่หรือไม่?`)) return;
+    completedIds = completedIds.filter(item => item !== id);
   }
+  
   saveState();
   renderAll();
 }
@@ -373,12 +663,42 @@ function selectStep(id) {
 }
 
 function resetProgress() {
-  if (confirm('ต้องการรีเซ็ตสถานะการเล่นและสิทธิ์บัตร Premier Access ทั้งหมดใช่ไหม?')) {
+  if (confirm('⚠️ คำเตือน: ต้องการล้างข้อมูลที่ติ๊กไว้และสิทธิ์บัตร Premier Access ทั้งหมดใช่หรือไม่?')) {
     completedIds = [];
     selectedId = 1;
     saveState();
     renderAll();
   }
+}
+
+// ----------------- ระบบแสดงผล -----------------
+function renderFacilities() {
+  const layer = document.getElementById('facilitiesLayer');
+  layer.innerHTML = '';
+  facilities.forEach(f => {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", f.x - 16);
+    rect.setAttribute("y", f.y - 5);
+    rect.setAttribute("width", 32);
+    rect.setAttribute("height", 9);
+    rect.setAttribute("rx", 4);
+    rect.setAttribute("fill", "#0284c7");
+    rect.setAttribute("stroke", "#ffffff");
+    rect.setAttribute("stroke-width", "0.8");
+    g.appendChild(rect);
+
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    txt.setAttribute("x", f.x);
+    txt.setAttribute("y", f.y + 1.5);
+    txt.setAttribute("text-anchor", "middle");
+    txt.setAttribute("font-size", "4.5");
+    txt.setAttribute("font-weight", "bold");
+    txt.setAttribute("fill", "#ffffff");
+    txt.textContent = f.label;
+    g.appendChild(txt);
+    layer.appendChild(g);
+  });
 }
 
 function renderDPA() {
@@ -402,7 +722,7 @@ function renderMap() {
 
   const currentIdx = itinerary.findIndex(i => i.id === selectedId);
   const currentStep = itinerary[currentIdx];
-  const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 215, y: 302 };
+  const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 200, y: 232 };
 
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   line.setAttribute("x1", prevStep.x);
@@ -413,14 +733,16 @@ function renderMap() {
   routeLayer.appendChild(line);
 
   const angle = Math.atan2(currentStep.y - prevStep.y, currentStep.x - prevStep.x);
-  const arrowDist = 14;
+  const arrowDist = 13;
   const ax = currentStep.x - Math.cos(angle) * arrowDist;
   const ay = currentStep.y - Math.sin(angle) * arrowDist;
   const deg = angle * (180 / Math.PI);
 
   const arrow = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-  arrow.setAttribute("points", "-6,-5 6,0 -6,5");
-  arrow.setAttribute("fill", "#38bdf8");
+  arrow.setAttribute("points", "-5,-4 5,0 -5,4");
+  arrow.setAttribute("fill", "#ef4444");
+  arrow.setAttribute("stroke", "#ffffff");
+  arrow.setAttribute("stroke-width", "0.8");
   arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${deg})`);
   routeLayer.appendChild(arrow);
 
@@ -429,7 +751,7 @@ function renderMap() {
     const isSelected = item.id === selectedId;
 
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttribute("class", "pin-group");
+    g.setAttribute("class", "pin-group" + (isDone ? " done" : ""));
     g.onclick = () => selectStep(item.id);
 
     if (isSelected) {
@@ -443,27 +765,46 @@ function renderMap() {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", item.x);
     circle.setAttribute("cy", item.y);
-    circle.setAttribute("r", isSelected ? "10" : "8");
+    circle.setAttribute("r", isSelected ? "7.5" : "5.8");
     
-    let fill = "#38bdf8";
+    let fill = "#0284c7";
     if (item.type === 'dpa') fill = "#f59e0b";
     if (item.type === 'food') fill = "#10b981";
-    if (isDone) fill = "#475569";
+    if (isDone) fill = "#64748b";
 
     circle.setAttribute("fill", fill);
-    circle.setAttribute("stroke", isSelected ? "#ffffff" : "#0f172a");
-    circle.setAttribute("stroke-width", isSelected ? "2.5" : "1.5");
+    circle.setAttribute("stroke", "#ffffff");
+    circle.setAttribute("stroke-width", isSelected ? "2" : "1.2");
     g.appendChild(circle);
 
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", item.x);
-    text.setAttribute("y", item.y + 3);
+    text.setAttribute("y", item.y + 2.3);
     text.setAttribute("text-anchor", "middle");
-    text.setAttribute("font-size", "8.5");
+    text.setAttribute("font-size", "7");
     text.setAttribute("font-weight", "bold");
-    text.setAttribute("fill", isDone ? "#94a3b8" : "#000000");
+    text.setAttribute("fill", "#ffffff");
     text.textContent = isDone ? "✓" : item.id;
     g.appendChild(text);
+
+    // ป้ายชื่อลอยเหนือหมุด
+    const labelY = item.y - 11;
+    const txtLen = item.shortName.length * 2.6 + 10;
+
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", item.x - (txtLen / 2));
+    rect.setAttribute("y", labelY - 4.8);
+    rect.setAttribute("width", txtLen);
+    rect.setAttribute("height", 7.8);
+    rect.setAttribute("class", "pin-label-bg");
+    g.appendChild(rect);
+
+    const lblText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    lblText.setAttribute("x", item.x);
+    lblText.setAttribute("y", labelY + 1.1);
+    lblText.setAttribute("class", "pin-label-text");
+    lblText.textContent = `${item.id}. ${item.shortName}`;
+    g.appendChild(lblText);
 
     pinsLayer.appendChild(g);
   });
@@ -499,7 +840,18 @@ function renderTimeline() {
   container.innerHTML = '';
   let currentPhase = '';
 
-  itinerary.forEach(item => {
+  const filteredList = itinerary.filter(item => {
+    if (currentFilter === 'dpa') return item.type === 'dpa';
+    if (currentFilter === 'todo') return !completedIds.includes(item.id);
+    return true;
+  });
+
+  if (filteredList.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted);">🎉 เก็บครบทุกรายการในหมวดนี้แล้ว!</div>`;
+    return;
+  }
+
+  filteredList.forEach(item => {
     if (item.phase !== currentPhase) {
       currentPhase = item.phase;
       const pDiv = document.createElement('div');
@@ -536,6 +888,7 @@ function renderTimeline() {
 }
 
 function renderAll() {
+  renderFacilities();
   renderDPA();
   renderMap();
   renderBanner();
@@ -546,3 +899,5 @@ renderAll();
 </script>
 </body>
 </html>
+      
+  
