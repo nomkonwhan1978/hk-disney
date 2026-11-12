@@ -70,7 +70,6 @@
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
-  /* ลิ้นชักเลือกเครื่องเล่น */
   .ride-drawer {
     display: none;
     background: var(--card);
@@ -259,7 +258,6 @@
     <button class="toolbar-btn ride-picker-btn" id="ridePickerBtn" onclick="toggleRideDrawer()">🎢 เลือกเครื่องเล่น</button>
   </div>
 
-  <!-- ลิ้นชักเลือกเครื่องเล่น: เรียงปุ่ม แสดงทั้งหมด | 8 Premier | 3 คิวปกติ -->
   <div class="ride-drawer" id="rideDrawer">
     <div class="drawer-tabs">
       <button class="drawer-tab-btn active" id="tab-all" onclick="setDrawerTab('all')">แสดงทั้งหมด</button>
@@ -516,7 +514,6 @@ const itinerary = [
 ];
 
 const rideChipCatalog = [
-  // 8 Premier
   { key: "mystic", label: "👁️ Mystic Manor", group: "premier", defaultId: 5 },
   { key: "grizzly", label: "🐻 Grizzly Mountain", group: "premier", defaultId: 6 },
   { key: "smallworld", label: "🛶 small world", group: "premier", defaultId: 8 },
@@ -525,7 +522,6 @@ const rideChipCatalog = [
   { key: "spacemountain", label: "🌌 Space Mountain", group: "premier", defaultId: 11 },
   { key: "ironman", label: "🔴 Iron Man", group: "premier", defaultId: 12 },
   { key: "antman", label: "🐜 Ant-Man", group: "premier", defaultId: 13 },
-  // 3 คิวปกติ
   { key: "sliding", label: "❄️ Sliding Sleighs", group: "normal", defaultId: 1 },
   { key: "pooh", label: "🍯 Winnie the Pooh", group: "normal", defaultId: 3 },
   { key: "toystory", label: "🚀 Toy Story", group: "normal", defaultId: 4 }
@@ -545,7 +541,7 @@ let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
 let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
 let highlightedRideKeys = [];
 let drawerTab = 'all';
-let isExploreMode = false; // โหมดสำรวจตำแหน่ง (ซ่อนเส้นปะสีแดงจนกว่าจะกดปุ่มแผนที่เพื่อกลับโหมดปกติ)
+let isExploreMode = false;
 let currentFilter = 'all';
 let showFacilities = false;
 let is3DMap = true;
@@ -561,7 +557,6 @@ function toggleTheme() {
   localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
 }
 
-// กดปุ่มแผนที่ 3D: หากอยู่ในโหมดสำรวจ/กรองจุด จะคืนค่า 14 จุดและแสดงเส้นปะกลับมาทันที
 function handleMapToggleBtn() {
   if (isExploreMode || currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideKeys.length > 0 || document.getElementById('rideDrawer').classList.contains('open')) {
     document.getElementById('rideDrawer').classList.remove('open');
@@ -585,22 +580,19 @@ function toggleFacilities() {
   layer.style.display = showFacilities ? 'block' : 'none';
 }
 
-// เปิด/ปิดลิ้นชักเลือกเครื่องเล่น: ไม่รีเซ็ตค่า Default และซ่อนเส้นปะทันที
 function toggleRideDrawer() {
   const drawer = document.getElementById('rideDrawer');
   const btn = document.getElementById('ridePickerBtn');
   const isOpen = drawer.classList.toggle('open');
   
   if (isOpen) {
-    isExploreMode = true; // เข้าโหมดสำรวจตำแหน่ง (เส้นปะหายไป)
+    isExploreMode = true;
   }
   
-  // คงไฟปุ่มสีส้มไว้หากลิ้นชักเปิดอยู่ หรือยังอยู่ในโหมดสำรวจ/กรองเครื่องเล่น
   btn.classList.toggle('active', isOpen || isExploreMode || highlightedRideKeys.length > 0 || drawerTab !== 'all');
   renderMap();
 }
 
-// สลับแท็บภายในลิ้นชัก: แสดงทั้งหมด | 8 Premier | 3 คิวปกติ
 function setDrawerTab(tabName) {
   drawerTab = tabName;
   highlightedRideKeys = [];
@@ -621,7 +613,6 @@ function setDrawerTab(tabName) {
   renderMap();
 }
 
-// กดเลือกเครื่องเล่นรายตัว
 function toggleHighlightRide(rideKey, defaultId) {
   isExploreMode = true;
   const idx = highlightedRideKeys.indexOf(rideKey);
@@ -651,7 +642,6 @@ function toggleHighlightRide(rideKey, defaultId) {
   renderTimeline();
 }
 
-// ล้างโหมดสำรวจ กลับสู่โหมดนำทางปกติครบ 14 จุด + แสดงเส้นปะสีแดง
 function clearHighlightRides() {
   highlightedRideKeys = [];
   drawerTab = 'all';
@@ -828,7 +818,6 @@ function selectStep(id, fromMap = false) {
   saveState();
 
   if (fromMap) {
-    if (isFullscreen) exitFullscreen();
     const singleBtn = document.getElementById('filter-single');
     singleBtn.style.display = 'inline-block';
     singleBtn.innerText = `🎯 เฉพาะลำดับที่ ${id}`;
@@ -839,7 +828,7 @@ function selectStep(id, fromMap = false) {
 
   renderAll();
 
-  if (fromMap) {
+  if (fromMap && !isFullscreen) {
     setTimeout(() => {
       const cardEl = document.getElementById(`card-${id}`);
       if (cardEl) {
@@ -917,7 +906,6 @@ function renderMap() {
   const currentStep = itinerary[currentIdx];
   const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 200, y: 232 };
 
-  // วาดเส้นปะสีแดงเฉพาะเมื่อไม่ได้อยู่ในโหมดสำรวจตำแหน่งเครื่องเล่น
   if (!isExploreMode) {
     const pathData = currentStep.routePath || `M ${prevStep.x},${prevStep.y} L ${currentStep.x},${currentStep.y}`;
     const pathNode = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -978,6 +966,7 @@ function renderMap() {
     if (isDone) cls += " done";
     if (!isActive) cls += " dimmed";
     g.setAttribute("class", cls);
+    g.ontouchstart = (e) => { e.stopPropagation(); };
     g.onclick = (e) => { e.stopPropagation(); selectStep(item.id, true); };
 
     if (isSelected || isHighlighted) {
