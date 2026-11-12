@@ -20,7 +20,7 @@
     --green: #10b981;
     --green-bg: rgba(16, 185, 129, 0.15);
     --map-bg: #131c31;
-    --label-bg: rgba(15, 23, 42, 0.88);
+    --label-bg: rgba(15, 23, 42, 0.76);
     --label-text: #ffffff;
   }
 
@@ -39,7 +39,7 @@
     --green: #059669;
     --green-bg: #d1fae5;
     --map-bg: #e2e8f0;
-    --label-bg: rgba(255, 255, 255, 0.95);
+    --label-bg: rgba(255, 255, 255, 0.84);
     --label-text: #0f172a;
   }
 
@@ -61,14 +61,47 @@
   .dpa-count { font-size: 1.05rem; font-weight: 800; color: #fbbf24; }
 
   .map-section { padding: 12px 16px 0; position: relative; }
-  .map-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 6px; }
-  .toolbar-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .map-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 6px; }
   .toolbar-btn {
     background: var(--card); color: var(--text); border: 1px solid var(--border);
-    padding: 6px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s;
+    padding: 6px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; flex: 1; text-align: center;
   }
   .toolbar-btn.active { background: #0284c7; color: #ffffff; border-color: #0284c7; }
-  .fullscreen-btn { background: #f59e0b; color: #000000; border-color: #f59e0b; }
+  .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
+  .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
+
+  /* ลิ้นชักเลือกเครื่องเล่นทั้ง 8 */
+  .ride-drawer {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .ride-drawer.open { display: block; }
+  .ride-drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.72rem; color: var(--gold); font-weight: 700; }
+  .clear-ride-btn { background: transparent; border: none; color: var(--blue); font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: underline; }
+  .ride-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .ride-chip {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: 0.2s;
+  }
+  .ride-chip.selected {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+    font-weight: 800;
+  }
 
   .map-wrapper { background: var(--map-bg); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; position: relative; touch-action: none; height: 265px; }
   
@@ -92,37 +125,44 @@
 
   svg { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
   
-  .zoom-controls { position: absolute; bottom: 12px; right: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 20; }
-  .zoom-btn { background: rgba(15, 23, 42, 0.88); border: 1px solid #64748b; color: #fff; width: 34px; height: 34px; border-radius: 8px; font-weight: bold; font-size: 1.05rem; cursor: pointer; }
+  /* ปุ่มควบคุมมุมขวาล่างของแผนที่ */
+  .zoom-controls { position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; z-index: 50; }
+  .bottom-btn-row { display: flex; gap: 5px; }
+  .zoom-btn { background: rgba(15, 23, 42, 0.88); border: 1px solid #64748b; color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .fs-icon-btn { background: rgba(245, 158, 11, 0.92); border: 1px solid #ffffff; color: #000000; font-size: 1.05rem; }
+  
   .exit-fs-btn {
     display: none;
     position: absolute;
-    top: 12px; right: 12px;
+    top: 14px; right: 14px;
     background: #ef4444;
     color: #fff;
     border: 2px solid #fff;
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 800;
-    z-index: 30;
+    z-index: 100;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.5);
   }
   .map-wrapper.is-fullscreen .exit-fs-btn { display: block; }
+  .map-wrapper.is-fullscreen .fs-icon-btn { display: none; }
 
-  .zoom-info { position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.82); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; color: #38bdf8; pointer-events: none; z-index: 20; }
+  .zoom-info { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.78); padding: 4px 9px; border-radius: 6px; font-size: 0.72rem; color: #38bdf8; pointer-events: none; z-index: 20; }
 
   @keyframes dashMove { to { stroke-dashoffset: -24; } }
   .nav-route { stroke: #ef4444; stroke-width: 3.5; stroke-dasharray: 6, 6; fill: none; stroke-linecap: round; stroke-linejoin: round; animation: dashMove 1s linear infinite; filter: drop-shadow(0 0 2px #ffffff); }
-  @keyframes pulseRing { 0% { r: 6; opacity: 1; } 100% { r: 18; opacity: 0; } }
-  .pulse-circle { fill: none; stroke: #ef4444; stroke-width: 2.5; animation: pulseRing 1.5s infinite; }
-  .pin-group { cursor: pointer; }
+  @keyframes pulseRing { 0% { r: 6; opacity: 1; } 100% { r: 19; opacity: 0; } }
+  .pulse-circle { fill: none; stroke: #ef4444; stroke-width: 2.8; animation: pulseRing 1.4s infinite; }
+  
+  .pin-group { cursor: pointer; transition: opacity 0.25s ease; }
+  .pin-group.dimmed { opacity: 0.18; }
 
-  .pin-label-bg { fill: var(--label-bg); stroke: var(--gold); stroke-width: 0.8px; rx: 3.5px; }
+  /* ป้ายชื่อไม่มีขอบสีส้ม และโปร่งแสงเล็กน้อย */
+  .pin-label-bg { fill: var(--label-bg); stroke: none; rx: 3.5px; }
   .pin-label-text { font-size: 4.8px; font-weight: 700; fill: var(--label-text); text-anchor: middle; pointer-events: none; }
-  .pin-group.done .pin-label-bg { opacity: 0.5; stroke: #64748b; }
-  .pin-group.done .pin-label-text { opacity: 0.6; text-decoration: line-through; }
+  .pin-group.done .pin-label-text { text-decoration: line-through; }
 
   .nav-banner { margin: 12px 16px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; border-radius: 14px; padding: 14px; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25); }
   .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap; }
@@ -180,21 +220,36 @@
 </header>
 
 <div class="map-section">
+  <!-- แถบปุ่ม 3 ปุ่มหลัก -->
   <div class="map-toolbar">
-    <div class="toolbar-group">
-      <button class="toolbar-btn active" id="mapToggleBtn" onclick="toggleMapType()">🗺️ แผนที่ 3D</button>
-      <button class="toolbar-btn" id="facilityBtn" onclick="toggleFacilities()">🚻💧 ห้องน้ำ/น้ำ</button>
+    <button class="toolbar-btn active" id="mapToggleBtn" onclick="handleMapToggleBtn()">🗺️ แผนที่ 3D</button>
+    <button class="toolbar-btn" id="facilityBtn" onclick="toggleFacilities()">🚻💧 ห้องน้ำ/น้ำ</button>
+    <button class="toolbar-btn ride-picker-btn" id="ridePickerBtn" onclick="toggleRideDrawer()">🎢 เลือกเครื่องเล่น</button>
+  </div>
+
+  <!-- ลิ้นชักเลือกเครื่องเล่นทั้ง 8 -->
+  <div class="ride-drawer" id="rideDrawer">
+    <div class="ride-drawer-header">
+      <span>แตะชื่อเพื่อเน้นจุดบนแผนที่:</span>
+      <button class="clear-ride-btn" onclick="clearHighlightRides()">แสดงทั้งหมด</button>
     </div>
-    <button class="toolbar-btn fullscreen-btn" onclick="enterFullscreen()">⛶ เต็มจอแนวนอน</button>
+    <div class="ride-chips" id="rideChips"></div>
   </div>
 
   <div class="map-wrapper" id="mapWrapper">
     <div class="zoom-info" id="zoomInfo">ซูม: 100%</div>
-    <button class="exit-fs-btn" onclick="exitFullscreen()">✕ ปิดเต็มจอ</button>
-    <div class="zoom-controls">
+    
+    <!-- ปุ่มปิดเต็มจอ (ใส่ ontouchstart stopPropagation เพื่อกันบั๊กกดไม่ติด) -->
+    <button class="exit-fs-btn" ontouchstart="event.stopPropagation()" onclick="exitFullscreen()">✕ ปิดเต็มจอ</button>
+    
+    <!-- ปุ่มซูม + สัญลักษณ์เต็มจอข้างปุ่ม 1x -->
+    <div class="zoom-controls" ontouchstart="event.stopPropagation()">
       <button class="zoom-btn" onclick="zoom(0.35)">+</button>
       <button class="zoom-btn" onclick="zoom(-0.35)">-</button>
-      <button class="zoom-btn" onclick="resetZoom()">1x</button>
+      <div class="bottom-btn-row">
+        <button class="zoom-btn fs-icon-btn" title="เต็มจอแนวนอน" onclick="enterFullscreen()">⛶</button>
+        <button class="zoom-btn" onclick="resetZoom()">1x</button>
+      </div>
     </div>
 
     <svg id="parkMap" viewBox="0 0 400 250">
@@ -281,10 +336,10 @@ const itinerary = [
   },
   {
     id: 2, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
-    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)", shortName: "❄️ Frozen Ever After",
+    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)", shortName: "❄️ Frozen (รอบเช้า)",
     zone: "World of Frozen", type: "std", dpaNum: null,
-    x: 118, y: 48,
-    routePath: "M 62,52 L 118,48",
+    x: 112, y: 34, // แยกอยู่ด้านบน
+    routePath: "M 62,52 L 112,34",
     arrow: "➡️",
     direction: "เดินขยับมาทางขวาภายในโซนหิมะ",
     note: "เก็บคิวปกติก่อนช่วงคนน้อย แล้วเก็บสิทธิ์บัตรลัดคิวไว้ใช้อีกรอบตอนบ่าย"
@@ -293,8 +348,8 @@ const itinerary = [
     id: 3, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
     time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh", shortName: "🍯 Winnie the Pooh",
     zone: "Fantasyland", type: "std", dpaNum: null,
-    x: 242, y: 64,
-    routePath: "M 118,48 L 200,60 L 242,64",
+    x: 248, y: 62,
+    routePath: "M 112,34 L 200,56 L 248,62",
     arrow: "➡️",
     direction: "ออกจากโซนหิมะ เดินลัดสวนหลังปราสาทไปทางขวา",
     note: "ไม่มีในบัตร Premier Access ช่วงเช้านี้คิวสั้นมาก รีบเก็บก่อนสวนสนุกเปิดเต็มรูปแบบ"
@@ -304,7 +359,7 @@ const itinerary = [
     time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop", shortName: "🚀 Toy Story",
     zone: "Toy Story Land", type: "std", dpaNum: null,
     x: 78, y: 112,
-    routePath: "M 242,64 L 200,115 L 78,112",
+    routePath: "M 248,62 L 200,115 L 78,112",
     arrow: "↙️",
     direction: "กลับมาที่ลานปราสาท เดินตัดไปทางซ้ายเข้าโซนของเล่น",
     note: "โซนนี้ไม่มีบัตร Premier Access ให้ใช้ รีบเล่นก่อนคนแน่นและแดดร้อน"
@@ -313,8 +368,8 @@ const itinerary = [
     id: 5, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
     time: "11:00 น.", name: "Mystic Manor", shortName: "👁️ Mystic Manor",
     zone: "Mystic Point", type: "dpa", dpaNum: 1,
-    x: 62, y: 165,
-    routePath: "M 78,112 L 62,165",
+    x: 50, y: 162, // เว้นระยะห่างจากจุดที่ 7
+    routePath: "M 78,112 L 50,162",
     arrow: "⬇️",
     direction: "เดินลงใต้ต่อเนื่องจากโซนของเล่น",
     note: "เริ่มใช้บัตร Premier Access สิทธิ์ที่ 1 เดินเข้าช่องทางด่วนได้เลย"
@@ -324,7 +379,7 @@ const itinerary = [
     time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars", shortName: "🐻 Grizzly Mountain",
     zone: "Grizzly Gulch", type: "dpa", dpaNum: 2,
     x: 72, y: 218,
-    routePath: "M 62,165 L 72,218",
+    routePath: "M 50,162 L 72,218",
     arrow: "⬇️",
     direction: "เดินลงใต้ต่อจาก Mystic Point เข้าสู่โซนเหมืองแร่",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 2 ลัดคิวรถไฟเหาะเหมืองแร่"
@@ -333,8 +388,8 @@ const itinerary = [
     id: 7, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)", shortName: "🍽️ พักทานอาหาร",
     zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
-    x: 98, y: 165,
-    routePath: "M 72,218 L 62,165 L 98,165",
+    x: 112, y: 174, // เว้นระยะห่างจากจุดที่ 5
+    routePath: "M 72,218 L 62,165 L 112,174",
     arrow: "⬆️",
     direction: "เดินย้อนกลับขึ้นมาทานที่ Explorer's Club บริเวณคฤหาสน์",
     note: "พักหลบแดดช่วงที่คนหนาแน่นที่สุด"
@@ -344,7 +399,7 @@ const itinerary = [
     time: "13:15 น.", name: "\"it's a small world\"", shortName: "🛶 small world",
     zone: "Fantasyland", type: "dpa", dpaNum: 3,
     x: 242, y: 34,
-    routePath: "M 98,165 L 200,115 L 242,34",
+    routePath: "M 112,174 L 200,115 L 242,34",
     arrow: "↗️",
     direction: "ตัดผ่านหน้าปราสาทเดินขึ้นไปยังด้านบนสุดของ Fantasyland",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 3 ล่องเรือตากแอร์เย็นๆ ช่วงบ่ายที่คนเยอะ"
@@ -353,8 +408,8 @@ const itinerary = [
     id: 9, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "13:35 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (DPA)",
     zone: "World of Frozen", type: "dpa", dpaNum: 4,
-    x: 118, y: 48,
-    routePath: "M 242,34 L 185,42 L 118,48",
+    x: 126, y: 60, // แยกอยู่ด้านล่าง ไม่ทับจุดที่ 2
+    routePath: "M 242,34 L 185,48 L 126,60",
     arrow: "⬅️",
     direction: "เดินออกจาก small world เลี้ยวซ้ายเข้าโซน World of Frozen ที่อยู่ติดกันทันที",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 4 ลัดคิวช่วงบ่ายพีคไทม์ (ประหยัดเวลารอ 60-90 นาที)"
@@ -363,8 +418,8 @@ const itinerary = [
     id: 10, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "14:05 น.", name: "Mickey's PhilharMagic", shortName: "🎭 PhilharMagic",
     zone: "Fantasyland", type: "dpa", dpaNum: 5,
-    x: 215, y: 76,
-    routePath: "M 118,48 L 200,68 L 215,76",
+    x: 205, y: 78,
+    routePath: "M 126,60 L 205,78",
     arrow: "↘️",
     direction: "เดินออกจากโซนหิมะ ตัดผ่านหลังปราสาทมาทางขวา เพื่อเตรียมข้ามฝั่งไป Tomorrowland",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 5 ดูหนัง 4 มิติห้องแอร์ เป็นจุดพักขาก่อนข้ามโซน"
@@ -374,7 +429,7 @@ const itinerary = [
     time: "14:30 น.", name: "Hyperspace Mountain", shortName: "🌌 Space Mountain",
     zone: "Tomorrowland", type: "dpa", dpaNum: 6,
     x: 348, y: 92,
-    routePath: "M 215,76 L 235,112 L 348,92",
+    routePath: "M 205,78 L 235,112 L 348,92",
     arrow: "➡️",
     direction: "เดินต่อเนื่องจาก PhilharMagic ข้ามสะพานเข้าสู่โซน Tomorrowland ฝั่งขวาสุด",
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 6 รถไฟเหาะอวกาศในความมืด"
@@ -403,8 +458,8 @@ const itinerary = [
     id: 14, phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
     time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง", shortName: "📸 ปราสาท & ช้อป",
     zone: "Castle Hub / Adventureland / Main Street", type: "std", dpaNum: null,
-    x: 200, y: 115,
-    routePath: "M 312,158 L 200,115",
+    x: 200, y: 118,
+    routePath: "M 312,158 L 200,118",
     arrow: "⬇️",
     direction: "เดินกลับมาถ่ายรูปลานหน้าปราสาท แล้วช้อปปิ้งถนน Main Street มุ่งหน้าออกประตู",
     note: "เก็บครบ 100% พักผ่อนและถ่ายรูปตามอัธยาศัย"
@@ -423,6 +478,7 @@ const facilities = [
 
 let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
 let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
+let highlightedRideIds = [];
 let currentFilter = 'all';
 let showFacilities = false;
 let is3DMap = true;
@@ -438,7 +494,12 @@ function toggleTheme() {
   localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
 }
 
-function toggleMapType() {
+// กดปุ่มแผนที่ 3D: ถ้ากำลังกรองเฉพาะจุดอยู่ ให้คืนค่า 14 ลำดับทันที; ถ้าไม่ได้กรองอยู่ ให้สลับโหมดแผนที่
+function handleMapToggleBtn() {
+  if (currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideIds.length > 0) {
+    clearHighlightRides();
+    return;
+  }
   is3DMap = !is3DMap;
   document.getElementById('map3DLayer').style.display = is3DMap ? 'block' : 'none';
   document.getElementById('mapSVGLayer').style.display = is3DMap ? 'none' : 'block';
@@ -453,6 +514,52 @@ function toggleFacilities() {
   const layer = document.getElementById('facilitiesLayer');
   btn.classList.toggle('active', showFacilities);
   layer.style.display = showFacilities ? 'block' : 'none';
+}
+
+function toggleRideDrawer() {
+  const drawer = document.getElementById('rideDrawer');
+  const btn = document.getElementById('ridePickerBtn');
+  const isOpen = drawer.classList.toggle('open');
+  btn.classList.toggle('active', isOpen || highlightedRideIds.length > 0);
+}
+
+function toggleHighlightRide(id) {
+  const idx = highlightedRideIds.indexOf(id);
+  if (idx === -1) {
+    highlightedRideIds.push(id);
+    selectedId = id;
+  } else {
+    highlightedRideIds.splice(idx, 1);
+  }
+
+  const pickerBtn = document.getElementById('ridePickerBtn');
+  const drawerOpen = document.getElementById('rideDrawer').classList.contains('open');
+  pickerBtn.classList.toggle('active', drawerOpen || highlightedRideIds.length > 0);
+
+  if (highlightedRideIds.length > 0) {
+    currentFilter = 'highlighted';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    const singleBtn = document.getElementById('filter-single');
+    singleBtn.style.display = 'inline-block';
+    singleBtn.innerText = `🎯 เฉพาะที่เลือก (${highlightedRideIds.length})`;
+    singleBtn.classList.add('active');
+  } else {
+    setFilter('all');
+  }
+
+  renderRideChips();
+  renderMap();
+  renderBanner();
+  renderTimeline();
+}
+
+function clearHighlightRides() {
+  highlightedRideIds = [];
+  const drawerOpen = document.getElementById('rideDrawer').classList.contains('open');
+  document.getElementById('ridePickerBtn').classList.toggle('active', drawerOpen);
+  setFilter('all');
+  renderRideChips();
+  renderMap();
 }
 
 function enterFullscreen() {
@@ -480,7 +587,7 @@ function setFilter(filterType) {
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   const targetBtn = document.getElementById(`filter-${filterType}`);
   if (targetBtn) targetBtn.classList.add('active');
-  if (filterType !== 'single') {
+  if (filterType !== 'single' && filterType !== 'highlighted') {
     document.getElementById('filter-single').style.display = 'none';
   }
   renderTimeline();
@@ -591,8 +698,23 @@ function selectStep(id, fromMap = false) {
 
 function resetProgress() {
   if (confirm('⚠️ คำเตือน: ต้องการล้างข้อมูลที่ติ๊กไว้และสิทธิ์บัตร Premier Access ทั้งหมดใช่หรือไม่?')) {
-    completedIds = []; selectedId = 1; saveState(); setFilter('all'); renderAll();
+    completedIds = []; selectedId = 1; highlightedRideIds = [];
+    saveState(); clearHighlightRides(); renderAll();
   }
+}
+
+function renderRideChips() {
+  const container = document.getElementById('rideChips');
+  container.innerHTML = '';
+  const dpaRides = itinerary.filter(i => i.type === 'dpa');
+  dpaRides.forEach(ride => {
+    const btn = document.createElement('button');
+    const isSelected = highlightedRideIds.includes(ride.id);
+    btn.className = 'ride-chip' + (isSelected ? ' selected' : '');
+    btn.innerText = `#${ride.dpaNum} ${ride.shortName}`;
+    btn.onclick = () => toggleHighlightRide(ride.id);
+    container.appendChild(btn);
+  });
 }
 
 function renderFacilities() {
@@ -663,15 +785,28 @@ function renderMap() {
   arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${arrowAngle})`);
   routeLayer.appendChild(arrow);
 
-  itinerary.forEach(item => {
+  const hasHighlightMode = highlightedRideIds.length > 0;
+
+  const sortedPins = [...itinerary].sort((a, b) => {
+    const aHigh = highlightedRideIds.includes(a.id) ? 1 : 0;
+    const bHigh = highlightedRideIds.includes(b.id) ? 1 : 0;
+    return aHigh - bHigh;
+  });
+
+  sortedPins.forEach(item => {
     const isDone = completedIds.includes(item.id);
     const isSelected = item.id === selectedId;
+    const isHighlighted = highlightedRideIds.includes(item.id);
+    const isDimmed = hasHighlightMode && !isHighlighted;
 
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttribute("class", "pin-group" + (isDone ? " done" : ""));
+    let cls = "pin-group";
+    if (isDone) cls += " done";
+    if (isDimmed) cls += " dimmed";
+    g.setAttribute("class", cls);
     g.onclick = (e) => { e.stopPropagation(); selectStep(item.id, true); };
 
-    if (isSelected) {
+    if (isSelected || isHighlighted) {
       const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       pulse.setAttribute("cx", item.x); pulse.setAttribute("cy", item.y);
       pulse.setAttribute("class", "pulse-circle"); g.appendChild(pulse);
@@ -679,7 +814,7 @@ function renderMap() {
 
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", item.x); circle.setAttribute("cy", item.y);
-    circle.setAttribute("r", isSelected ? "7.5" : "5.8");
+    circle.setAttribute("r", (isSelected || isHighlighted) ? "7.8" : "5.8");
     
     let fill = "#0284c7";
     if (item.type === 'dpa') fill = "#f59e0b";
@@ -687,7 +822,7 @@ function renderMap() {
     if (isDone) fill = "#64748b";
 
     circle.setAttribute("fill", fill); circle.setAttribute("stroke", "#ffffff");
-    circle.setAttribute("stroke-width", isSelected ? "2" : "1.2"); g.appendChild(circle);
+    circle.setAttribute("stroke-width", (isSelected || isHighlighted) ? "2" : "1.2"); g.appendChild(circle);
 
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", item.x); text.setAttribute("y", item.y + 2.3);
@@ -738,6 +873,7 @@ function renderTimeline() {
   let currentPhase = '';
 
   const filteredList = itinerary.filter(item => {
+    if (currentFilter === 'highlighted') return highlightedRideIds.includes(item.id);
     if (currentFilter === 'single') return item.id === selectedId;
     if (currentFilter === 'dpa') return item.type === 'dpa';
     if (currentFilter === 'todo') return !completedIds.includes(item.id);
@@ -784,17 +920,18 @@ function renderTimeline() {
     container.appendChild(card);
   });
 
-  if (currentFilter === 'single') {
+  if (currentFilter === 'single' || currentFilter === 'highlighted') {
     const showAllBtn = document.createElement('button');
     showAllBtn.className = 'filter-btn';
     showAllBtn.style.cssText = 'width: 100%; padding: 10px; margin-top: 4px; text-align: center;';
     showAllBtn.innerText = '📋 แสดงตารางเวลาทั้งหมด (14 รายการ)';
-    showAllBtn.onclick = () => setFilter('all');
+    showAllBtn.onclick = () => clearHighlightRides();
     container.appendChild(showAllBtn);
   }
 }
 
 function renderAll() {
+  renderRideChips();
   renderFacilities();
   renderDPA();
   renderMap();
