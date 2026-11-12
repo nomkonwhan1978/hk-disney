@@ -20,7 +20,7 @@
     --green: #10b981;
     --green-bg: rgba(16, 185, 129, 0.15);
     --map-bg: #131c31;
-    --label-bg: rgba(15, 23, 42, 0.76);
+    --label-bg: rgba(15, 23, 42, 0.78);
     --label-text: #ffffff;
   }
 
@@ -39,7 +39,7 @@
     --green: #059669;
     --green-bg: #d1fae5;
     --map-bg: #e2e8f0;
-    --label-bg: rgba(255, 255, 255, 0.84);
+    --label-bg: rgba(255, 255, 255, 0.86);
     --label-text: #0f172a;
   }
 
@@ -70,6 +70,7 @@
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
+  /* ลิ้นชักเลือกเครื่องเล่น */
   .ride-drawer {
     display: none;
     background: var(--card);
@@ -79,8 +80,30 @@
     margin-bottom: 8px;
   }
   .ride-drawer.open { display: block; }
-  .ride-drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.72rem; color: var(--gold); font-weight: 700; }
-  .clear-ride-btn { background: transparent; border: none; color: var(--blue); font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: underline; }
+  .drawer-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+  .drawer-tab-btn {
+    flex: 1;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+  }
+  .drawer-tab-btn.active {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+  .drawer-tab-btn.tab-premier.active {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+  }
   .ride-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
   .ride-chip {
     background: var(--bg);
@@ -168,7 +191,7 @@
   .pulse-circle { fill: none; stroke: #ef4444; stroke-width: 2.8; animation: pulseRing 1.4s infinite; }
   
   .pin-group { cursor: pointer; transition: opacity 0.25s ease; }
-  .pin-group.dimmed { opacity: 0.18; }
+  .pin-group.dimmed { opacity: 0.16; }
 
   .pin-label-bg { fill: var(--label-bg); stroke: none; rx: 3.5px; }
   .pin-label-text { font-size: 4.8px; font-weight: 700; fill: var(--label-text); text-anchor: middle; pointer-events: none; }
@@ -236,10 +259,12 @@
     <button class="toolbar-btn ride-picker-btn" id="ridePickerBtn" onclick="toggleRideDrawer()">🎢 เลือกเครื่องเล่น</button>
   </div>
 
+  <!-- ลิ้นชักเลือกเครื่องเล่น: เรียงปุ่ม แสดงทั้งหมด | 8 Premier | 3 คิวปกติ -->
   <div class="ride-drawer" id="rideDrawer">
-    <div class="ride-drawer-header">
-      <span>แตะชื่อเพื่อเน้นจุดบนแผนที่:</span>
-      <button class="clear-ride-btn" onclick="clearHighlightRides()">แสดงทั้งหมด</button>
+    <div class="drawer-tabs">
+      <button class="drawer-tab-btn" id="tab-all" onclick="setDrawerTab('all')">แสดงทั้งหมด</button>
+      <button class="drawer-tab-btn tab-premier active" id="tab-premier" onclick="setDrawerTab('premier')">8 Premier</button>
+      <button class="drawer-tab-btn" id="tab-normal" onclick="setDrawerTab('normal')">3 คิวปกติ</button>
     </div>
     <div class="ride-chips" id="rideChips"></div>
   </div>
@@ -335,7 +360,8 @@
 <script>
 const itinerary = [
   {
-    id: 1, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    id: 1, rideKey: "sliding", rideGroup: "normal",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
     time: "09:00 น.", name: "Wandering Oaken's Sliding Sleighs", shortName: "❄️ Sliding Sleighs",
     zone: "World of Frozen", type: "std", dpaNum: null,
     x: 62, y: 52,
@@ -345,8 +371,9 @@ const itinerary = [
     note: "ไม่มีในบัตร Premier Access ต้องต่อคิวปกติเป็นเครื่องเล่นแรกของวัน"
   },
   {
-    id: 2, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
-    time: "09:15 น.", name: "Frozen Ever After (รอบที่ 1 - คิวปกติ)", shortName: "❄️ Frozen (รอบเช้า)",
+    id: 2, rideKey: "frozen", rideGroup: "premier",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:15 น.", name: "Frozen Ever After (รอบเช้า - คิวปกติ)", shortName: "❄️ Frozen (รอบเช้า)",
     zone: "World of Frozen", type: "std", dpaNum: null,
     x: 112, y: 34,
     routePath: "M 62,52 L 112,34",
@@ -355,7 +382,8 @@ const itinerary = [
     note: "เก็บคิวปกติก่อนช่วงคนน้อย แล้วเก็บสิทธิ์บัตรลัดคิวไว้ใช้อีกรอบตอนบ่าย"
   },
   {
-    id: 3, phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    id: 3, rideKey: "pooh", rideGroup: "normal",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
     time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh", shortName: "🍯 Winnie the Pooh",
     zone: "Fantasyland", type: "std", dpaNum: null,
     x: 248, y: 62,
@@ -365,7 +393,8 @@ const itinerary = [
     note: "ไม่มีในบัตร Premier Access ช่วงเช้านี้คิวสั้นมาก รีบเก็บก่อนสวนสนุกเปิดเต็มรูปแบบ"
   },
   {
-    id: 4, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    id: 4, rideKey: "toystory", rideGroup: "normal",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
     time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop", shortName: "🚀 Toy Story",
     zone: "Toy Story Land", type: "std", dpaNum: null,
     x: 78, y: 112,
@@ -375,7 +404,8 @@ const itinerary = [
     note: "โซนนี้ไม่มีบัตร Premier Access ให้ใช้ รีบเล่นก่อนคนแน่นและแดดร้อน"
   },
   {
-    id: 5, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    id: 5, rideKey: "mystic", rideGroup: "premier",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
     time: "11:00 น.", name: "Mystic Manor", shortName: "👁️ Mystic Manor",
     zone: "Mystic Point", type: "dpa", dpaNum: 1,
     x: 50, y: 162,
@@ -385,7 +415,8 @@ const itinerary = [
     note: "เริ่มใช้บัตร Premier Access สิทธิ์ที่ 1 เดินเข้าช่องทางด่วนได้เลย"
   },
   {
-    id: 6, phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    id: 6, rideKey: "grizzly", rideGroup: "premier",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
     time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars", shortName: "🐻 Grizzly Mountain",
     zone: "Grizzly Gulch", type: "dpa", dpaNum: 2,
     x: 72, y: 218,
@@ -395,7 +426,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 2 ลัดคิวรถไฟเหาะเหมืองแร่"
   },
   {
-    id: 7, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 7, rideKey: "food", rideGroup: "other",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)", shortName: "🍽️ พักทานอาหาร",
     zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
     x: 112, y: 174,
@@ -405,7 +437,8 @@ const itinerary = [
     note: "พักหลบแดดช่วงที่คนหนาแน่นที่สุด"
   },
   {
-    id: 8, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 8, rideKey: "smallworld", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "13:15 น.", name: "\"it's a small world\"", shortName: "🛶 small world",
     zone: "Fantasyland", type: "dpa", dpaNum: 3,
     x: 242, y: 34,
@@ -415,8 +448,9 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 3 ล่องเรือตากแอร์เย็นๆ ช่วงบ่ายที่คนเยอะ"
   },
   {
-    id: 9, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
-    time: "13:35 น.", name: "Frozen Ever After (รอบที่ 2 - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (DPA)",
+    id: 9, rideKey: "frozen", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "13:35 น.", name: "Frozen Ever After (รอบบ่าย - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (รอบบ่าย)",
     zone: "World of Frozen", type: "dpa", dpaNum: 4,
     x: 126, y: 60,
     routePath: "M 242,34 L 185,48 L 126,60",
@@ -425,7 +459,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 4 ลัดคิวช่วงบ่ายพีคไทม์ (ประหยัดเวลารอ 60-90 นาที)"
   },
   {
-    id: 10, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 10, rideKey: "philhar", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "14:05 น.", name: "Mickey's PhilharMagic", shortName: "🎭 PhilharMagic",
     zone: "Fantasyland", type: "dpa", dpaNum: 5,
     x: 205, y: 78,
@@ -435,7 +470,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 5 ดูหนัง 4 มิติห้องแอร์ เป็นจุดพักขาก่อนข้ามโซน"
   },
   {
-    id: 11, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 11, rideKey: "spacemountain", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "14:30 น.", name: "Hyperspace Mountain", shortName: "🌌 Space Mountain",
     zone: "Tomorrowland", type: "dpa", dpaNum: 6,
     x: 348, y: 92,
@@ -445,7 +481,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 6 รถไฟเหาะอวกาศในความมืด"
   },
   {
-    id: 12, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 12, rideKey: "ironman", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "15:00 น.", name: "Iron Man Experience", shortName: "🔴 Iron Man",
     zone: "Tomorrowland", type: "dpa", dpaNum: 7,
     x: 345, y: 132,
@@ -455,7 +492,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 7 ซิมูเลเตอร์ 3 มิติ"
   },
   {
-    id: 13, phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    id: 13, rideKey: "antman", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
     time: "15:30 น.", name: "Ant-Man and The Wasp: Nano Battle!", shortName: "🐜 Ant-Man",
     zone: "Tomorrowland", type: "dpa", dpaNum: 8,
     x: 312, y: 158,
@@ -465,7 +503,8 @@ const itinerary = [
     note: "ใช้บัตร Premier Access สิทธิ์ที่ 8 (ใบสุดท้าย) ยิงปืนเลเซอร์เก็บคะแนน"
   },
   {
-    id: 14, phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
+    id: 14, rideKey: "castle", rideGroup: "other",
+    phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
     time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง", shortName: "📸 ปราสาท & ช้อป",
     zone: "Castle Hub / Adventureland / Main Street", type: "std", dpaNum: null,
     x: 200, y: 118,
@@ -474,6 +513,23 @@ const itinerary = [
     direction: "เดินกลับมาถ่ายรูปลานหน้าปราสาท แล้วช้อปปิ้งถนน Main Street มุ่งหน้าออกประตู",
     note: "เก็บครบ 100% พักผ่อนและถ่ายรูปตามอัธยาศัย"
   }
+];
+
+// รายชื่อชิปเครื่องเล่นสำหรับกดเลือก (8 Premier + 3 คิวปกติ)
+const rideChipCatalog = [
+  // 8 Premier
+  { key: "mystic", label: "👁️ Mystic Manor", group: "premier", defaultId: 5 },
+  { key: "grizzly", label: "🐻 Grizzly Mountain", group: "premier", defaultId: 6 },
+  { key: "smallworld", label: "🛶 small world", group: "premier", defaultId: 8 },
+  { key: "frozen", label: "❄️ Frozen", group: "premier", defaultId: 9 },
+  { key: "philhar", label: "🎭 PhilharMagic", group: "premier", defaultId: 10 },
+  { key: "spacemountain", label: "🌌 Space Mountain", group: "premier", defaultId: 11 },
+  { key: "ironman", label: "🔴 Iron Man", group: "premier", defaultId: 12 },
+  { key: "antman", label: "🐜 Ant-Man", group: "premier", defaultId: 13 },
+  // 3 คิวปกติ
+  { key: "sliding", label: "❄️ Sliding Sleighs", group: "normal", defaultId: 1 },
+  { key: "pooh", label: "🍯 Winnie the Pooh", group: "normal", defaultId: 3 },
+  { key: "toystory", label: "🚀 Toy Story", group: "normal", defaultId: 4 }
 ];
 
 const facilities = [
@@ -488,7 +544,8 @@ const facilities = [
 
 let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
 let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
-let highlightedRideIds = [];
+let highlightedRideKeys = [];
+let drawerTab = 'premier'; // ค่าเริ่มต้นคือ 8 Premier
 let currentFilter = 'all';
 let showFacilities = false;
 let is3DMap = true;
@@ -505,7 +562,9 @@ function toggleTheme() {
 }
 
 function handleMapToggleBtn() {
-  if (currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideIds.length > 0) {
+  if (currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideKeys.length > 0 || document.getElementById('rideDrawer').classList.contains('open')) {
+    document.getElementById('rideDrawer').classList.remove('open');
+    document.getElementById('ridePickerBtn').classList.remove('active');
     clearHighlightRides();
     return;
   }
@@ -525,35 +584,63 @@ function toggleFacilities() {
   layer.style.display = showFacilities ? 'block' : 'none';
 }
 
+// เปิด/ปิดลิ้นชักเลือกเครื่องเล่น (ทุกครั้งที่เปิดจะ Default ที่ 8 Premier เสมอ)
 function toggleRideDrawer() {
   const drawer = document.getElementById('rideDrawer');
   const btn = document.getElementById('ridePickerBtn');
   const isOpen = drawer.classList.toggle('open');
-  btn.classList.toggle('active', isOpen || highlightedRideIds.length > 0);
+  if (isOpen) {
+    setDrawerTab('premier');
+  } else {
+    highlightedRideKeys = [];
+    setFilter('all');
+    renderMap();
+  }
+  btn.classList.toggle('active', isOpen);
 }
 
-function toggleHighlightRide(id) {
-  const idx = highlightedRideIds.indexOf(id);
-  if (idx === -1) {
-    highlightedRideIds.push(id);
-    selectedId = id;
+// สลับแท็บภายในลิ้นชัก: แสดงทั้งหมด | 8 Premier | 3 คิวปกติ
+function setDrawerTab(tabName) {
+  drawerTab = tabName;
+  highlightedRideKeys = []; // ล้างการเลือกเจาะจงรายตัวเมื่อเปลี่ยนหมวดหมู่
+
+  document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+
+  if (tabName === 'premier') {
+    setFilter('dpa');
+  } else if (tabName === 'normal') {
+    setFilter('normal');
   } else {
-    highlightedRideIds.splice(idx, 1);
+    setFilter('all');
   }
 
-  const pickerBtn = document.getElementById('ridePickerBtn');
-  const drawerOpen = document.getElementById('rideDrawer').classList.contains('open');
-  pickerBtn.classList.toggle('active', drawerOpen || highlightedRideIds.length > 0);
+  renderRideChips();
+  renderMap();
+}
 
-  if (highlightedRideIds.length > 0) {
+// กดเลือกเครื่องเล่นรายตัว (เช่น Frozen จะเน้นทั้งรอบเช้าและรอบบ่ายพร้อมกัน)
+function toggleHighlightRide(rideKey, defaultId) {
+  const idx = highlightedRideKeys.indexOf(rideKey);
+  if (idx === -1) {
+    highlightedRideKeys.push(rideKey);
+    selectedId = defaultId;
+  } else {
+    highlightedRideKeys.splice(idx, 1);
+  }
+
+  if (highlightedRideKeys.length > 0) {
     currentFilter = 'highlighted';
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     const singleBtn = document.getElementById('filter-single');
     singleBtn.style.display = 'inline-block';
-    singleBtn.innerText = `🎯 เฉพาะที่เลือก (${highlightedRideIds.length})`;
+    singleBtn.innerText = `🎯 เฉพาะที่เลือก (${highlightedRideKeys.length})`;
     singleBtn.classList.add('active');
   } else {
-    setFilter('all');
+    // ถ้ายกเลิกการเลือกหมด ให้กลับไปแสดงตามหมวดแท็บปัจจุบัน
+    if (drawerTab === 'premier') setFilter('dpa');
+    else if (drawerTab === 'normal') setFilter('normal');
+    else setFilter('all');
   }
 
   renderRideChips();
@@ -563,9 +650,8 @@ function toggleHighlightRide(id) {
 }
 
 function clearHighlightRides() {
-  highlightedRideIds = [];
-  const drawerOpen = document.getElementById('rideDrawer').classList.contains('open');
-  document.getElementById('ridePickerBtn').classList.toggle('active', drawerOpen);
+  highlightedRideKeys = [];
+  drawerTab = 'all';
   setFilter('all');
   renderRideChips();
   renderMap();
@@ -603,8 +689,13 @@ function setFilter(filterType) {
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   const targetBtn = document.getElementById(`filter-${filterType}`);
   if (targetBtn) targetBtn.classList.add('active');
-  if (filterType !== 'single' && filterType !== 'highlighted') {
+  if (filterType !== 'single' && filterType !== 'highlighted' && filterType !== 'normal') {
     document.getElementById('filter-single').style.display = 'none';
+  } else if (filterType === 'normal') {
+    const singleBtn = document.getElementById('filter-single');
+    singleBtn.style.display = 'inline-block';
+    singleBtn.innerText = '🚶 3 คิวปกติ';
+    singleBtn.classList.add('active');
   }
   renderTimeline();
 }
@@ -753,7 +844,9 @@ function selectStep(id, fromMap = false) {
 
 function resetProgress() {
   if (confirm('⚠️ คำเตือน: ต้องการล้างข้อมูลที่ติ๊กไว้และสิทธิ์บัตร Premier Access ทั้งหมดใช่หรือไม่?')) {
-    completedIds = []; selectedId = 1; highlightedRideIds = [];
+    completedIds = []; selectedId = 1; highlightedRideKeys = [];
+    document.getElementById('rideDrawer').classList.remove('open');
+    document.getElementById('ridePickerBtn').classList.remove('active');
     saveState(); clearHighlightRides(); renderAll();
   }
 }
@@ -761,13 +854,19 @@ function resetProgress() {
 function renderRideChips() {
   const container = document.getElementById('rideChips');
   container.innerHTML = '';
-  const dpaRides = itinerary.filter(i => i.type === 'dpa');
-  dpaRides.forEach(ride => {
+
+  const visibleChips = rideChipCatalog.filter(chip => {
+    if (drawerTab === 'premier') return chip.group === 'premier';
+    if (drawerTab === 'normal') return chip.group === 'normal';
+    return true; // แสดงทั้งหมดเรียง 8 Premier + 3 คิวปกติ
+  });
+
+  visibleChips.forEach(chip => {
     const btn = document.createElement('button');
-    const isSelected = highlightedRideIds.includes(ride.id);
+    const isSelected = highlightedRideKeys.includes(chip.key);
     btn.className = 'ride-chip' + (isSelected ? ' selected' : '');
-    btn.innerText = `#${ride.dpaNum} ${ride.shortName}`;
-    btn.onclick = () => toggleHighlightRide(ride.id);
+    btn.innerText = chip.label;
+    btn.onclick = () => toggleHighlightRide(chip.key, chip.defaultId);
     container.appendChild(btn);
   });
 }
@@ -840,24 +939,37 @@ function renderMap() {
   arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${arrowAngle})`);
   routeLayer.appendChild(arrow);
 
-  const hasHighlightMode = highlightedRideIds.length > 0;
+  const isDrawerOpen = document.getElementById('rideDrawer').classList.contains('open');
+  const hasSpecificRideSelected = highlightedRideKeys.length > 0;
+
+  // คำนวณว่าหมุดแต่ละตัวควรถูกเน้น (สว่างชัด) หรือจางลง
+  const isItemActiveOnMap = (item) => {
+    if (hasSpecificRideSelected) {
+      return highlightedRideKeys.includes(item.rideKey);
+    }
+    if (isDrawerOpen) {
+      if (drawerTab === 'premier') return item.rideGroup === 'premier'; // 8 Premier (9 หมุด รวม Frozen 2 รอบ)
+      if (drawerTab === 'normal') return item.rideGroup === 'normal';   // 3 คิวปกติ (3 หมุด)
+    }
+    return true; // แสดงทั้งหมดสว่างเท่ากัน
+  };
 
   const sortedPins = [...itinerary].sort((a, b) => {
-    const aHigh = highlightedRideIds.includes(a.id) ? 1 : 0;
-    const bHigh = highlightedRideIds.includes(b.id) ? 1 : 0;
-    return aHigh - bHigh;
+    const aAct = isItemActiveOnMap(a) ? 1 : 0;
+    const bAct = isItemActiveOnMap(b) ? 1 : 0;
+    return aAct - bAct;
   });
 
   sortedPins.forEach(item => {
     const isDone = completedIds.includes(item.id);
     const isSelected = item.id === selectedId;
-    const isHighlighted = highlightedRideIds.includes(item.id);
-    const isDimmed = hasHighlightMode && !isHighlighted;
+    const isActive = isItemActiveOnMap(item);
+    const isHighlighted = hasSpecificRideSelected && highlightedRideKeys.includes(item.rideKey);
 
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     let cls = "pin-group";
     if (isDone) cls += " done";
-    if (isDimmed) cls += " dimmed";
+    if (!isActive) cls += " dimmed";
     g.setAttribute("class", cls);
     g.onclick = (e) => { e.stopPropagation(); selectStep(item.id, true); };
 
@@ -928,9 +1040,10 @@ function renderTimeline() {
   let currentPhase = '';
 
   const filteredList = itinerary.filter(item => {
-    if (currentFilter === 'highlighted') return highlightedRideIds.includes(item.id);
+    if (currentFilter === 'highlighted') return highlightedRideKeys.includes(item.rideKey);
     if (currentFilter === 'single') return item.id === selectedId;
     if (currentFilter === 'dpa') return item.type === 'dpa';
+    if (currentFilter === 'normal') return item.rideGroup === 'normal';
     if (currentFilter === 'todo') return !completedIds.includes(item.id);
     return true;
   });
@@ -975,12 +1088,16 @@ function renderTimeline() {
     container.appendChild(card);
   });
 
-  if (currentFilter === 'single' || currentFilter === 'highlighted') {
+  if (currentFilter === 'single' || currentFilter === 'highlighted' || currentFilter === 'normal') {
     const showAllBtn = document.createElement('button');
     showAllBtn.className = 'filter-btn';
     showAllBtn.style.cssText = 'width: 100%; padding: 10px; margin-top: 4px; text-align: center;';
     showAllBtn.innerText = '📋 แสดงตารางเวลาทั้งหมด (14 รายการ)';
-    showAllBtn.onclick = () => clearHighlightRides();
+    showAllBtn.onclick = () => {
+      document.getElementById('rideDrawer').classList.remove('open');
+      document.getElementById('ridePickerBtn').classList.remove('active');
+      clearHighlightRides();
+    };
     container.appendChild(showAllBtn);
   }
 }
