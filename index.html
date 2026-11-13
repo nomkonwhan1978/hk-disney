@@ -236,7 +236,7 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.82);
   backdrop-filter: blur(6px);
   z-index: 9999;
   justify-content: center;
@@ -319,7 +319,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.78);
+  background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(8px);
   color: #ffffff;
   border: 1.5px solid rgba(255, 255, 255, 0.35);
@@ -331,13 +331,40 @@
 }
 .map-viewport.fullscreen .fs-close-btn { display: flex; }
 
+/* ปุ่มซูม +/- มุมขวาล่างแบบหน้าหลัก */
+.map-zoom-controls {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 20;
+}
+.zoom-mini-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* แคนวาสแผนที่ ล็อกจุดอ้างอิงที่มุมซ้ายบน (0 0) เพื่อการแพนที่ลื่นไหลไม่กระตุก */
 .map-canvas {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-origin: center center;
-  /* ซูมแบบนุ่มนวลไม่กระชากสายตา */
-  transition: transform 1.1s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .map-viewport.fullscreen .map-canvas {
   width: 100%;
@@ -351,55 +378,47 @@
   position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
 }
 
-/* หมุดอัจฉริยะ (Smart Micro-Pins) พื้นดำโปร่งแสง */
+/* ป้ายชื่อสถานที่ขนาดเล็กกะทัดรัด (7.5px) เหมือนหน้าหลัก */
+.map-pins-layer {
+  position: absolute; inset: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.map-pins-layer.hidden { opacity: 0; }
+
 .map-pin {
   position: absolute;
   transform: translate(-50%, -50%);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  gap: 3px;
+  background: rgba(15, 23, 42, 0.76);
   color: #ffffff;
-  padding: 3px;
-  border-radius: 20px;
-  font-size: 9.5px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 7.5px;
   font-weight: 600;
+  letter-spacing: 0.1px;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-.pin-icon {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: rgba(255,255,255,0.18);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-}
-.pin-label {
-  display: none;
-  padding-right: 6px;
-}
-/* แสดงป้ายชื่อเมื่อเปิดโหมดโชว์ทั้งหมด หรือเมื่อกำลังเลือก Step ของจุดนั้น */
-.map-pins-layer.show-all .pin-label,
-.map-pin.focused .pin-label {
-  display: inline-block;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 .map-pin.focused {
-  background: rgba(15, 23, 42, 0.92);
-  transform: translate(-50%, -50%) scale(1.08);
+  background: #2563eb;
+  transform: translate(-50%, -50%) scale(1.15);
   z-index: 15;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6);
 }
-.map-pin.dimmed { opacity: 0.4; }
+/* ซ่อนสถานที่ที่ไม่ผ่านในโหมดนั้นทิ้งไปเลย */
+.map-pin.route-hidden {
+  display: none !important;
+}
 
 /* วงแหวนไฟกระพริบชี้จุด */
 .spotlight-ring {
   position: absolute;
-  width: 40px; height: 40px;
+  width: 34px; height: 34px;
   border-radius: 50%;
-  border: 2.5px solid #facc15;
-  background: rgba(250, 204, 21, 0.22);
+  border: 2px solid #facc15;
+  background: rgba(250, 204, 21, 0.2);
   transform: translate(-50%, -50%);
   pointer-events: none;
   display: none;
@@ -410,7 +429,7 @@
   100% { transform: translate(-50%, -50%) scale(1.75); opacity: 0; }
 }
 
-/* แถบสรุปเวลาออกเดินทางอัจฉริยะ */
+/* แถบสรุปเวลาออกเดินทาง */
 .departure-banner {
   background: #fefce8;
   border-bottom: 1px solid #fef08a;
@@ -421,7 +440,7 @@
   text-align: center;
 }
 
-/* แถบสลับโหมดเดินทาง */
+/* แถบสลับโหมดเดินทาง (กดซ้ำเพื่อยกเลิกดูภาพรวมทั้งหมดได้) */
 .mode-tabs {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   padding: 10px 14px; background: #ffffff; border-bottom: 1px solid #e2e8f0;
@@ -438,7 +457,7 @@
   background: #f0fdf4; border-color: #16a34a; color: #15803d;
 }
 
-/* รายการ Step แบบกดกางและกดซ้ำเพื่อพับเก็บได้ */
+/* รายการ Step */
 .steps-container {
   padding: 10px 14px 24px; overflow-y: auto; flex: 1;
 }
@@ -495,7 +514,6 @@
 }
 /* === [END: CSS แผนที่เดินทาง 3D ใหม่] === */
   
-
 </style>
 </head>
 <body>
@@ -614,41 +632,49 @@
 <!-- === [START: HTML แผนที่เดินทาง 3D ใหม่] === -->
 <div id="transitModal" class="transit-modal">
   <div class="transit-sheet">
-    <!-- แถบหัวข้อด้านบน รวมปุ่มเปิด/ปิดชื่อสถานที่ และปุ่มขยายเต็มจอ -->
+    <!-- แถบหัวข้อด้านบน -->
     <div class="transit-header">
       <h3>🗺️ เส้นทางไป Disneyland (5 ท่าน)</h3>
       <div class="header-icon-group">
-        <button id="togglePinsBtn" class="header-circle-btn" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleMapPins()">🏷️</button>
+        <button id="togglePinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleMapPins()">🏷️</button>
         <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleMapFullscreen()">⛶</button>
         <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeTransitModal()">✕</button>
       </div>
     </div>
 
-    <!-- กรอบแสดงแผนที่ 3D สะอาด 100% ไม่มีปุ่มบังภาพ -->
+    <!-- กรอบแสดงแผนที่ 3D -->
     <div id="mapViewport" class="map-viewport">
-      <!-- ปุ่มกากบาทเดี่ยวโผล่เฉพาะตอนเปิดเต็มจอ -->
+      <!-- ปุ่มกากบาทเดี่ยวตอนเปิดเต็มจอ -->
       <button class="fs-close-btn" onclick="toggleMapFullscreen()">✕</button>
+
+      <!-- ปุ่มซูม +/- มุมขวาล่าง -->
+      <div class="map-zoom-controls">
+        <button class="zoom-mini-btn" onclick="manualZoom(0.25)">+</button>
+        <button class="zoom-mini-btn" onclick="manualZoom(-0.25)">−</button>
+      </div>
 
       <div id="mapCanvas" class="map-canvas">
         <img src="transit-bg.png" alt="แผนที่เดินทาง" class="map-bg-img">
 
-        <!-- เลเยอร์เส้นทางแอนิเมชัน SVG (ขบวนรถไฟและรถตู้จริง) -->
+        <!-- เลเยอร์เส้นทางแอนิเมชัน SVG (ตัวรถใหญ่เห็นชัดเจน) -->
         <svg class="map-svg-overlay" viewBox="0 0 1000 562" preserveAspectRatio="none">
           <!-- เส้นทาง MTR -->
           <g id="svgRouteMtr">
             <path id="pathMtr" d="M 885 455 Q 945 340 935 200 Q 925 125 780 80 Q 620 140 430 105 Q 250 85 215 135 Q 110 190 120 265 Q 145 320 280 345" 
-                  fill="none" stroke="rgba(236, 72, 153, 0.35)" stroke-width="6" stroke-linecap="round"/>
+                  fill="none" stroke="rgba(236, 72, 153, 0.3)" stroke-width="7" stroke-linecap="round"/>
             <path d="M 885 455 Q 945 340 935 200 Q 925 125 780 80 Q 620 140 430 105 Q 250 85 215 135 Q 110 190 120 265 Q 145 320 280 345" 
-                  fill="none" stroke="#ec4899" stroke-width="4" stroke-dasharray="10,8" stroke-linecap="round"/>
-            <!-- กราฟิกขบวนรถไฟ 2 ตู้หันหัวตามโค้ง -->
+                  fill="none" stroke="#ec4899" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <!-- ขบวนรถไฟ 2 ตู้ขนาดใหญ่หันหัวตามโค้ง -->
             <g>
-              <rect x="-22" y="-6" width="20" height="12" rx="4" fill="#ffffff" stroke="#db2777" stroke-width="2"/>
-              <circle cx="-15" cy="0" r="2.2" fill="#db2777"/>
-              <circle cx="-8" cy="0" r="2.2" fill="#db2777"/>
-              <rect x="1" y="-6" width="22" height="12" rx="5" fill="#f472b6" stroke="#be185d" stroke-width="2"/>
-              <circle cx="9" cy="0" r="2.2" fill="#ffffff"/>
-              <circle cx="16" cy="0" r="2.2" fill="#ffffff"/>
-              <animateMotion dur="8.5s" repeatCount="indefinite" rotate="auto">
+              <rect x="-40" y="-11" width="36" height="22" rx="6" fill="#ffffff" stroke="#be185d" stroke-width="3"/>
+              <rect x="-32" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="-19" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="2" y="-11" width="40" height="22" rx="9" fill="#ec4899" stroke="#9d174d" stroke-width="3"/>
+              <rect x="10" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <rect x="24" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <circle cx="38" cy="-5" r="2.5" fill="#fef08a"/>
+              <circle cx="38" cy="5" r="2.5" fill="#fef08a"/>
+              <animateMotion dur="9s" repeatCount="indefinite" rotate="auto">
                 <mpath href="#pathMtr"/>
               </animateMotion>
             </g>
@@ -657,41 +683,34 @@
           <!-- เส้นทางรถยนต์ UberXL / Taxi -->
           <g id="svgRouteCar" style="display:none;">
             <path id="pathCar" d="M 885 330 Q 800 310 730 240 Q 705 150 675 140 Q 600 185 435 275 Q 370 330 395 415 Q 415 485 300 470" 
-                  fill="none" stroke="rgba(34, 197, 94, 0.35)" stroke-width="6" stroke-linecap="round"/>
+                  fill="none" stroke="rgba(34, 197, 94, 0.3)" stroke-width="7" stroke-linecap="round"/>
             <path d="M 885 330 Q 800 310 730 240 Q 705 150 675 140 Q 600 185 435 275 Q 370 330 395 415 Q 415 485 300 470" 
-                  fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10,8" stroke-linecap="round"/>
-            <!-- กราฟิกรถตู้ UberXL สีดำเงาหันหัวตามโค้ง -->
+                  fill="none" stroke="#22c55e" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <!-- รถยนต์ SUV / UberXL ขนาดใหญ่หันหัวตามโค้ง -->
             <g>
-              <rect x="-16" y="-7" width="32" height="14" rx="5" fill="#1e293b" stroke="#ffffff" stroke-width="1.8"/>
-              <rect x="4" y="-5" width="8" height="10" rx="2" fill="#38bdf8"/>
-              <rect x="-11" y="-5" width="12" height="10" rx="1.5" fill="#94a3b8"/>
-              <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+              <rect x="-28" y="-13" width="56" height="26" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+              <!-- กระจกหน้า -->
+              <path d="M 8 -9 L 19 -7 L 19 7 L 8 9 Z" fill="#38bdf8"/>
+              <!-- หลังคาและกระจกข้าง -->
+              <rect x="-18" y="-9" width="22" height="18" rx="3" fill="#1e293b"/>
+              <!-- ไฟหน้า -->
+              <circle cx="25" cy="-7" r="2.5" fill="#facc15"/>
+              <circle cx="25" cy="7" r="2.5" fill="#facc15"/>
+              <animateMotion dur="7.5s" repeatCount="indefinite" rotate="auto">
                 <mpath href="#pathCar"/>
               </animateMotion>
             </g>
           </g>
         </svg>
 
-        <!-- เลเยอร์หมุดสถานที่อัจฉริยะ (Smart Micro-Pins) -->
+        <!-- เลเยอร์ป้ายชื่อสถานที่ขนาดเล็ก 7.5px -->
         <div id="mapPinsLayer" class="map-pins-layer">
-          <div id="pin-hotel" class="map-pin" style="top: 56%; left: 86%;">
-            <span class="pin-icon">🏨</span><span class="pin-label">B P International</span>
-          </div>
-          <div id="pin-jordan" class="map-pin pin-mtr" style="top: 84%; left: 86%;">
-            <span class="pin-icon">🚇</span><span class="pin-label">สถานี Jordan</span>
-          </div>
-          <div id="pin-laiking" class="map-pin pin-mtr" style="top: 17%; left: 79%;">
-            <span class="pin-icon">🔄</span><span class="pin-label">Lai King (สายสีส้ม)</span>
-          </div>
-          <div id="pin-bridge" class="map-pin pin-car" style="top: 47%; left: 53%;">
-            <span class="pin-icon">🌉</span><span class="pin-label">สะพานชิงหม่า</span>
-          </div>
-          <div id="pin-sunnybay" class="map-pin pin-mtr" style="top: 19%; left: 22%;">
-            <span class="pin-icon">🐭</span><span class="pin-label">Sunny Bay (สายดิสนีย์)</span>
-          </div>
-          <div id="pin-disney" class="map-pin" style="top: 63%; left: 15%;">
-            <span class="pin-icon">🏰</span><span class="pin-label">HK Disneyland</span>
-          </div>
+          <div id="pin-hotel" class="map-pin" style="top: 56%; left: 86%;">🏨 B P International</div>
+          <div id="pin-jordan" class="map-pin pin-mtr" style="top: 84%; left: 86%;">🚇 สถานี Jordan</div>
+          <div id="pin-laiking" class="map-pin pin-mtr" style="top: 17%; left: 79%;">🔄 Lai King (สายสีส้ม)</div>
+          <div id="pin-bridge" class="map-pin pin-car" style="top: 47%; left: 53%;">🌉 สะพานชิงหม่า</div>
+          <div id="pin-sunnybay" class="map-pin pin-mtr" style="top: 19%; left: 22%;">🐭 Sunny Bay (สายดิสนีย์)</div>
+          <div id="pin-disney" class="map-pin" style="top: 63%; left: 15%;">🏰 HK Disneyland</div>
         </div>
 
         <!-- วงแหวนไฟกระพริบชี้จุด -->
@@ -699,17 +718,17 @@
       </div>
     </div>
 
-    <!-- แถบสรุปเวลาออกเดินทางอัจฉริยะ -->
+    <!-- แถบสรุปเวลาออกเดินทาง -->
     <div id="departureBanner" class="departure-banner">
       ⏰ แนะนำออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (ถึงหน้าพาร์ค ~08:30 น.)
     </div>
 
-    <!-- แถบเลือกวิธีเดินทาง -->
+    <!-- แถบเลือกวิธีเดินทาง (กดซ้ำเพื่อยกเลิกดูสถานที่ทั้งหมดได้) -->
     <div class="mode-tabs">
-      <button id="tabMtr" class="mode-tab active mtr" onclick="switchTransitMode('mtr')">
+      <button id="tabMtr" class="mode-tab active mtr" onclick="toggleTransitMode('mtr')">
         🚇 รถไฟฟ้า MTR<br><small style="font-weight:500;">~45 นาที | ประหยัด</small>
       </button>
-      <button id="tabCar" class="mode-tab" onclick="switchTransitMode('car')">
+      <button id="tabCar" class="mode-tab" onclick="toggleTransitMode('car')">
         🚐 UberXL / แท็กซี่<br><small style="font-weight:500;">~28 นาที | สะดวก 5 คน</small>
       </button>
     </div>
@@ -1612,14 +1631,14 @@ document.addEventListener("visibilitychange", () => {
     gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
   }
 });
-  /* === [START: JS แผนที่เดินทาง 3D ใหม่] === */
+/* === [START: JS แผนที่เดินทาง 3D ใหม่] === */
 const transitData = {
   mtr: [
     {
       step: 1,
       title: "เดินจาก B P International ไปสถานี Jordan",
       sub: "ระยะทาง 450 ม. (~6 นาที) | เข้าทางออก Exit C2",
-      zoom: "scale(1.28) translate(-14%, -12%)",
+      cam: { scale: 1.35, x: -30, y: -25 },
       spot: { top: "70%", left: "87%" },
       pinId: "pin-jordan",
       tip: "เดินออกจากโรงแรมเลียบถนน Austin Rd. มุ่งหน้าแยก Nathan Rd. แนะนำลงทางออก <b>Exit C2</b> เพราะมีลิฟต์สะดวกสำหรับเด็กและรถเข็น",
@@ -1630,7 +1649,7 @@ const transitData = {
       step: 2,
       title: "ขึ้นสายสีแดง (Tsuen Wan) ลงสถานี Lai King",
       sub: "นั่ง 6 สถานี (~12 นาที) | เดินข้ามชานชาลาเปลี่ยนสาย",
-      zoom: "scale(1.3) translate(-12%, 12%)",
+      cam: { scale: 1.35, x: -26, y: 0 },
       spot: { top: "17%", left: "79%" },
       pinId: "pin-laiking",
       tip: "ลงรถที่สถานี <b>Lai King</b> แล้วเดินข้ามฝั่งชานชาลาตรงหน้าได้เลย (ไม่ต้องขึ้น-ลงบันได) เพื่อต่อรถไฟสายสีส้ม (Tung Chung Line)",
@@ -1641,7 +1660,7 @@ const transitData = {
       step: 3,
       title: "ขึ้นสายสีส้มไป Sunny Bay ต่อสายดิสนีย์",
       sub: "นั่ง 2 สถานี (~10 นาที) | เปลี่ยนเป็นขบวนสีชมพู",
-      zoom: "scale(1.3) translate(12%, 12%)",
+      cam: { scale: 1.35, x: 0, y: 0 },
       spot: { top: "20%", left: "22%" },
       pinId: "pin-sunnybay",
       tip: "ลงที่ <b>Sunny Bay</b> เดินข้ามชานชาลามาขึ้นขบวน <b>Disneyland Resort Line</b> (หน้าต่างรูปหัวมิกกี้) รถออกทุก 5-10 นาที",
@@ -1652,7 +1671,7 @@ const transitData = {
       step: 4,
       title: "ถึงสถานี Hong Kong Disneyland Resort",
       sub: "นั่ง 1 สถานี (~5 นาที) | เดินเข้าลานน้ำพุ",
-      zoom: "scale(1.28) translate(14%, -10%)",
+      cam: { scale: 1.35, x: 0, y: -22 },
       spot: { top: "63%", left: "16%" },
       pinId: "pin-disney",
       tip: "เดินออกจากสถานีผ่านซุ้มประตูหลัก มุ่งหน้าสู่จุดตรวจกระเป๋าและถ่ายรูปเช็กอินที่น้ำพุมิกกี้ปลาวาฬก่อนเข้าพาร์ค",
@@ -1665,7 +1684,7 @@ const transitData = {
       step: 1,
       title: "เรียกรถ UberXL หน้าโรงแรม B P International",
       sub: "จุดรับ: Main Lobby (Austin Rd.) | นั่งได้สูงสุด 6 คน",
-      zoom: "scale(1.28) translate(-14%, -8%)",
+      cam: { scale: 1.35, x: -30, y: -18 },
       spot: { top: "56%", left: "88%" },
       pinId: "pin-hotel",
       tip: "กดเรียกประเภทรถ <b>UberXL</b> (รถแวน 6 ที่นั่ง) เพื่อให้ทั้ง 5 คนนั่งสบายและวางกระเป๋าเป้ได้ครบ ปักหมุดรับที่หน้าประตูหลักโรงแรม",
@@ -1676,7 +1695,7 @@ const transitData = {
       step: 2,
       title: "ขึ้นทางด่วน Route 8 ข้ามสะพานแขวนชิงหม่า",
       sub: "ใช้เวลาวิ่งบนทางด่วน ~20 นาที | ชมวิวอ่าววิคตอเรีย",
-      zoom: "scale(1.25) translate(0%, 0%)",
+      cam: { scale: 1.3, x: -15, y: -12 },
       spot: { top: "47%", left: "53%" },
       pinId: "pin-bridge",
       tip: "เส้นทางวิ่งตรงยาวผ่านอุโมงค์และข้ามสะพานชิงหม่า ไม่ต้องต่อรถ เหมาะมากในวันที่ต้องรีบทำเวลาช่วงเช้า",
@@ -1687,7 +1706,7 @@ const transitData = {
       step: 3,
       title: "ถึงจุดส่งผู้โดยสารหน้า Hong Kong Disneyland",
       sub: "จอดส่งใกล้ทางเดินเข้าลานน้ำพุมิกกี้ปลาวาฬ",
-      zoom: "scale(1.28) translate(14%, -12%)",
+      cam: { scale: 1.35, x: 0, y: -22 },
       spot: { top: "68%", left: "22%" },
       pinId: "pin-disney",
       tip: "รถจะจอดส่งที่จุด Drop-off เดินต่ออีกเพียง 3 นาทีถึงจุดตรวจกระเป๋าหน้าสวนสนุก",
@@ -1697,39 +1716,67 @@ const transitData = {
   ]
 };
 
-let currentMode = 'mtr';
+let currentMode = 'mtr'; // 'mtr' | 'car' | null (ดูภาพรวมทั้งหมด)
 let activeStepIdx = null;
-let showAllPins = false;
+let pinsVisible = true;
+let currentScale = 1;
 
 function openTransitModal() {
   document.getElementById('transitModal').classList.add('active');
-  switchTransitMode('mtr');
+  setTransitMode('mtr');
 }
 
 function closeTransitModal() {
   document.getElementById('transitModal').classList.remove('active');
-  resetMapZoom();
+  resetCamera();
 }
 
-function switchTransitMode(mode) {
+// กดเลือกโหมด หรือกดซ้ำโหมดเดิมเพื่อดูภาพรวมสถานที่ทั้งหมด
+function toggleTransitMode(mode) {
+  if (currentMode === mode) {
+    setTransitMode(null);
+  } else {
+    setTransitMode(mode);
+  }
+}
+
+function setTransitMode(mode) {
   currentMode = mode;
   activeStepIdx = null;
-  resetMapZoom();
+  resetCamera();
 
   document.getElementById('tabMtr').className = mode === 'mtr' ? 'mode-tab active mtr' : 'mode-tab';
   document.getElementById('tabCar').className = mode === 'car' ? 'mode-tab active car' : 'mode-tab';
 
-  document.getElementById('departureBanner').innerHTML = mode === 'mtr'
-    ? '⏰ แนะนำออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (ถึงหน้าพาร์ค ~08:30 น.)'
-    : '⏰ แนะนำเรียกรถหน้าล็อบบี้ไม่เกิน <b>08:05 น.</b> (ถึงหน้าพาร์ค ~08:33 น.)';
+  const banner = document.getElementById('departureBanner');
+  if (mode === 'mtr') {
+    banner.innerHTML = '⏰ แนะนำออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (ถึงหน้าพาร์ค ~08:30 น.)';
+  } else if (mode === 'car') {
+    banner.innerHTML = '⏰ แนะนำเรียกรถหน้าล็อบบี้ไม่เกิน <b>08:05 น.</b> (ถึงหน้าพาร์ค ~08:33 น.)';
+  } else {
+    banner.innerHTML = '🗺️ กำลังแสดง <b>ภาพรวมสถานที่ทั้งหมด</b> (กดเลือกวิธีเดินทางด้านล่างเพื่อดูเส้นทาง)';
+  }
 
   document.getElementById('svgRouteMtr').style.display = mode === 'mtr' ? 'block' : 'none';
   document.getElementById('svgRouteCar').style.display = mode === 'car' ? 'block' : 'none';
 
-  document.querySelectorAll('.pin-mtr').forEach(el => el.classList.toggle('dimmed', mode !== 'mtr'));
-  document.querySelectorAll('.pin-car').forEach(el => el.classList.toggle('dimmed', mode !== 'car'));
+  // ซ่อนสถานที่ที่ไม่ผ่านทิ้งไปเลย หรือแสดงทั้งหมดเมื่อไม่เลือกโหมด
+  document.querySelectorAll('.pin-mtr').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'car');
+  });
+  document.querySelectorAll('.pin-car').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'mtr');
+  });
 
   const container = document.getElementById('stepsContainer');
+  if (!mode) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:24px 16px; color:#64748b; font-size:12.5px;">
+        👆 แตะเลือกปุ่ม <b>รถไฟฟ้า MTR</b> หรือ <b>UberXL / แท็กซี่</b> ด้านบน<br>เพื่อดูเส้นทางวิ่งและปุ่มลัดประจำแต่ละจุดครับ
+      </div>`;
+    return;
+  }
+
   container.className = mode === 'car' ? 'steps-container car-mode' : 'steps-container';
   container.innerHTML = transitData[mode].map((item, idx) => `
     <div class="step-card" id="stepCard-${idx}" onclick="selectStep(${idx})">
@@ -1749,10 +1796,11 @@ function switchTransitMode(mode) {
   `).join('');
 }
 
+// เลื่อนกล้องต่อเนื่องจากจุดเดิมไปยังจุดใหม่โดยไม่กระตุก
 function selectStep(idx) {
-  // กดซ้ำที่ Step เดิม -> พับเก็บและคืนมุมมองแผนที่เต็มใบ
+  if (!currentMode) return;
   if (activeStepIdx === idx) {
-    resetMapZoom();
+    resetCamera();
     return;
   }
 
@@ -1763,39 +1811,54 @@ function selectStep(idx) {
     card.classList.toggle('active', i === idx);
   });
 
-  // โฟกัสป้ายชื่อเฉพาะหมุดของ Step นั้น
   document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
   if (item.pinId) {
     const targetPin = document.getElementById(item.pinId);
     if (targetPin) targetPin.classList.add('focused');
   }
 
+  currentScale = item.cam.scale;
   const canvas = document.getElementById('mapCanvas');
   const ring = document.getElementById('spotlightRing');
-  canvas.style.transform = item.zoom;
+
+  // คำนวณพิกัดเลื่อนกล้องอย่างนุ่มนวล
+  canvas.style.transform = `translate(${item.cam.x}%, ${item.cam.y}%) scale(${item.cam.scale})`;
   ring.style.top = item.spot.top;
   ring.style.left = item.spot.left;
   ring.style.display = 'block';
 }
 
-function resetMapZoom() {
+function resetCamera() {
   activeStepIdx = null;
-  document.getElementById('mapCanvas').style.transform = 'scale(1) translate(0, 0)';
+  currentScale = 1;
+  document.getElementById('mapCanvas').style.transform = 'translate(0%, 0%) scale(1)';
   document.getElementById('spotlightRing').style.display = 'none';
   document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
 }
 
+// ปุ่มซูม +/- แบบแมนนวล
+function manualZoom(delta) {
+  currentScale = Math.min(2.2, Math.max(1, currentScale + delta));
+  const canvas = document.getElementById('mapCanvas');
+  if (currentScale === 1) {
+    resetCamera();
+  } else {
+    const offset = -((currentScale - 1) * 50);
+    canvas.style.transform = `translate(${offset}%, ${offset}%) scale(${currentScale})`;
+  }
+}
+
 function toggleMapPins() {
-  showAllPins = !showAllPins;
-  document.getElementById('mapPinsLayer').classList.toggle('show-all', showAllPins);
-  document.getElementById('togglePinsBtn').classList.toggle('active', showAllPins);
+  pinsVisible = !pinsVisible;
+  document.getElementById('mapPinsLayer').classList.toggle('hidden', !pinsVisible);
+  document.getElementById('togglePinsBtn').classList.toggle('active', pinsVisible);
 }
 
 function toggleMapFullscreen() {
   const vp = document.getElementById('mapViewport');
   const isFs = vp.classList.toggle('fullscreen');
-  if (isFs) resetMapZoom();
+  if (isFs) resetCamera();
 }
 
 function showSubInfo(type) {
