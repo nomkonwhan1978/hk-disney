@@ -1132,6 +1132,17 @@ function toggleGPS() {
 function updateGPSMarker(position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
+  const btn = document.getElementById('gpsBtn');
+
+  // เช็กว่าพิกัดอยู่นอกเขตฮ่องกงดิสนีย์แลนด์หรือไม่
+  if (lat < 22.3050 || lat > 22.3220 || lon < 114.0320 || lon > 114.0520) {
+    if (btn) btn.innerText = "📍 คุณอยู่นอกเขตสวนสนุก";
+    const gpsGroup = document.getElementById('gps-user-group');
+    if (gpsGroup) gpsGroup.remove(); // ลบจุดสีฟ้าออก ไม่ให้ค้างกลางแผนที่
+    return;
+  }
+
+  if (btn) btn.innerText = "📍 กำลังติดตามตำแหน่ง";
 
   // พิกัดอ้างอิง 5 จุด และตำแหน่ง X,Y บน SVG (400x250)
   const anchors = [
@@ -1141,6 +1152,7 @@ function updateGPSMarker(position) {
     { name: 'SE', lat: 22.3100, lon: 114.0450, x: 385, y: 185 },
     { name: 'C',  lat: 22.3130, lon: 114.0415, x: 200, y: 115 }
   ];
+  // ... (โค้ดส่วนคำนวณและวาดหมุดด้านล่างคงเดิม) ...
 
   let totalWeight = 0;
   let simulatedX = 0;
