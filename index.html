@@ -342,6 +342,7 @@
       <g id="pinsLayer"></g>
     </svg>
   </div>
+  <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; margin-top: 8px;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
 </div>
 
 <div class="nav-banner" id="navBanner"></div>
@@ -1107,6 +1108,114 @@ function renderAll() {
 }
 
 renderAll();
+let gpsWatcher = null;
+let isTrackingGPS = false;
+
+function toggleGPS() {
+  const btn = document.getElementById('gpsBtn');
+  if (!isTrackingGPS) {
+    if ("geolocation" in navigator) {
+      isTrackingGPS = true;
+      btn.innerText = "📍 กำลังระบุตำแหน่ง...";
+      btn.style.background = "#059669";
+      
+      const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+      gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
+    } else {
+      alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
+    }
+  } else {
+    stopGPS(btn);
+  }
+}
+
+function updateGPSMarker(position) {
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+
+  // พิกัดอ้างอิง 5 จุด และตำแหน่ง X,Y บน SVG (400x250)
+  const anchors = [
+    { name: 'NW', lat: 22.3160, lon: 114.0380, x: 25, y: 15 },
+    { name: 'NE', lat: 22.3160, lon: 114.0450, x: 385, y: 55 },
+    { name: 'SW', lat: 22.3100, lon: 114.0380, x: 20, y: 240 },
+    { name: 'SE', lat: 22.3100, lon: 114.0450, x: 385, y: 185 },
+    { name: 'C',  lat: 22.3130, lon: 114.0415, x: 200, y: 115 }
+  ];
+
+  let totalWeight = 0;
+  let simulatedX = 0;
+  let simulatedY = 0;
+
+  anchors.forEach(anchor => {
+    const dLat = lat - anchor.lat;
+    const dLon = lon - anchor.lon;
+    const weight = 1 / (dLat * dLat + dLon * dLon + 0.0000001);
+    simulatedX += anchor.x * weight;
+    simulatedY += anchor.y * weight;
+    totalWeight += weight;
+  });
+
+  simulatedX /= totalWeight;
+  simulatedY /= totalWeight;
+
+  const pinsLayer = document.getElementById('pinsLayer');
+  let gpsGroup = document.getElementById('gps-user-group');
+
+  if (!gpsGroup) {
+    gpsGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    gpsGroup.id = "gps-user-group";
+
+    const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    pulse.id = "gps-pulse-circle";
+    pulse.setAttribute("r", "25");
+    pulse.setAttribute("fill", "url(#gpsPulse)");
+    gpsGroup.appendChild(pulse);
+
+    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    dot.id = "gps-dot-circle";
+    dot.setAttribute("r", "8");
+    dot.setAttribute("fill", "#2563eb");
+    dot.setAttribute("stroke", "#ffffff");
+    dot.setAttribute("stroke-width", "2");
+    gpsGroup.appendChild(dot);
+
+    pinsLayer.appendChild(gpsGroup);
+  }
+
+  gpsGroup.setAttribute("transform", `translate(${simulatedX}, ${simulatedY})`);
+}
+
+function handleGPSError(err) {
+  console.warn(`GPS Error (${err.code}): ${err.message}`);
+  const btn = document.getElementById('gpsBtn');
+  if(btn) btn.innerText = "📍 สัญญาณ GPS ขัดข้อง";
+}
+
+function stopGPS(btn) {
+  if (gpsWatcher !== null) {
+    navigator.geolocation.clearWatch(gpsWatcher);
+    gpsWatcher = null;
+  }
+  isTrackingGPS = false;
+  btn.innerText = "📍 แสดงตำแหน่งฉัน";
+  btn.style.background = "#10b981";
+  const gpsGroup = document.getElementById('gps-user-group');
+  if (gpsGroup) gpsGroup.remove();
+}
+
+// หยุดดึงพิกัดอัตโนมัติเมื่อปิดหน้าจอหรือสลับแอป เพื่อประหยัดแบตเตอรี่
+document.addEventListener("visibilitychange", () => {
+  const btn = document.getElementById('gpsBtn');
+  if (document.hidden) {
+    if (gpsWatcher !== null) {
+      navigator.geolocation.clearWatch(gpsWatcher);
+      gpsWatcher = null;
+    }
+  } else if (isTrackingGPS && gpsWatcher === null) {
+    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+    gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
+  }
+});
 </script>
 </body>
 </html>
