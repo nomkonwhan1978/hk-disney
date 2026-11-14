@@ -64,21 +64,28 @@
   .map-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 6px; }
   .toolbar-btn {
     background: var(--card); color: var(--text); border: 1px solid var(--border);
-    padding: 6px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; flex: 1; text-align: center;
+    padding: 6px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; flex: 1; text-align: center;
   }
   .toolbar-btn.active { background: #0284c7; color: #ffffff; border-color: #0284c7; }
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
+  /* แถบ 3 ปุ่มใต้แผนที่สวนสนุก */
   .sub-action-row {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
     margin-top: 8px;
   }
-  .transit-launch-btn {
+  .transit-disney-btn {
     background: #4f46e5;
     color: #ffffff;
     border-color: #4f46e5;
+  }
+  .transit-lym-btn {
+    background: #ea580c;
+    color: #ffffff;
+    border-color: #ea580c;
   }
 
   .ride-drawer {
@@ -242,7 +249,7 @@
   .item-zone { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; }
   .item-note { font-size: 0.79rem; color: var(--text-muted); line-height: 1.35; }
 
-  /* === [START: CSS แผนที่เดินทาง 3D ใหม่] === */
+  /* === [START: CSS แผนที่เดินทาง 3D ทั้ง 2 เส้นทาง (Disney & Lei Yue Mun)] === */
   .transit-modal {
     display: none;
     position: fixed;
@@ -285,7 +292,7 @@
     flex-shrink: 0;
   }
   .transit-header h3 {
-    margin: 0; font-size: 14.5px; color: #0f172a; font-weight: 700;
+    margin: 0; font-size: 14px; color: #0f172a; font-weight: 700;
     flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .header-icon-group {
@@ -519,6 +526,9 @@
   .action-shortcut-btn.gold {
     background: #fef3c7; color: #92400e; border: 1px solid #f59e0b;
   }
+  .action-shortcut-btn.orange {
+    background: #ffedd5; color: #9a3412; border: 1px solid #f97316;
+  }
 
   .sub-info-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.78);
@@ -530,7 +540,7 @@
     width: 100%; max-width: 390px; text-align: center;
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
   }
-  /* === [END: CSS แผนที่เดินทาง 3D ใหม่] === */
+  /* === [END: CSS แผนที่เดินทาง 3D] === */
 </style>
 </head>
 <body>
@@ -644,10 +654,11 @@
     </svg>
   </div>
 
-  <!-- แถบปุ่ม GPS และปุ่มเปิดแผนที่เดินทาง 3D จากโรงแรม -->
+  <!-- แถบ 3 ปุ่มใต้แผนที่สวนสนุก: GPS | เดินทาง Disney | ไปเล่ยหยู่มุน -->
   <div class="sub-action-row">
     <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; border-color: #10b981;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
-    <button class="toolbar-btn transit-launch-btn" onclick="openTransitModal()">🚇 เดินทางไปสวนสนุก (5 คน)</button>
+    <button class="toolbar-btn transit-disney-btn" onclick="openTransitModal()">🚇 เดินทาง Disney</button>
+    <button class="toolbar-btn transit-lym-btn" onclick="openLymModal()">🦞 ไปเล่ยหยู่มุน</button>
   </div>
 </div>
 
@@ -662,7 +673,9 @@
 
 <div class="timeline" id="timelineContainer"></div>
 
-<!-- === [START: HTML แผนที่เดินทาง 3D ใหม่] === -->
+<!-- =====================================================================
+     MODAL 1: แผนที่เดินทาง 3D จากโรงแรม B P International -> HK Disneyland
+     ===================================================================== -->
 <div id="transitModal" class="transit-modal" onclick="closeTransitModal()">
   <div class="transit-sheet" onclick="event.stopPropagation()">
     <div class="transit-header">
@@ -684,7 +697,7 @@
       </div>
 
       <div id="mapCanvas" class="map-canvas">
-        <img src="transit-bg.png" alt="แผนที่เดินทาง" class="map-bg-img">
+        <img src="transit-bg.png" alt="แผนที่เดินทางไปดิสนีย์" class="map-bg-img">
 
         <svg class="map-svg-overlay" viewBox="0 0 1000 562" preserveAspectRatio="none">
           <!-- เส้นทาง MTR -->
@@ -757,13 +770,110 @@
   </div>
 </div>
 
+<!-- =====================================================================
+     MODAL 2: แผนที่เดินทาง 3D จาก HK Disneyland -> เล่ยหยู่มุน (Lei Yue Mun)
+     ===================================================================== -->
+<div id="lymModal" class="transit-modal" onclick="closeLymModal()">
+  <div class="transit-sheet" onclick="event.stopPropagation()">
+    <div class="transit-header">
+      <h3>🦞 เส้นทางไปเล่ยหยู่มุน (5 ท่าน)</h3>
+      <div class="header-icon-group">
+        <button class="header-driver-btn" title="ป้ายคนขับขาไปและขากลับ" onclick="showSubInfo('lymChineseSign')">🀄 ป้ายคนขับ</button>
+        <button id="toggleLymPinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleLymPins()">🏷️</button>
+        <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleLymFullscreen()">⛶</button>
+        <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeLymModal()">✕</button>
+      </div>
+    </div>
+
+    <div id="lymViewport" class="map-viewport">
+      <button class="fs-close-btn" onclick="toggleLymFullscreen()">✕</button>
+
+      <div class="map-zoom-controls">
+        <button class="zoom-mini-btn" onclick="manualLymZoom(0.25)">+</button>
+        <button class="zoom-mini-btn" onclick="manualLymZoom(-0.25)">−</button>
+      </div>
+
+      <div id="lymCanvas" class="map-canvas">
+        <img src="transit-lym.png" alt="แผนที่เดินทางไปเล่ยหยู่มุน" class="map-bg-img">
+
+        <svg class="map-svg-overlay" viewBox="0 0 1000 562" preserveAspectRatio="none">
+          <!-- เส้นทาง MTR ไป Yau Tong -> Lei Yue Mun -->
+          <g id="svgLymMtr">
+            <path id="pathLymMtr" d="M 185 335 Q 250 220 385 165 Q 505 155 565 235 Q 635 285 755 280 Q 825 320 890 365" 
+                  fill="none" stroke="rgba(236, 72, 153, 0.3)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M 185 335 Q 250 220 385 165 Q 505 155 565 235 Q 635 285 755 280 Q 825 320 890 365" 
+                  fill="none" stroke="#ec4899" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <g>
+              <rect x="-40" y="-11" width="36" height="22" rx="6" fill="#ffffff" stroke="#be185d" stroke-width="3"/>
+              <rect x="-32" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="-19" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="2" y="-11" width="40" height="22" rx="9" fill="#ec4899" stroke="#9d174d" stroke-width="3"/>
+              <rect x="10" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <rect x="24" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <circle cx="38" cy="-5" r="2.5" fill="#fef08a"/>
+              <circle cx="38" cy="5" r="2.5" fill="#fef08a"/>
+              <animateMotion dur="9.5s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathLymMtr"/>
+              </animateMotion>
+            </g>
+          </g>
+
+          <!-- เส้นทาง UberXL / แท็กซี่ 5 ที่นั่ง ตรงดิ่งสู่ Lei Yue Mun -->
+          <g id="svgLymCar" style="display:none;">
+            <path id="pathLymCar" d="M 195 360 Q 290 235 415 160 Q 520 140 620 215 Q 720 250 815 310 Q 860 345 900 375" 
+                  fill="none" stroke="rgba(249, 115, 22, 0.35)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M 195 360 Q 290 235 415 160 Q 520 140 620 215 Q 720 250 815 310 Q 860 345 900 375" 
+                  fill="none" stroke="#f97316" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <g>
+              <rect x="-28" y="-13" width="56" height="26" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+              <path d="M 8 -9 L 19 -7 L 19 7 L 8 9 Z" fill="#38bdf8"/>
+              <rect x="-18" y="-9" width="22" height="18" rx="3" fill="#1e293b"/>
+              <circle cx="25" cy="-7" r="2.5" fill="#facc15"/>
+              <circle cx="25" cy="7" r="2.5" fill="#facc15"/>
+              <animateMotion dur="7.5s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathLymCar"/>
+              </animateMotion>
+            </g>
+          </g>
+        </svg>
+
+        <div id="lymPinsLayer" class="map-pins-layer">
+          <div id="lym-pin-disney" class="map-pin" style="top: 63%; left: 17%;">🏰 HK Disneyland</div>
+          <div id="lym-pin-sunnybay" class="map-pin lym-pin-mtr" style="top: 37%; left: 26%;">🐭 Sunny Bay (สายสีส้ม)</div>
+          <div id="lym-pin-bridge" class="map-pin lym-pin-car" style="top: 27%; left: 41%;">🌉 สะพานชิงหม่า</div>
+          <div id="lym-pin-prince" class="map-pin lym-pin-mtr" style="top: 34%; left: 57%;">🔄 Prince Edward (สายสีเขียว)</div>
+          <div id="lym-pin-yautong" class="map-pin lym-pin-mtr" style="top: 47%; left: 77%;">🚇 สถานี Yau Tong (Exit A2)</div>
+          <div id="lym-pin-lym" class="map-pin" style="top: 67%; left: 89%;">🦞 เล่ยหยู่มุน (Lei Yue Mun)</div>
+        </div>
+
+        <div id="lymSpotlightRing" class="spotlight-ring"></div>
+      </div>
+    </div>
+
+    <div id="lymDepartureBanner" class="departure-banner">
+      🌅 แนะนำออกจาก Disneyland ช่วง <b>16:30 – 17:00 น.</b> (ถึงร้านอาหารทะเล ~17:45 น.)
+    </div>
+
+    <div class="mode-tabs">
+      <button id="lymTabMtr" class="mode-tab active mtr" onclick="toggleLymMode('mtr')">
+        🚇 MTR + ต่อรถสั้นๆ<br><small style="font-weight:500;">~70 นาที | ประหยัด</small>
+      </button>
+      <button id="lymTabCar" class="mode-tab" onclick="toggleLymMode('car')">
+        🚐 UberXL / แท็กซี่<br><small style="font-weight:500;">~40 นาที | สะดวกสุด 5 คน</small>
+      </button>
+    </div>
+
+    <div id="lymStepsContainer" class="steps-container"></div>
+  </div>
+</div>
+
+<!-- ป๊อปอัปย่อยสำหรับปุ่มลัดทั้ง 2 หน้าต่าง -->
 <div id="subInfoOverlay" class="sub-info-overlay" onclick="closeSubInfo()">
   <div class="sub-info-box" onclick="event.stopPropagation()">
     <div id="subInfoContent"></div>
     <button class="action-shortcut-btn" style="margin-top:16px;" onclick="closeSubInfo()">ปิดหน้าต่าง</button>
   </div>
 </div>
-<!-- === [END: HTML แผนที่เดินทาง 3D ใหม่] === -->
 
 <script>
 const itinerary = [
@@ -1634,7 +1744,9 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-/* === [START: JS แผนที่เดินทาง 3D ใหม่] === */
+/* =====================================================================
+   JS ชุดที่ 1: แผนที่เดินทาง 3D (B P International -> HK Disneyland)
+   ===================================================================== */
 const transitData = {
   mtr: [
     {
@@ -1644,7 +1756,7 @@ const transitData = {
       cam: { scale: 1.35, x: -30, y: -25 },
       spot: { top: "70%", left: "86%" },
       pinId: "pin-jordan",
-      tip: "• <b>จุดสังเกตทางเดิน:</b> ออกจากประตูหลักโรงแรมเลี้ยวขวาเลียบถนน Austin Rd. เดินตรงไปจนถึงสี่แยกใหญ่ถนน Nathan Rd.<br>• <b>ทางลงแนะนำ:</b> มองหาป้ายทางลง <b>Exit C2</b> (อยู่ฝั่งเดียวกับโรงแรม ไม่ต้องข้ามถนน) มีลิฟต์ลงชั้นขายตั๋ว สะดวกสำหรับเด็กและรถเข็น",
+      tip: "• <b>จุดสังเกตทางเดิน:</b> ออกจากประตูหลักโรงแรมเลี้ยวขวาเลียบถนน Austin Rd. เดินตรงไปจนถึงสี่แยกใหญ่ถนน Nathan Rd.<br>• <b>ทางลงแนะนำ:</b> มองหาป้ายทางลง <b>Exit C2</b> (อยู่ฝั่งเดียวกับโรงแรม ไม่ต้องข้ามถนน) มีลิฟต์ลงชั้นขายตั๋ว<br>• <b>วิธีผ่านประตู:</b> ผู้ใหญ่แตะบัตรเครดิต/เดบิต Visa หรือ Mastercard (Contactless) ผ่านประตูสีฟ้าได้คนละ 1 ใบ ส่วนเด็กใช้บัตร Child Octopus",
       buttons: [
         { text: "📍 เปิดพิกัดทางลงสถานี Jordan (Exit C2)", action: "window.open('https://maps.google.com/?q=Jordan+Station+Exit+C2+Hong+Kong', '_blank')" }
       ]
@@ -1676,11 +1788,11 @@ const transitData = {
     {
       step: 4,
       title: "ถึงสถานี Hong Kong Disneyland Resort",
-      sub: "นั่ง 1 สถานี (~5 นาที) | เข้าช่อง Early Entry ซ้ายสุด",
+      sub: "นั่ง 1 สถานี (~5 นาที) | ออก Exit A เข้าช่อง Early Entry ซ้ายสุด",
       cam: { scale: 1.35, x: 0, y: -22 },
       spot: { top: "63%", left: "16%" },
       pinId: "pin-disney",
-      tip: "• <b>ทางเดินเข้าพาร์ค:</b> ออกจากสถานีเดินผ่านซุ้มประตูโค้ง Disney ตรงไป ~400 เมตร จะเจอลานน้ำพุมิกกี้ปลาวาฬ<br>• <b>จุดต่อคิว Early Entry:</b> ผ่านจุดตรวจกระเป๋าแล้ว ให้เดินตรงไปต่อคิวที่ <b>ช่องซ้ายมือสุด</b> (มีป้าย Early Park Entry Pass) เปิดให้สแกนเข้าก่อนเวลาปกติ 1 ชม.",
+      tip: "• <b>ทางเดินเข้าพาร์ค:</b> สถานีมีทางออกเดียว (<b>Exit A</b>) ขึ้นบันไดเลื่อนมาจะเจอซุ้มประตูโค้ง Disney เดินตรงไป ~400 เมตร จะเจอลานน้ำพุมิกกี้ปลาวาฬ<br>• <b>จุดต่อคิว Early Entry:</b> ผ่านจุดตรวจกระเป๋าแล้ว ให้เดินตรงไปต่อคิวที่ <b>ช่องซ้ายมือสุด</b> (มีป้าย Early Park Entry Pass) เปิดให้สแกนเข้าก่อนเวลาปกติ 1 ชม.",
       buttons: [
         { text: "🎟️ เช็กลิสต์เตรียมตัว & ห้องน้ำก่อนต่อคิว", action: "showSubInfo('checklistPark')" }
       ]
@@ -1819,11 +1931,11 @@ function selectTransitStep(idx) {
   activeStepIdx = idx;
   const item = transitData[currentMode][idx];
 
-  document.querySelectorAll('.step-card').forEach((card, i) => {
+  document.querySelectorAll('#stepsContainer .step-card').forEach((card, i) => {
     card.classList.toggle('active', i === idx);
   });
 
-  document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
+  document.querySelectorAll('#mapPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
   if (item.pinId) {
     const targetPin = document.getElementById(item.pinId);
     if (targetPin) targetPin.classList.add('focused');
@@ -1848,8 +1960,8 @@ function resetCamera() {
   camState = { scale: 1, x: 0, y: 0 };
   applyCamera();
   document.getElementById('spotlightRing').style.display = 'none';
-  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
+  document.querySelectorAll('#stepsContainer .step-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#mapPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
 }
 
 function manualZoom(delta) {
@@ -1877,6 +1989,244 @@ function toggleMapFullscreen() {
   if (isFs) resetCamera();
 }
 
+/* =====================================================================
+   JS ชุดที่ 2: แผนที่เดินทาง 3D (HK Disneyland -> Lei Yue Mun เล่ยหยู่มุน)
+   ===================================================================== */
+const lymTransitData = {
+  mtr: [
+    {
+      step: 1,
+      title: "ขึ้นสายสีชมพู Disneyland ➔ ต่อสายสีส้ม Sunny Bay",
+      sub: "นั่ง 1 สถานี (~5 นาที) | เปลี่ยนเป็นสายสีส้มปลายทาง Hong Kong",
+      cam: { scale: 1.35, x: 0, y: -12 },
+      spot: { top: "37%", left: "26%" },
+      pinId: "lym-pin-sunnybay",
+      tip: "• <b>จุดขึ้นรถ:</b> เดินออกจากสวนสนุกมุ่งหน้าสู่สถานี <b>Disneyland Resort</b> ขึ้นขบวนดิสนีย์สีชมพูไปลงที่ <b>Sunny Bay</b><br>• <b>การเปลี่ยนสาย:</b> เดินข้ามชานชาลาไปขึ้นสายสีส้ม (<b>Tung Chung Line</b> ปลายทาง Hong Kong) นั่ง 2 สถานี (~10 นาที) ลงที่ <b>Lai King</b> แล้วเดินข้ามชานชาลาฝั่งตรงข้ามต่อสายสีแดง (ปลายทาง Central)",
+      buttons: [
+        { text: "💰 เช็กค่าเดินทาง MTR + แท็กซี่ต่อช่วงสุดท้าย (5 ท่าน)", action: "showSubInfo('lymFareMtr')" }
+      ]
+    },
+    {
+      step: 2,
+      title: "เปลี่ยนเป็นสายสีเขียวที่ Prince Edward ➔ ลง Yau Tong",
+      sub: "นั่งสายสีเขียว 9 สถานี (~18 นาที) | ปลายทาง Tiu Keng Leng",
+      cam: { scale: 1.35, x: -24, y: -8 },
+      spot: { top: "47%", left: "77%" },
+      pinId: "lym-pin-yautong",
+      tip: "• <b>จุดเปลี่ยนสายสีเขียว:</b> นั่งสายสีแดงจาก Lai King มาลงที่สถานี <b>Prince Edward</b> เดินข้ามชานชาลาฝั่งตรงข้ามไปต่อสายสีเขียว (<b>Kwun Tong Line</b> ปลายทาง Tiu Keng Leng)<br>• <b>สถานีปลายทาง:</b> นั่งผ่าน 9 สถานี แล้วลงที่ <b>Yau Tong (เหยาถง)</b> มองหาป้ายทางออก <b>Exit A2</b>",
+      buttons: [
+        { text: "📍 เปิดพิกัดทางออกสถานี Yau Tong (Exit A2)", action: "window.open('https://maps.google.com/?q=Yau+Tong+Station+Exit+A2+Hong+Kong', '_blank')" }
+      ]
+    },
+    {
+      step: 3,
+      title: "ต่อแท็กซี่สั้นๆ 4 นาที (หรือเดิน 15 นาที) สู่ซุ้มประตูเล่ยหยู่มุน",
+      sub: "ระยะทาง 1.2 กม. | แนะนำเรียกแท็กซี่สีแดง 5 ที่นั่ง หน้า Exit A2",
+      cam: { scale: 1.4, x: -34, y: -25 },
+      spot: { top: "67%", left: "89%" },
+      pinId: "lym-pin-lym",
+      tip: "• <b>ทางเลือกแนะนำ (ไม่เหนื่อย):</b> ออกจาก <b>Exit A2</b> เรียกแท็กซี่สีแดงป้าย 5 ที่นั่ง นั่งเพียง <b>4 นาที</b> (~27-30 HKD) ส่งถึงหน้าซุ้มประตู Lei Yue Mun ทันที<br>• <b>หากเดินเท้า:</b> เดินเลียบถนน Cha Kwo Ling Rd. มุ่งหน้าไปทางริมอ่าวประมาณ 15-18 นาที",
+      buttons: [
+        { text: "🦞 กติกา & เทคนิคสั่งอาหารทะเลสด (ห้ามพลาด!)", style: "orange", action: "showSubInfo('lymSeafoodGuide')" },
+        { text: "🏨 ดูวิธีเดินทางขากลับโรงแรม B P International", action: "showSubInfo('lymReturnGuide')" }
+      ]
+    }
+  ],
+  car: [
+    {
+      step: 1,
+      title: "เรียกรถ UberXL / แท็กซี่ 5 ที่นั่ง ลานจอดหน้า Disneyland",
+      sub: "จุดขึ้นรถ: Public Transport Interchange | วิ่งทางด่วนยาวรวดเดียว",
+      cam: { scale: 1.35, x: 0, y: -20 },
+      spot: { top: "63%", left: "17%" },
+      pinId: "lym-pin-disney",
+      tip: "• <b>จุดขึ้นรถ:</b> เดินออกจากซุ้มประตูสวนสนุกไปทางซ้ายมือที่ลาน <b>Public Transport Interchange</b><br>• <b>ประเภทรถสำหรับ 5 ท่าน:</b> กดเรียก <b>UberXL (6 ที่นั่ง)</b> หรือเข้าคิวช่องแท็กซี่สีแดง โดยแจ้งเจ้าหน้าที่ขอรถ <b>ป้าย 5 ที่นั่ง (5-Seater)</b> เท่านั้น",
+      buttons: [
+        { text: "🀄 โชว์ป้ายชื่อภาษาจีนให้คนขับดู (ขาไป & ขากลับ)", style: "gold", action: "showSubInfo('lymChineseSign')" },
+        { text: "🚕 เปิดแอป Uber ปักหมุดไป Lei Yue Mun", action: "window.open('https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=Lei%20Yue%20Mun%20Seafood%20Bazaar', '_blank')" }
+      ]
+    },
+    {
+      step: 2,
+      title: "ข้ามสะพานชิงหม่า ➔ วิ่งตรงสู่ฝั่งเกาลูนตะวันออก",
+      sub: "ใช้เวลาบนทางด่วน ~35-40 นาที | นั่งพักขาหลังเล่นเครื่องเล่นมาทั้งวัน",
+      cam: { scale: 1.3, x: -16, y: -10 },
+      spot: { top: "27%", left: "41%" },
+      pinId: "lym-pin-bridge",
+      tip: "• <b>เส้นทางด่วน:</b> รถจะพาข้ามสะพานแขวนชิงหม่า ตัดผ่านทางด่วนฝั่งเกาลูนมุ่งหน้าไปทาง Kwun Tong / Yau Tong โดยไม่ต้องแวะเปลี่ยนขบวนรถไฟให้เหนื่อย<br>• <b>เตรียมเงินสด:</b> ระหว่างนั่งรถแนะนำเช็กเงินสดสกุล HKD ในกระเป๋าให้พร้อม (ควรมีติดตัว 1,500 - 2,500 HKD สำหรับซื้ออาหารทะเลสดหน้าร้าน)",
+      buttons: [
+        { text: "🧾 ดูสรุปค่าโดยสาร UberXL / แท็กซี่ (หาร 5 ท่าน)", action: "showSubInfo('lymFareCar')" }
+      ]
+    },
+    {
+      step: 3,
+      title: "ถึงซุ้มประตูหมู่บ้านชาวประมง Lei Yue Mun (鯉魚門)",
+      sub: "เดินเลือกของสดหน้าร้านขายปลา ➔ เลือกร้านอาหารปรุงให้",
+      cam: { scale: 1.4, x: -34, y: -25 },
+      spot: { top: "67%", left: "89%" },
+      pinId: "lym-pin-lym",
+      tip: "• <b>จุดลงรถ:</b> รถจะจอดส่งที่ลานหน้าซุ้มประตูทางเข้า Lei Yue Mun Archway เดินตรงเข้าไปในตรอกจะพบแผงอาหารทะเลสดเรียงรายตลอดสองข้างทาง<br>• <b>ช่วงเวลาแนะนำ:</b> ถึงก่อน 18:00 น. จะได้เดินชมวิวพระอาทิตย์ตกริมอ่าววิคตอเรียและเลือกของสดได้ครบก่อนคนแน่น",
+      buttons: [
+        { text: "🦞 กติกา & เทคนิคสั่งอาหารทะเลสด (ห้ามพลาด!)", style: "orange", action: "showSubInfo('lymSeafoodGuide')" },
+        { text: "🏨 ดูวิธีเดินทางขากลับโรงแรม B P International", action: "showSubInfo('lymReturnGuide')" }
+      ]
+    }
+  ]
+};
+
+let lymMode = 'mtr';
+let lymActiveStepIdx = null;
+let lymPinsVisible = true;
+let lymCamState = { scale: 1, x: 0, y: 0 };
+
+function openLymModal() {
+  document.getElementById('lymModal').classList.add('active');
+  setLymMode('mtr');
+}
+
+function closeLymModal() {
+  document.getElementById('lymModal').classList.remove('active');
+  resetLymCamera();
+}
+
+function toggleLymMode(mode) {
+  if (lymMode === mode) {
+    setLymMode(null);
+  } else {
+    setLymMode(mode);
+  }
+}
+
+function setLymMode(mode) {
+  lymMode = mode;
+  lymActiveStepIdx = null;
+  resetLymCamera();
+
+  document.getElementById('lymTabMtr').className = mode === 'mtr' ? 'mode-tab active mtr' : 'mode-tab';
+  document.getElementById('lymTabCar').className = mode === 'car' ? 'mode-tab active car' : 'mode-tab';
+
+  const banner = document.getElementById('lymDepartureBanner');
+  if (mode === 'mtr') {
+    banner.innerHTML = '🌅 แนะนำออกจาก Disneyland ช่วง <b>16:30 – 17:00 น.</b> (ถึงเล่ยหยู่มุน ~17:45 น.)';
+  } else if (mode === 'car') {
+    banner.innerHTML = '🚐 นั่งสบายรวดเดียว ~40 นาที ถึงหน้าซุ้มประตู <b>Lei Yue Mun</b> ก่อนพระอาทิตย์ตก';
+  } else {
+    banner.innerHTML = '🗺️ กำลังแสดง <b>ภาพรวมเส้นทางไปเล่ยหยู่มุน</b> (เลือกวิธีเดินทางด้านล่าง)';
+  }
+
+  document.getElementById('svgLymMtr').style.display = mode === 'mtr' ? 'block' : 'none';
+  document.getElementById('svgLymCar').style.display = mode === 'car' ? 'block' : 'none';
+
+  document.querySelectorAll('.lym-pin-mtr').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'car');
+  });
+  document.querySelectorAll('.lym-pin-car').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'mtr');
+  });
+
+  const container = document.getElementById('lymStepsContainer');
+  if (!mode) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:32px 16px; color:#64748b; font-size:12.5px; line-height:1.6;">
+        👆 แตะเลือกปุ่ม <b>MTR + ต่อรถสั้นๆ</b> หรือ <b>UberXL / แท็กซี่</b> ด้านบน<br>เพื่อดูขั้นตอนการเดินทางไปร้านอาหารทะเลเล่ยหยู่มุนครับ
+      </div>`;
+    return;
+  }
+
+  container.className = mode === 'car' ? 'steps-container car-mode' : 'steps-container';
+  container.innerHTML = lymTransitData[mode].map((item, idx) => `
+    <div class="step-card" id="lymStepCard-${idx}" onclick="selectLymStep(${idx})">
+      <div class="step-header">
+        <div class="step-badge">${item.step}</div>
+        <div style="flex:1;">
+          <div class="step-title">${item.title}</div>
+          <div class="step-sub">${item.sub}</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>${item.tip}</div>
+        <div class="step-btn-group">
+          ${item.buttons.map(b => `
+            <button class="action-shortcut-btn ${b.style || ''}" onclick="${b.action}">${b.text}</button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectLymStep(idx) {
+  if (!lymMode) return;
+  if (lymActiveStepIdx === idx) {
+    resetLymCamera();
+    return;
+  }
+
+  lymActiveStepIdx = idx;
+  const item = lymTransitData[lymMode][idx];
+
+  document.querySelectorAll('#lymStepsContainer .step-card').forEach((card, i) => {
+    card.classList.toggle('active', i === idx);
+  });
+
+  document.querySelectorAll('#lymPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+  if (item.pinId) {
+    const targetPin = document.getElementById(item.pinId);
+    if (targetPin) targetPin.classList.add('focused');
+  }
+
+  lymCamState = { scale: item.cam.scale, x: item.cam.x, y: item.cam.y };
+  applyLymCamera();
+
+  const ring = document.getElementById('lymSpotlightRing');
+  ring.style.top = item.spot.top;
+  ring.style.left = item.spot.left;
+  ring.style.display = 'block';
+}
+
+function applyLymCamera() {
+  const canvas = document.getElementById('lymCanvas');
+  canvas.style.transform = `translate(${lymCamState.x}%, ${lymCamState.y}%) scale(${lymCamState.scale})`;
+}
+
+function resetLymCamera() {
+  lymActiveStepIdx = null;
+  lymCamState = { scale: 1, x: 0, y: 0 };
+  applyLymCamera();
+  document.getElementById('lymSpotlightRing').style.display = 'none';
+  document.querySelectorAll('#lymStepsContainer .step-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#lymPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+}
+
+function manualLymZoom(delta) {
+  const newScale = Math.min(2.2, Math.max(1, lymCamState.scale + delta));
+  if (newScale === 1) {
+    resetLymCamera();
+    return;
+  }
+  const scaleDiff = newScale - lymCamState.scale;
+  lymCamState.scale = newScale;
+  lymCamState.x = Math.min(0, Math.max(-((newScale - 1) * 100), lymCamState.x - (scaleDiff * 45)));
+  lymCamState.y = Math.min(0, Math.max(-((newScale - 1) * 100), lymCamState.y - (scaleDiff * 45)));
+  applyLymCamera();
+}
+
+function toggleLymPins() {
+  lymPinsVisible = !lymPinsVisible;
+  document.getElementById('lymPinsLayer').classList.toggle('hidden', !lymPinsVisible);
+  document.getElementById('toggleLymPinsBtn').classList.toggle('active', lymPinsVisible);
+}
+
+function toggleLymFullscreen() {
+  const vp = document.getElementById('lymViewport');
+  const isFs = vp.classList.toggle('fullscreen');
+  if (isFs) resetLymCamera();
+}
+
+/* =====================================================================
+   ป๊อปอัปข้อมูลย่อย (Sub-Info Overlay) รวมทั้ง 2 เส้นทาง
+   ===================================================================== */
 function showSubInfo(type) {
   const box = document.getElementById('subInfoContent');
   const contents = {
@@ -1903,7 +2253,7 @@ function showSubInfo(type) {
         3. <b>ช่องทางเข้า:</b> ผ่านจุดตรวจกระเป๋าแล้ว เดินตรงไปต่อคิว <b>ช่องซ้ายมือสุด (Early Park Entry Pass)</b>
       </p>`,
     fareCar: `
-      <h3 style="margin-top:0; color:#15803d;">🧾 ประมาณการค่า UberXL / แท็กซี่</h3>
+      <h3 style="margin-top:0; color:#15803d;">🧾 ประมาณการค่า UberXL / แท็กซี่ (ไป Disneyland)</h3>
       <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
         • <b>ค่าโดยสาร UberXL (รถใหญ่ 6 ที่นั่ง):</b> ~230 - 270 HKD<br>
         • <b>ค่าทางด่วนอุโมงค์:</b> รวมในราคาแอปแล้ว<br>
@@ -1918,7 +2268,52 @@ function showSubInfo(type) {
         <div style="font-size:34px; font-weight:800; color:#0f172a; letter-spacing:2px; margin:8px 0;">香港迪士尼樂園</div>
         <div style="font-size:18px; font-weight:700; color:#dc2626; margin-bottom:6px;">(落客區 / จุดส่งผู้โดยสาร)</div>
         <div style="font-size:14px; font-weight:600; color:#2563eb;">Hong Kong Disneyland Drop-off Area</div>
-      </div>`
+      </div>`,
+
+    /* ข้อมูลเฉพาะของทริปไปเล่ยหยู่มุน (Lei Yue Mun) */
+    lymFareMtr: `
+      <h3 style="margin-top:0; color:#1d4ed8;">💰 ค่าเดินทาง MTR + แท็กซี่สั้นๆ (5 ท่าน)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ค่า MTR (Disneyland ➔ Yau Tong):</b> ผู้ใหญ่ ~24.5 HKD / เด็ก ~12 HKD (รวม 5 ท่าน ~110-122 HKD)<br>
+        • <b>ค่าแท็กซี่ต่อช่วงสุดท้าย (Yau Tong ➔ Lei Yue Mun):</b> ~27-30 HKD ต่อคัน<br>
+        • <b>รวมทั้งหมด 5 ท่าน:</b> <b>~137 - 152 HKD</b> (~585 - 650 บาท)
+      </p>`,
+    lymFareCar: `
+      <h3 style="margin-top:0; color:#ea580c;">🧾 ค่า UberXL / แท็กซี่ (Disneyland ➔ Lei Yue Mun)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ค่าโดยสาร UberXL (รถใหญ่ 6 ที่นั่ง):</b> ~280 - 330 HKD<br>
+        • <b>เฉลี่ยตกคนละ (หาร 5 ท่าน):</b> <b>~56 - 66 HKD</b> (~240 - 280 บาท/คน)<br>
+        <small style="color:#16a34a;">*นั่งสบายรวดเดียว ไม่ต้องเปลี่ยนรถไฟ 3 สายหลังเดินเที่ยวสวนสนุกมาทั้งวัน</small>
+      </p>`,
+    lymChineseSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#fef3c7; color:#92400e; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#fff7ed; border:1.5px solid #fdba74; border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#c2410c; font-weight:700;">ขาไปร้านอาหารทะเล:</div>
+          <div style="font-size:28px; font-weight:800; color:#0f172a; margin:4px 0;">鯉魚門海鮮街</div>
+          <div style="font-size:13px; font-weight:700; color:#ea580c;">Lei Yue Mun Seafood Bazaar (落客區)</div>
+        </div>
+        <div style="background:#eff6ff; border:1.5px solid #93c5fd; border-radius:12px; padding:10px;">
+          <div style="font-size:11px; color:#1d4ed8; font-weight:700;">ขากลับโรงแรม (ใช้ตอนค่ำ):</div>
+          <div style="font-size:24px; font-weight:800; color:#0f172a; margin:4px 0;">尖沙咀 龍堡國際賓館</div>
+          <div style="font-size:13px; font-weight:700; color:#2563eb;">B P International Hotel (Austin Rd.)</div>
+        </div>
+      </div>`,
+    lymSeafoodGuide: `
+      <h3 style="margin-top:0; color:#ea580c;">🦞 กติกา & เทคนิคสั่งอาหารทะเล Lei Yue Mun</h3>
+      <p style="font-size:12.5px; color:#334155; text-align:left; line-height:1.6;">
+        1. <b>ซื้อของสดหน้าร้านขายปลา:</b> เดินเลือกกุ้งมังกร ปู หอยงวงช้าง กั้งกระดาน <b>ต่อราคาและดูตราชั่งให้ชัดเจน</b> ร้านจะใส่ตะกร้าแล้วเดินตามไปส่งที่ร้านอาหารให้เรา<br>
+        2. <b>แจ้งวิธีปรุงที่ร้านอาหาร:</b> ร้านดังแนะนำ <i>Lung Mun Seafood</i> หรือ <i>South Sea</i> สั่งวิธีปรุงได้ เช่น กุ้งมังกรอบชีส, กั้งทอดพริกเกลือ, หอยเชลล์นึ่งกระเทียมวุ้นเส้น (มีค่าปรุง Cooking Fee แยกต่างหาก)<br>
+        3. <b>เตรียมเงินสด HKD:</b> แผงขายของสดด้านหน้าส่วนใหญ่ <b>รับเฉพาะเงินสด หรือ Octopus</b> (ควรพกเงินสดไว้ ~1,500 - 2,500 HKD)
+      </p>`,
+    lymReturnGuide: `
+      <h3 style="margin-top:0; color:#0f172a;">🏨 วิธีกลับโรงแรม B P International ช่วงค่ำ</h3>
+      <p style="font-size:12.5px; color:#334155; text-align:left; line-height:1.6;">
+        • <b>แบบที่ 1 (สะดวกสุด):</b> กดเรียก <b>UberXL</b> ล่วงหน้า 10-15 นาทีก่อนเช็กบิล ปักหมุดจุดรับที่ <b>Lei Yue Mun Archway</b> วิ่งตรงกลับโรงแรม ~25 นาที (~110-140 HKD)<br>
+        • <b>แบบที่ 2 (ไม่ต้องรอรถนาน):</b> นั่งแท็กซี่สั้นๆ 4 นาทีไปลง <b>MTR Yau Tong</b> ➔ นั่งสายสีเขียวลง <b>Mong Kok</b> ➔ เดินข้ามชานชาลาต่อสายสีแดง 3 สถานีถึง <b>Jordan (Exit C2)</b> เดินเข้าโรงแรมได้เลย
+      </p>`
   };
   box.innerHTML = contents[type] || '';
   document.getElementById('subInfoOverlay').classList.add('active');
@@ -1927,7 +2322,6 @@ function showSubInfo(type) {
 function closeSubInfo() {
   document.getElementById('subInfoOverlay').classList.remove('active');
 }
-/* === [END: JS แผนที่เดินทาง 3D ใหม่] === */
 </script>
 </body>
 </html>
