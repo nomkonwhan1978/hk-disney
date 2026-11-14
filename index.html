@@ -70,6 +70,17 @@
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
+  .sub-action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .transit-launch-btn {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4f46e5;
+  }
+
   .ride-drawer {
     display: none;
     background: var(--card);
@@ -144,7 +155,7 @@
     }
   }
 
-  svg { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
+  #parkMap { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
   
   .zoom-controls { position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; z-index: 50; }
   .bottom-btn-row { display: flex; gap: 6px; align-items: center; }
@@ -230,6 +241,296 @@
   .item-name { font-size: 0.94rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
   .item-zone { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; }
   .item-note { font-size: 0.79rem; color: var(--text-muted); line-height: 1.35; }
+
+  /* === [START: CSS แผนที่เดินทาง 3D ใหม่] === */
+  .transit-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.82);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: flex-end;
+    font-family: -apple-system, BlinkMacSystemFont, 'Prompt', sans-serif;
+  }
+  .transit-modal.active { display: flex; }
+
+  .transit-sheet {
+    background: #f8fafc;
+    width: 100%;
+    max-width: 540px;
+    height: 88vh;
+    max-height: 820px;
+    border-radius: 24px 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.35);
+    animation: slideUpSheet 0.3s ease-out;
+  }
+  @keyframes slideUpSheet {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .transit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .transit-header h3 {
+    margin: 0; font-size: 14.5px; color: #0f172a; font-weight: 700;
+    flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .header-icon-group {
+    display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+  }
+  .header-circle-btn {
+    background: #f1f5f9; border: 1px solid #e2e8f0;
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 14px; color: #334155; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .header-circle-btn.active {
+    background: #0f172a; color: #ffffff; border-color: #0f172a;
+  }
+  .header-driver-btn {
+    background: #fef3c7; border: 1px solid #f59e0b;
+    padding: 0 9px; height: 32px; border-radius: 16px;
+    font-size: 11.5px; font-weight: 700; color: #92400e;
+    cursor: pointer; display: flex; align-items: center; gap: 4px;
+  }
+
+  .map-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #38bdf8;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .map-viewport.fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: auto;
+    z-index: 10005;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+  }
+  .fs-close-btn {
+    display: none;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10008;
+    align-items: center;
+    justify-content: center;
+  }
+  .map-viewport.fullscreen .fs-close-btn { display: flex; }
+
+  .map-zoom-controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 20;
+  }
+  .zoom-mini-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-origin: 0 0;
+    will-change: transform;
+    transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .map-viewport.fullscreen .map-canvas {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .map-bg-img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .map-svg-overlay {
+    position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  }
+
+  .map-pins-layer {
+    position: absolute; inset: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .map-pins-layer.hidden { opacity: 0; }
+
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(15, 23, 42, 0.78);
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .map-pin.focused {
+    background: #2563eb;
+    transform: translate(-50%, -50%) scale(1.15);
+    z-index: 15;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6);
+  }
+  .map-pin.route-hidden {
+    display: none !important;
+  }
+
+  .spotlight-ring {
+    position: absolute;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 2px solid #facc15;
+    background: rgba(250, 204, 21, 0.22);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+    animation: pulseSpot 1.6s infinite;
+  }
+  @keyframes pulseSpot {
+    0% { transform: translate(-50%, -50%) scale(0.75); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.75); opacity: 0; }
+  }
+
+  .departure-banner {
+    background: #fefce8;
+    border-bottom: 1px solid #fef08a;
+    color: #854d0e;
+    padding: 7px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .mode-tabs {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    padding: 10px 14px; background: #ffffff; border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
+  }
+  .mode-tab {
+    padding: 8px 10px; border-radius: 12px; border: 1.5px solid #e2e8f0;
+    background: #f8fafc; font-size: 12.5px; font-weight: 700; color: #475569;
+    cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .mode-tab.active.mtr {
+    background: #eff6ff; border-color: #2563eb; color: #1d4ed8;
+  }
+  .mode-tab.active.car {
+    background: #f0fdf4; border-color: #16a34a; color: #15803d;
+  }
+
+  .steps-container {
+    padding: 10px 14px 28px; overflow-y: auto; flex: 1;
+  }
+  .step-card {
+    background: #ffffff; border-radius: 14px; padding: 11px 13px;
+    margin-bottom: 8px; border: 1.5px solid #e2e8f0;
+    cursor: pointer; transition: all 0.25s;
+  }
+  .step-card.active {
+    border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+  }
+  .car-mode .step-card.active {
+    border-color: #16a34a; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.12);
+  }
+  .step-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .step-badge {
+    width: 24px; height: 24px; border-radius: 50%; background: #2563eb;
+    color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .car-mode .step-badge { background: #16a34a; }
+  .step-title { font-size: 13px; font-weight: 700; color: #1e293b; flex: 1; }
+  .step-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .step-arrow {
+    font-size: 11px; color: #94a3b8; transition: transform 0.25s;
+  }
+  .step-card.active .step-arrow {
+    transform: rotate(180deg); color: #2563eb;
+  }
+  .step-details {
+    display: none; margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed #cbd5e1; font-size: 12px; color: #334155; line-height: 1.6;
+  }
+  .step-card.active .step-details { display: block; }
+
+  .step-btn-group {
+    display: flex; flex-direction: column; gap: 6px; margin-top: 10px;
+  }
+  .action-shortcut-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 12px; border-radius: 10px;
+    background: #0f172a; color: #ffffff; font-size: 12px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer; width: 100%; justify-content: center;
+  }
+  .action-shortcut-btn.gold {
+    background: #fef3c7; color: #92400e; border: 1px solid #f59e0b;
+  }
+
+  .sub-info-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+    z-index: 10010; justify-content: center; align-items: center; padding: 20px;
+  }
+  .sub-info-overlay.active { display: flex; }
+  .sub-info-box {
+    background: #ffffff; border-radius: 20px; padding: 20px;
+    width: 100%; max-width: 390px; text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  /* === [END: CSS แผนที่เดินทาง 3D ใหม่] === */
 </style>
 </head>
 <body>
@@ -342,7 +643,12 @@
       <g id="pinsLayer"></g>
     </svg>
   </div>
-  <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; margin-top: 8px;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
+
+  <!-- แถบปุ่ม GPS และปุ่มเปิดแผนที่เดินทาง 3D จากโรงแรม -->
+  <div class="sub-action-row">
+    <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; border-color: #10b981;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
+    <button class="toolbar-btn transit-launch-btn" onclick="openTransitModal()">🚇 เดินทางไปสวนสนุก (5 คน)</button>
+  </div>
 </div>
 
 <div class="nav-banner" id="navBanner"></div>
@@ -355,6 +661,109 @@
 </div>
 
 <div class="timeline" id="timelineContainer"></div>
+
+<!-- === [START: HTML แผนที่เดินทาง 3D ใหม่] === -->
+<div id="transitModal" class="transit-modal" onclick="closeTransitModal()">
+  <div class="transit-sheet" onclick="event.stopPropagation()">
+    <div class="transit-header">
+      <h3>🗺️ เส้นทางไป Disneyland (5 ท่าน)</h3>
+      <div class="header-icon-group">
+        <button class="header-driver-btn" title="ยื่นให้คนขับดู" onclick="showSubInfo('chineseSign')">🀄 ป้ายคนขับ</button>
+        <button id="togglePinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleMapPins()">🏷️</button>
+        <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleMapFullscreen()">⛶</button>
+        <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeTransitModal()">✕</button>
+      </div>
+    </div>
+
+    <div id="mapViewport" class="map-viewport">
+      <button class="fs-close-btn" onclick="toggleMapFullscreen()">✕</button>
+
+      <div class="map-zoom-controls">
+        <button class="zoom-mini-btn" onclick="manualZoom(0.25)">+</button>
+        <button class="zoom-mini-btn" onclick="manualZoom(-0.25)">−</button>
+      </div>
+
+      <div id="mapCanvas" class="map-canvas">
+        <img src="transit-bg.png" alt="แผนที่เดินทาง" class="map-bg-img">
+
+        <svg class="map-svg-overlay" viewBox="0 0 1000 562" preserveAspectRatio="none">
+          <!-- เส้นทาง MTR -->
+          <g id="svgRouteMtr">
+            <path id="pathMtr" d="M 885 455 Q 945 340 935 200 Q 925 125 780 82 Q 620 140 430 105 Q 250 85 215 135 Q 110 190 120 265 Q 145 320 280 345" 
+                  fill="none" stroke="rgba(236, 72, 153, 0.3)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M 885 455 Q 945 340 935 200 Q 925 125 780 82 Q 620 140 430 105 Q 250 85 215 135 Q 110 190 120 265 Q 145 320 280 345" 
+                  fill="none" stroke="#ec4899" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <g>
+              <rect x="-40" y="-11" width="36" height="22" rx="6" fill="#ffffff" stroke="#be185d" stroke-width="3"/>
+              <rect x="-32" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="-19" y="-6" width="8" height="12" rx="2" fill="#f472b6"/>
+              <rect x="2" y="-11" width="40" height="22" rx="9" fill="#ec4899" stroke="#9d174d" stroke-width="3"/>
+              <rect x="10" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <rect x="24" y="-6" width="9" height="12" rx="2" fill="#ffffff"/>
+              <circle cx="38" cy="-5" r="2.5" fill="#fef08a"/>
+              <circle cx="38" cy="5" r="2.5" fill="#fef08a"/>
+              <animateMotion dur="9s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathMtr"/>
+              </animateMotion>
+            </g>
+          </g>
+
+          <!-- เส้นทางรถยนต์ UberXL / Taxi -->
+          <g id="svgRouteCar" style="display:none;">
+            <path id="pathCar" d="M 885 330 Q 800 310 730 240 Q 705 150 675 140 Q 600 185 435 275 Q 370 330 395 415 Q 415 485 300 470" 
+                  fill="none" stroke="rgba(34, 197, 94, 0.3)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M 885 330 Q 800 310 730 240 Q 705 150 675 140 Q 600 185 435 275 Q 370 330 395 415 Q 415 485 300 470" 
+                  fill="none" stroke="#22c55e" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+            <g>
+              <rect x="-28" y="-13" width="56" height="26" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+              <path d="M 8 -9 L 19 -7 L 19 7 L 8 9 Z" fill="#38bdf8"/>
+              <rect x="-18" y="-9" width="22" height="18" rx="3" fill="#1e293b"/>
+              <circle cx="25" cy="-7" r="2.5" fill="#facc15"/>
+              <circle cx="25" cy="7" r="2.5" fill="#facc15"/>
+              <animateMotion dur="7.5s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathCar"/>
+              </animateMotion>
+            </g>
+          </g>
+        </svg>
+
+        <div id="mapPinsLayer" class="map-pins-layer">
+          <div id="pin-hotel" class="map-pin" style="top: 55%; left: 85%;">🏨 B P International</div>
+          <div id="pin-jordan" class="map-pin pin-mtr" style="top: 81%; left: 79%;">🚇 สถานี Jordan</div>
+          <div id="pin-laiking" class="map-pin pin-mtr" style="top: 17%; left: 78%;">🔄 Lai King (สายสีส้ม)</div>
+          <div id="pin-bridge" class="map-pin pin-car" style="top: 47%; left: 53%;">🌉 สะพานชิงหม่า</div>
+          <div id="pin-sunnybay" class="map-pin pin-mtr" style="top: 20%; left: 22%;">🐭 Sunny Bay (สายดิสนีย์)</div>
+          <div id="pin-disney" class="map-pin" style="top: 63%; left: 15%;">🏰 HK Disneyland</div>
+        </div>
+
+        <div id="spotlightRing" class="spotlight-ring"></div>
+      </div>
+    </div>
+
+    <div id="departureBanner" class="departure-banner">
+      ⏰ แนะนำออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (ถึงหน้าพาร์ค ~08:30 น.)
+    </div>
+
+    <div class="mode-tabs">
+      <button id="tabMtr" class="mode-tab active mtr" onclick="toggleTransitMode('mtr')">
+        🚇 รถไฟฟ้า MTR<br><small style="font-weight:500;">~45 นาที | ประหยัด</small>
+      </button>
+      <button id="tabCar" class="mode-tab" onclick="toggleTransitMode('car')">
+        🚐 UberXL / แท็กซี่<br><small style="font-weight:500;">~28 นาที | สะดวก 5 คน</small>
+      </button>
+    </div>
+
+    <div id="stepsContainer" class="steps-container"></div>
+  </div>
+</div>
+
+<div id="subInfoOverlay" class="sub-info-overlay" onclick="closeSubInfo()">
+  <div class="sub-info-box" onclick="event.stopPropagation()">
+    <div id="subInfoContent"></div>
+    <button class="action-shortcut-btn" style="margin-top:16px;" onclick="closeSubInfo()">ปิดหน้าต่าง</button>
+  </div>
+</div>
+<!-- === [END: HTML แผนที่เดินทาง 3D ใหม่] === -->
 
 <script>
 const itinerary = [
@@ -1134,17 +1543,15 @@ function updateGPSMarker(position) {
   const lon = position.coords.longitude;
   const btn = document.getElementById('gpsBtn');
 
-  // เช็กว่าพิกัดอยู่นอกเขตฮ่องกงดิสนีย์แลนด์หรือไม่
   if (lat < 22.3050 || lat > 22.3220 || lon < 114.0320 || lon > 114.0520) {
     if (btn) btn.innerText = "📍 คุณอยู่นอกเขตสวนสนุก";
     const gpsGroup = document.getElementById('gps-user-group');
-    if (gpsGroup) gpsGroup.remove(); // ลบจุดสีฟ้าออก ไม่ให้ค้างกลางแผนที่
+    if (gpsGroup) gpsGroup.remove();
     return;
   }
 
   if (btn) btn.innerText = "📍 กำลังติดตามตำแหน่ง";
 
-  // พิกัดอ้างอิง 5 จุด และตำแหน่ง X,Y บน SVG (400x250)
   const anchors = [
     { name: 'NW', lat: 22.3160, lon: 114.0380, x: 25, y: 15 },
     { name: 'NE', lat: 22.3160, lon: 114.0450, x: 385, y: 55 },
@@ -1152,7 +1559,6 @@ function updateGPSMarker(position) {
     { name: 'SE', lat: 22.3100, lon: 114.0450, x: 385, y: 185 },
     { name: 'C',  lat: 22.3130, lon: 114.0415, x: 200, y: 115 }
   ];
-  // ... (โค้ดส่วนคำนวณและวาดหมุดด้านล่างคงเดิม) ...
 
   let totalWeight = 0;
   let simulatedX = 0;
@@ -1215,7 +1621,6 @@ function stopGPS(btn) {
   if (gpsGroup) gpsGroup.remove();
 }
 
-// หยุดดึงพิกัดอัตโนมัติเมื่อปิดหน้าจอหรือสลับแอป เพื่อประหยัดแบตเตอรี่
 document.addEventListener("visibilitychange", () => {
   const btn = document.getElementById('gpsBtn');
   if (document.hidden) {
@@ -1228,6 +1633,301 @@ document.addEventListener("visibilitychange", () => {
     gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
   }
 });
+
+/* === [START: JS แผนที่เดินทาง 3D ใหม่] === */
+const transitData = {
+  mtr: [
+    {
+      step: 1,
+      title: "เดินจาก B P International ไปสถานี Jordan",
+      sub: "ระยะทาง 450 ม. (~6 นาที) | ลงทางออก Exit C2 (มีลิฟต์)",
+      cam: { scale: 1.35, x: -30, y: -25 },
+      spot: { top: "70%", left: "86%" },
+      pinId: "pin-jordan",
+      tip: "• <b>จุดสังเกตทางเดิน:</b> ออกจากประตูหลักโรงแรมเลี้ยวขวาเลียบถนน Austin Rd. เดินตรงไปจนถึงสี่แยกใหญ่ถนน Nathan Rd.<br>• <b>ทางลงแนะนำ:</b> มองหาป้ายทางลง <b>Exit C2</b> (อยู่ฝั่งเดียวกับโรงแรม ไม่ต้องข้ามถนน) มีลิฟต์ลงชั้นขายตั๋ว สะดวกสำหรับเด็กและรถเข็น",
+      buttons: [
+        { text: "📍 เปิดพิกัดทางลงสถานี Jordan (Exit C2)", action: "window.open('https://maps.google.com/?q=Jordan+Station+Exit+C2+Hong+Kong', '_blank')" }
+      ]
+    },
+    {
+      step: 2,
+      title: "ขึ้นสายสีแดง (ปลายทาง Tsuen Wan) ลง Lai King",
+      sub: "นั่ง 6 สถานี (~12 นาที) | เดินข้ามชานชาลาฝั่งตรงข้าม",
+      cam: { scale: 1.35, x: -26, y: 0 },
+      spot: { top: "17%", left: "78%" },
+      pinId: "pin-laiking",
+      tip: "• <b>ป้ายชานชาลาที่ต้องขึ้น:</b> เลือกฝั่งที่เขียนป้ายปลายทางว่า <b>Tsuen Wan (สายสีแดง)</b><br>• <b>จุดเปลี่ยนสาย:</b> นั่งผ่าน 6 สถานี แล้วลงที่ <b>Lai King</b> ประตูรถจะเปิดฝั่งขวา เดินข้ามชานชาลาตรงหน้าไปขึ้นสายสีส้มได้เลย (ไม่ต้องขึ้น-ลงบันได)",
+      buttons: [
+        { text: "💰 เช็กยอดค่าโดยสาร MTR รวม 5 ท่าน", action: "showSubInfo('fareMtr')" }
+      ]
+    },
+    {
+      step: 3,
+      title: "ขึ้นสายสีส้ม (ปลายทาง Tung Chung) ลง Sunny Bay",
+      sub: "นั่ง 2 สถานี (~10 นาที) | เปลี่ยนเป็นขบวนดิสนีย์สีชมพู",
+      cam: { scale: 1.35, x: 0, y: 0 },
+      spot: { top: "20%", left: "22%" },
+      pinId: "pin-sunnybay",
+      tip: "• <b>ตู้โดยสารแนะนำ:</b> แนะนำให้ยืนรอขึ้นช่วง <b>กลางขบวน</b> ของสายสีส้ม (ปลายทาง Tung Chung)<br>• <b>จุดต่อรถไฟดิสนีย์:</b> ลงที่ <b>Sunny Bay</b> เดินขึ้นบันไดเลื่อนข้ามชานชาลามาต่อขบวน <b>Disneyland Resort Line</b> (หน้าต่างหัวมิกกี้) รถออกทุก 5-10 นาที",
+      buttons: [
+        { text: "⏱️ เช็กเวลาขบวนรถรอบเช้า (Early Entry)", action: "showSubInfo('scheduleMtr')" }
+      ]
+    },
+    {
+      step: 4,
+      title: "ถึงสถานี Hong Kong Disneyland Resort",
+      sub: "นั่ง 1 สถานี (~5 นาที) | เข้าช่อง Early Entry ซ้ายสุด",
+      cam: { scale: 1.35, x: 0, y: -22 },
+      spot: { top: "63%", left: "16%" },
+      pinId: "pin-disney",
+      tip: "• <b>ทางเดินเข้าพาร์ค:</b> ออกจากสถานีเดินผ่านซุ้มประตูโค้ง Disney ตรงไป ~400 เมตร จะเจอลานน้ำพุมิกกี้ปลาวาฬ<br>• <b>จุดต่อคิว Early Entry:</b> ผ่านจุดตรวจกระเป๋าแล้ว ให้เดินตรงไปต่อคิวที่ <b>ช่องซ้ายมือสุด</b> (มีป้าย Early Park Entry Pass) เปิดให้สแกนเข้าก่อนเวลาปกติ 1 ชม.",
+      buttons: [
+        { text: "🎟️ เช็กลิสต์เตรียมตัว & ห้องน้ำก่อนต่อคิว", action: "showSubInfo('checklistPark')" }
+      ]
+    }
+  ],
+  car: [
+    {
+      step: 1,
+      title: "เรียกรถ UberXL / แท็กซี่ 5 ที่นั่ง หน้าโรงแรม",
+      sub: "จุดรับ: Main Lobby (Austin Rd.) | ห้ามขึ้นแท็กซี่คันเล็ก 4 ที่นั่ง",
+      cam: { scale: 1.35, x: -30, y: -18 },
+      spot: { top: "55%", left: "86%" },
+      pinId: "pin-hotel",
+      tip: "• <b>ข้อควรระวังสำหรับ 5 คน:</b> แท็กซี่สีแดงทั่วไปนั่งได้สูงสุดแค่ 4 คนเท่านั้น ต้องเรียก <b>UberXL (6 ที่นั่ง)</b> หรือมองหา <b>แท็กซี่สีแดงป้าย 5 ที่นั่ง (5-Seater)</b> หน้าล็อบบี้<br>• <b>จุดปักหมุดรับ:</b> B P International - Main Entrance (Austin Rd.)",
+      buttons: [
+        { text: "🀄 โชว์ป้ายชื่อภาษาจีนให้คนขับดู (เต็มจอ)", style: "gold", action: "showSubInfo('chineseSign')" },
+        { text: "🚕 เปิดแอป Uber / ปักหมุดจุดรับหน้าโรงแรม", action: "window.open('https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=Hong%20Kong%20Disneyland', '_blank')" }
+      ]
+    },
+    {
+      step: 2,
+      title: "ขึ้นทางด่วน Route 8 ข้ามสะพานแขวนชิงหม่า",
+      sub: "ใช้เวลาวิ่งบนทางด่วน ~20 นาที | ชมวิวอ่าววิคตอเรีย",
+      cam: { scale: 1.3, x: -15, y: -12 },
+      spot: { top: "47%", left: "53%" },
+      pinId: "pin-bridge",
+      tip: "• <b>เส้นทางด่วน:</b> รถจะวิ่งขึ้นทางด่วน West Kowloon ผ่านสะพานแขวนชิงหม่า (Tsing Ma Bridge) ตรงดิ่งสู่เกาะลันเตา<br>• <b>การเตรียมตัวบนรถ:</b> ช่วงนั่งรถสามารถเปิดแอป HKDL โหลดหน้า QR Code บัตรเข้าพาร์คของทั้ง 5 คนเตรียมไว้ล่วงหน้าได้เลย",
+      buttons: [
+        { text: "🧾 ดูสรุปค่าโดยสาร + ค่าทางด่วน (หาร 5 ท่าน)", action: "showSubInfo('fareCar')" }
+      ]
+    },
+    {
+      step: 3,
+      title: "ถึงจุดส่งผู้โดยสาร (Drop-off) หน้าสวนสนุก",
+      sub: "เดินผ่านทางเดินมีหลังคา 3 นาทีถึงจุดตรวจกระเป๋า",
+      cam: { scale: 1.35, x: 0, y: -22 },
+      spot: { top: "68%", left: "22%" },
+      pinId: "pin-disney",
+      tip: "• <b>จุดลงรถ & ห้องน้ำ:</b> รถจะจอดส่งที่ลาน Public Transport Interchange เดินตามทางเดินมีหลังคาไปทางซ้ายมือ จะเจอ <b>ห้องน้ำใหญ่ด้านขวามือ</b> ก่อนถึงจุดตรวจกระเป๋า แนะนำให้พาเด็กๆ เข้าห้องน้ำให้เรียบร้อยก่อนเข้าไปต่อคิว Early Entry",
+      buttons: [
+        { text: "🎟️ เช็กลิสต์เตรียมตัว & ช่องทางเข้า Early Entry", action: "showSubInfo('checklistPark')" }
+      ]
+    }
+  ]
+};
+
+let currentMode = 'mtr';
+let activeStepIdx = null;
+let pinsVisible = true;
+let camState = { scale: 1, x: 0, y: 0 };
+
+function openTransitModal() {
+  document.getElementById('transitModal').classList.add('active');
+  setTransitMode('mtr');
+}
+
+function closeTransitModal() {
+  document.getElementById('transitModal').classList.remove('active');
+  resetCamera();
+}
+
+function toggleTransitMode(mode) {
+  if (currentMode === mode) {
+    setTransitMode(null);
+  } else {
+    setTransitMode(mode);
+  }
+}
+
+function setTransitMode(mode) {
+  currentMode = mode;
+  activeStepIdx = null;
+  resetCamera();
+
+  document.getElementById('tabMtr').className = mode === 'mtr' ? 'mode-tab active mtr' : 'mode-tab';
+  document.getElementById('tabCar').className = mode === 'car' ? 'mode-tab active car' : 'mode-tab';
+
+  const banner = document.getElementById('departureBanner');
+  if (mode === 'mtr') {
+    banner.innerHTML = '⏰ แนะนำออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (ถึงหน้าพาร์ค ~08:30 น.)';
+  } else if (mode === 'car') {
+    banner.innerHTML = '⏰ แนะนำเรียกรถหน้าล็อบบี้ไม่เกิน <b>08:05 น.</b> (ถึงหน้าพาร์ค ~08:33 น.)';
+  } else {
+    banner.innerHTML = '🗺️ กำลังแสดง <b>ภาพรวมสถานที่ทั้งหมด</b> (กดเลือกวิธีเดินทางด้านล่างเพื่อดูเส้นทาง)';
+  }
+
+  document.getElementById('svgRouteMtr').style.display = mode === 'mtr' ? 'block' : 'none';
+  document.getElementById('svgRouteCar').style.display = mode === 'car' ? 'block' : 'none';
+
+  document.querySelectorAll('.pin-mtr').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'car');
+  });
+  document.querySelectorAll('.pin-car').forEach(el => {
+    el.classList.toggle('route-hidden', mode === 'mtr');
+  });
+
+  const container = document.getElementById('stepsContainer');
+  if (!mode) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:32px 16px; color:#64748b; font-size:12.5px; line-height:1.6;">
+        👆 แตะเลือกปุ่ม <b>รถไฟฟ้า MTR</b> หรือ <b>UberXL / แท็กซี่</b> ด้านบน<br>เพื่อดูเส้นทางวิ่งและขั้นตอนเดินทางสำหรับ 5 ท่านครับ
+      </div>`;
+    return;
+  }
+
+  container.className = mode === 'car' ? 'steps-container car-mode' : 'steps-container';
+  container.innerHTML = transitData[mode].map((item, idx) => `
+    <div class="step-card" id="stepCard-${idx}" onclick="selectTransitStep(${idx})">
+      <div class="step-header">
+        <div class="step-badge">${item.step}</div>
+        <div style="flex:1;">
+          <div class="step-title">${item.title}</div>
+          <div class="step-sub">${item.sub}</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>${item.tip}</div>
+        <div class="step-btn-group">
+          ${item.buttons.map(b => `
+            <button class="action-shortcut-btn ${b.style || ''}" onclick="${b.action}">${b.text}</button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectTransitStep(idx) {
+  if (!currentMode) return;
+  if (activeStepIdx === idx) {
+    resetCamera();
+    return;
+  }
+
+  activeStepIdx = idx;
+  const item = transitData[currentMode][idx];
+
+  document.querySelectorAll('.step-card').forEach((card, i) => {
+    card.classList.toggle('active', i === idx);
+  });
+
+  document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
+  if (item.pinId) {
+    const targetPin = document.getElementById(item.pinId);
+    if (targetPin) targetPin.classList.add('focused');
+  }
+
+  camState = { scale: item.cam.scale, x: item.cam.x, y: item.cam.y };
+  applyCamera();
+
+  const ring = document.getElementById('spotlightRing');
+  ring.style.top = item.spot.top;
+  ring.style.left = item.spot.left;
+  ring.style.display = 'block';
+}
+
+function applyCamera() {
+  const canvas = document.getElementById('mapCanvas');
+  canvas.style.transform = `translate(${camState.x}%, ${camState.y}%) scale(${camState.scale})`;
+}
+
+function resetCamera() {
+  activeStepIdx = null;
+  camState = { scale: 1, x: 0, y: 0 };
+  applyCamera();
+  document.getElementById('spotlightRing').style.display = 'none';
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('focused'));
+}
+
+function manualZoom(delta) {
+  const newScale = Math.min(2.2, Math.max(1, camState.scale + delta));
+  if (newScale === 1) {
+    resetCamera();
+    return;
+  }
+  const scaleDiff = newScale - camState.scale;
+  camState.scale = newScale;
+  camState.x = Math.min(0, Math.max(-((newScale - 1) * 100), camState.x - (scaleDiff * 45)));
+  camState.y = Math.min(0, Math.max(-((newScale - 1) * 100), camState.y - (scaleDiff * 45)));
+  applyCamera();
+}
+
+function toggleMapPins() {
+  pinsVisible = !pinsVisible;
+  document.getElementById('mapPinsLayer').classList.toggle('hidden', !pinsVisible);
+  document.getElementById('togglePinsBtn').classList.toggle('active', pinsVisible);
+}
+
+function toggleMapFullscreen() {
+  const vp = document.getElementById('mapViewport');
+  const isFs = vp.classList.toggle('fullscreen');
+  if (isFs) resetCamera();
+}
+
+function showSubInfo(type) {
+  const box = document.getElementById('subInfoContent');
+  const contents = {
+    fareMtr: `
+      <h3 style="margin-top:0; color:#1d4ed8;">💰 ประมาณการค่า MTR (Jordan ➔ Disneyland)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ผู้ใหญ่ (บัตร Octopus / บัตรเครดิต):</b> ~21.5 HKD / คน<br>
+        • <b>เด็ก (อายุ 3-11 ปี ใช้บัตร Child Octopus):</b> ~10.5 HKD / คน<br>
+        • <b>รวม 5 ท่าน (ประมาณการ):</b> <b>~96 - 107 HKD</b> (~410 - 455 บาท)<br>
+        <small style="color:#64748b;">*เด็กอายุต่ำกว่า 3 ปีขึ้นฟรี / แตะบัตรเครดิต Visa/Mastercard ผ่านประตูได้เลย</small>
+      </p>`,
+    scheduleMtr: `
+      <h3 style="margin-top:0; color:#db2777;">⏱️ รอบรถไฟสายดิสนีย์ (Sunny Bay)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ขบวนแรกจาก Sunny Bay:</b> 06:15 น.<br>
+        • <b>ความถี่ช่วงเช้า (07:30 - 09:30 น.):</b> รถออกทุกๆ <b>5 - 10 นาที</b><br>
+        • <b>คำแนะนำ Early Entry:</b> ควรออกจากโรงแรม B P International ไม่เกิน <b>07:45 น.</b> เพื่อไปถึงหน้าพาร์คก่อน 08:30 น.
+      </p>`,
+    checklistPark: `
+      <h3 style="margin-top:0; color:#0f172a;">🎟️ เช็กลิสต์ก่อนผ่านประตูเข้าพาร์ค</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        1. <b>เข้าห้องน้ำให้เรียบร้อย:</b> แนะนำห้องน้ำใหญ่ด้านขวามือก่อนถึงจุดตรวจกระเป๋า<br>
+        2. <b>เตรียม QR Code:</b> เปิดบัตรเข้าพาร์ค + บัตร Early Entry ของทั้ง 5 คนในแอป HKDL<br>
+        3. <b>ช่องทางเข้า:</b> ผ่านจุดตรวจกระเป๋าแล้ว เดินตรงไปต่อคิว <b>ช่องซ้ายมือสุด (Early Park Entry Pass)</b>
+      </p>`,
+    fareCar: `
+      <h3 style="margin-top:0; color:#15803d;">🧾 ประมาณการค่า UberXL / แท็กซี่</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ค่าโดยสาร UberXL (รถใหญ่ 6 ที่นั่ง):</b> ~230 - 270 HKD<br>
+        • <b>ค่าทางด่วนอุโมงค์:</b> รวมในราคาแอปแล้ว<br>
+        • <b>เฉลี่ยตกคนละ (หาร 5 ท่าน):</b> <b>~48 - 54 HKD</b> (~205 - 230 บาท/คน)<br>
+        <small style="color:#16a34a;">*คุ้มมากสำหรับ 5 คน ไม่ต้องเดินเปลี่ยนสายและถึงหน้าประตูเลย</small>
+      </p>`,
+    chineseSign: `
+      <div style="padding:8px 0;">
+        <div style="display:inline-block; background:#fef3c7; color:#92400e; font-weight:700; font-size:13px; padding:4px 12px; border-radius:20px; margin-bottom:10px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="font-size:34px; font-weight:800; color:#0f172a; letter-spacing:2px; margin:8px 0;">香港迪士尼樂園</div>
+        <div style="font-size:18px; font-weight:700; color:#dc2626; margin-bottom:6px;">(落客區 / จุดส่งผู้โดยสาร)</div>
+        <div style="font-size:14px; font-weight:600; color:#2563eb;">Hong Kong Disneyland Drop-off Area</div>
+      </div>`
+  };
+  box.innerHTML = contents[type] || '';
+  document.getElementById('subInfoOverlay').classList.add('active');
+}
+
+function closeSubInfo() {
+  document.getElementById('subInfoOverlay').classList.remove('active');
+}
+/* === [END: JS แผนที่เดินทาง 3D ใหม่] === */
 </script>
 </body>
 </html>
