@@ -1,1374 +1,1748 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HK Disneyland VIP Plan</title>
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --accent-blue: #0ea5e9;
-      --accent-gold: #f59e0b;
-      --accent-green: #10b981;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding-bottom: 90px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    /* โหมดสู้แดด (High Contrast) */
-    body.sunlight-mode {
-      --bg-dark: #f1f5f9;
-      --card-bg: #ffffff;
-      --card-border: #cbd5e1;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-    }
-
-    /* Header */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.95);
-      border-bottom: 1px solid var(--card-border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    body.sunlight-mode .top-bar {
-      background: #ffffff;
-    }
-
-    .app-title {
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-sm {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* กล่องนับสิทธิ์ Premier Access */
-    .premier-tracker {
-      margin: 12px 16px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, #1e1b4b, #312e81);
-      border: 1px solid #4338ca;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #fff;
-    }
-
-    .premier-dots {
-      display: flex;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .p-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2px solid #f59e0b;
-      transition: background 0.2s;
-    }
-
-    .p-dot.filled {
-      background: #f59e0b;
-      box-shadow: 0 0 8px #f59e0b;
-    }
-
-    .premier-count {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    /* ปุ่มโหมดควบคุมด้านบนแผนที่ */
-    .mode-bar {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.2fr;
-      gap: 8px;
-      padding: 0 16px 12px;
-    }
-
-    .mode-btn {
-      padding: 8px 6px;
-      border-radius: 20px;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--text-main);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: all 0.2s;
-    }
-
-    .mode-btn.active-blue {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: #fff;
-    }
-
-    .mode-btn.active-gold {
-      background: #d97706;
-      border-color: #fbbf24;
-      color: #fff;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
-    }
-
-    /* กรอบแผนที่ Interactive */
-    .map-wrapper {
-      position: relative;
-      margin: 0 16px;
-      height: 280px;
-      background: #1e293b;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 2px solid var(--card-border);
-      touch-action: pan-x pan-y;
-    }
-
-    .map-canvas {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-origin: center center;
-      transition: transform 0.2s ease-out;
-    }
-
-    .map-bg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      background: radial-gradient(circle at 50% 45%, #38bdf8 0%, #34d399 45%, #059669 100%);
-      display: block;
-    }
-
-    /* เลเยอร์เส้นประสีแดง (ห้ามบังการกดปุ่ม) */
-    #route-svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .route-line {
-      stroke: #ef4444;
-      stroke-width: 3;
-      stroke-dasharray: 6, 4;
-      fill: none;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
-      animation: dashFlow 1s linear infinite;
-    }
-
-    @keyframes dashFlow {
-      to { stroke-dashoffset: -10; }
-    }
-
-    /* หมุดตัวเลขเครื่องเล่นบนแผนที่ */
-    .map-pin {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      z-index: 20;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .pin-label {
-      background: rgba(15, 23, 42, 0.85);
-      color: #fff;
-      font-size: 9px;
-      padding: 1px 5px;
-      border-radius: 4px;
-      white-space: nowrap;
-      margin-bottom: 2px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .pin-circle {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #0284c7;
-      border: 2px solid #ffffff;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .map-pin.active .pin-circle {
-      background: #ef4444;
-      transform: scale(1.25);
-      box-shadow: 0 0 12px #ef4444;
-    }
-
-    .map-pin.premier-selected .pin-circle {
-      background: #f59e0b;
-      color: #000;
-      border-color: #fff;
-    }
-
-    .zoom-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(15, 23, 42, 0.8);
-      color: #fff;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      z-index: 30;
-    }
-
-    .zoom-controls {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      z-index: 30;
-    }
-
-    .zoom-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      background: rgba(15, 23, 42, 0.9);
-      color: #fff;
-      border: 1px solid #475569;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* แถบปุ่มตำแหน่งและการเดินทาง */
-    .sub-action-bar {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px;
-    }
-
-    .pill-btn {
-      flex: 1;
-      padding: 9px 10px;
-      border-radius: 20px;
-      border: none;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    }
-
-    .pill-green { background: #10b981; color: #064e3b; }
-    .pill-purple { background: #4f46e5; color: #fff; }
-
-    /* กล่องข้อมูลรายละเอียดสีฟ้าใต้แผนที่ */
-    .info-card-blue {
-      margin: 0 16px 14px;
-      padding: 14px 16px;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      border-radius: 14px;
-      color: #fff;
-      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
-      transition: all 0.2s;
-    }
-
-    .info-time-badge {
-      display: inline-block;
-      background: #fff;
-      color: #0369a1;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 6px;
-    }
-
-    .info-premier-tag {
-      display: inline-block;
-      background: #f59e0b;
-      color: #000;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .info-ride-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .info-route-box {
-      background: rgba(15, 23, 42, 0.35);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-
-    .info-tip {
-      font-size: 12px;
-      color: #e0f2fe;
-      line-height: 1.4;
-    }
-
-    /* แถบกรองรายการด้านล่าง */
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      padding: 0 16px 12px;
-      overflow-x: auto;
-    }
-
-    .filter-tab {
-      padding: 7px 14px;
-      border-radius: 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .filter-tab.active {
-      background: #0ea5e9;
-      color: #fff;
-      border-color: #38bdf8;
-    }
-
-    /* รายการการ์ดเวลา */
-    .schedule-list {
-      padding: 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .ride-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .ride-card.active-card {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
-    }
-
-    .ride-card.checked-card {
-      border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.08);
-    }
-
-    .ride-checkbox {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 2px solid #64748b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      font-size: 14px;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .ride-card.checked-card .ride-checkbox {
-      background: #f59e0b;
-      border-color: #f59e0b;
-    }
-
-    .ride-card-body {
-      flex: 1;
-    }
-
-    .ride-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .ride-time {
-      font-size: 12px;
-      color: #38bdf8;
-      font-weight: 600;
-    }
-
-    .badge-type {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .badge-normal { background: #1e3a8a; color: #93c5fd; }
-    .badge-premier { background: #78350f; color: #fcd34d; border: 1px solid #f59e0b; }
-
-    .ride-name {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .ride-zone {
-      font-size: 12px;
-      color: #38bdf8;
-      margin-bottom: 4px;
-    }
-
-    .ride-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    /* ==========================================
-       หน้าต่างป๊อปอัป (Modal) สำหรับการเดินทางและห้องน้ำ
-       ========================================== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.78);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 10000;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-    }
-
-    .modal-box {
-      background: #1e293b;
-      border: 1px solid #475569;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 460px;
-      max-height: 82vh;
-      overflow-y: auto;
-      padding: 18px;
-      color: #f8fafc;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.8);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 10px;
-      margin-bottom: 14px;
-    }
-
-    .modal-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #38bdf8;
-    }
-
-    .modal-close {
-      background: #334155;
-      border: none;
-      color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .transit-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    .transit-card h4 {
-      font-size: 14px;
-      color: #fbbf24;
-      margin-bottom: 6px;
-    }
-
-    .transit-step {
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: #e2e8f0;
-      margin-bottom: 4px;
-    }
-
-    .line-tag {
-      display: inline-block;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    /* ==========================================
-       แถบควบคุมเสียงลอยตัว (Floating Audio Widget)
-       ========================================== */
-    #disney-audio-widget {
-      position: fixed;
-      bottom: 16px;
-      left: 16px;
-      right: 16px;
-      max-width: 500px;
-      margin: 0 auto;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: #f8fafc;
-      padding: 10px 14px;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 99999;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-    }
-
-    .audio-btn {
-      background: #1e293b;
-      border: 1px solid #475569;
-      color: #fff;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .audio-btn.muted {
-      background: #ef4444;
-      border-color: #dc2626;
-    }
-
-    .audio-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .audio-status-label {
-      font-size: 10px;
-      color: #94a3b8;
-      display: block;
-    }
-
-    #current-track-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #38bdf8;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-    }
-
-    #volume-slider {
-      width: 65px;
-      accent-color: #38bdf8;
-    }
-
-    #yt-hidden-player {
-      position: fixed;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>HK Disneyland VIP Guide & DPA Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --header-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    --card: #1e293b;
+    --card-active: #27354f;
+    --border: #334155;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --gold: #f59e0b;
+    --gold-bg: rgba(245, 158, 11, 0.15);
+    --blue: #38bdf8;
+    --blue-bg: rgba(56, 189, 248, 0.15);
+    --green: #10b981;
+    --green-bg: rgba(16, 185, 129, 0.15);
+    --map-bg: #131c31;
+    --label-bg: rgba(15, 23, 42, 0.78);
+    --label-text: #ffffff;
+  }
+
+  body.light-mode {
+    --bg: #f1f5f9;
+    --header-bg: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+    --card: #ffffff;
+    --card-active: #eff6ff;
+    --border: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --gold: #d97706;
+    --gold-bg: #fef3c7;
+    --blue: #0284c7;
+    --blue-bg: #e0f2fe;
+    --green: #059669;
+    --green-bg: #d1fae5;
+    --map-bg: #e2e8f0;
+    --label-bg: rgba(255, 255, 255, 0.86);
+    --label-text: #0f172a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 40px; -webkit-tap-highlight-color: transparent; transition: background 0.25s, color 0.25s; }
+
+  header { background: var(--header-bg); padding: 14px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.25); color: #ffffff; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+  h1 { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .header-actions { display: flex; gap: 6px; }
+  .icon-btn { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+  
+  .dpa-bar { background: rgba(0,0,0,0.28); border-radius: 10px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(251, 191, 36, 0.4); }
+  .dpa-label { font-size: 0.82rem; color: #fde68a; font-weight: 600; }
+  .dpa-dots { display: flex; gap: 5px; margin-top: 4px; }
+  .dot { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1.5px solid #fbbf24; transition: 0.3s; }
+  .dot.used { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+  .dpa-count { font-size: 1.05rem; font-weight: 800; color: #fbbf24; }
+
+  .map-section { padding: 12px 16px 0; position: relative; }
+  .map-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 6px; }
+  .toolbar-btn {
+    background: var(--card); color: var(--text); border: 1px solid var(--border);
+    padding: 6px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; flex: 1; text-align: center;
+  }
+  .toolbar-btn.active { background: #0284c7; color: #ffffff; border-color: #0284c7; }
+  .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
+  .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
+
+  .ride-drawer {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .ride-drawer.open { display: block; }
+  .drawer-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+  .drawer-tab-btn {
+    flex: 1;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+  }
+  .drawer-tab-btn.active {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+  .drawer-tab-btn.tab-premier.active {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+  }
+  .ride-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .ride-chip {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: 0.2s;
+  }
+  .ride-chip.selected {
+    background: var(--gold);
+    color: #000000;
+    border-color: var(--gold);
+    font-weight: 800;
+  }
+
+  .map-wrapper { background: var(--map-bg); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; position: relative; touch-action: none; height: 265px; }
+  
+  .map-wrapper.is-fullscreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100dvh;
+    z-index: 9999;
+    border-radius: 0;
+    border: none;
+  }
+  @media screen and (orientation: portrait) {
+    .map-wrapper.is-fullscreen {
+      width: 100dvh;
+      height: 100vw;
+      transform: rotate(90deg);
+      transform-origin: top left;
+      left: 100vw;
+    }
+  }
+
+  svg { width: 100%; height: 100%; display: block; transform-origin: 0 0; }
+  
+  .zoom-controls { position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; z-index: 50; }
+  .bottom-btn-row { display: flex; gap: 6px; align-items: center; }
+  .zoom-btn { background: rgba(15, 23, 42, 0.88); border: 1px solid #64748b; color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  
+  .fs-icon-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+  }
+  
+  .exit-fs-btn {
+    display: none;
+    position: absolute;
+    top: 16px; right: 75px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: #000000;
+    width: 32px;
+    height: 32px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 200;
+    cursor: pointer;
+    text-shadow: 0 0 3px rgba(255,255,255,0.9);
+    align-items: center;
+    justify-content: center;
+  }
+  .map-wrapper.is-fullscreen .exit-fs-btn { display: flex; }
+  .map-wrapper.is-fullscreen .fs-icon-btn { display: none; }
+  .map-wrapper.is-fullscreen .zoom-controls { bottom: 18px; right: 24px; }
+
+  .zoom-info { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.78); padding: 4px 9px; border-radius: 6px; font-size: 0.72rem; color: #38bdf8; pointer-events: none; z-index: 20; }
+
+  @keyframes dashMove { to { stroke-dashoffset: -24; } }
+  .nav-route { stroke: #ef4444; stroke-width: 3.5; stroke-dasharray: 6, 6; fill: none; stroke-linecap: round; stroke-linejoin: round; animation: dashMove 1s linear infinite; filter: drop-shadow(0 0 2px #ffffff); }
+  @keyframes pulseRing { 0% { r: 6; opacity: 1; } 100% { r: 19; opacity: 0; } }
+  .pulse-circle { fill: none; stroke: #ef4444; stroke-width: 2.8; animation: pulseRing 1.4s infinite; }
+  
+  .pin-group { cursor: pointer; transition: opacity 0.25s ease; }
+  .pin-group.dimmed { opacity: 0.16; }
+
+  .pin-label-bg { fill: var(--label-bg); stroke: none; rx: 3.5px; }
+  .pin-label-text { font-size: 4.8px; font-weight: 700; fill: var(--label-text); text-anchor: middle; pointer-events: none; }
+  .pin-group.done .pin-label-text { text-decoration: line-through; }
+
+  .nav-banner { margin: 12px 16px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; border-radius: 14px; padding: 14px; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25); }
+  .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap; }
+  .nav-time { background: #fff; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px; font-size: 0.82rem; }
+  .nav-badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+  .badge-dpa { background: #fbbf24; color: #000; }
+  .badge-std { background: rgba(255,255,255,0.2); color: #fff; }
+  .nav-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .nav-dir { display: flex; align-items: flex-start; gap: 8px; background: rgba(0,0,0,0.22); padding: 8px 10px; border-radius: 8px; font-size: 0.84rem; line-height: 1.4; }
+  .dir-arrow { font-size: 1.25rem; line-height: 1; }
+  .nav-tip { font-size: 0.78rem; color: #e0f2fe; margin-top: 8px; }
+
+  .filter-bar { display: flex; gap: 6px; padding: 4px 16px 8px; overflow-x: auto; }
+  .filter-btn { background: var(--card); color: var(--text-muted); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+  .filter-btn.active { background: var(--blue); color: #ffffff; border-color: var(--blue); }
+
+  .timeline { padding: 0 16px; }
+  .phase-title { font-size: 0.78rem; letter-spacing: 0.3px; color: var(--blue); margin: 14px 0 8px; font-weight: 700; }
+  .card { background: var(--card); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); display: flex; gap: 12px; align-items: flex-start; transition: 0.2s; cursor: pointer; scroll-margin-top: 125px; }
+  .card.selected { background: var(--card-active); border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .card.done { opacity: 0.55; }
+  .card.done .item-name { text-decoration: line-through; }
+
+  .check-box { width: 28px; height: 28px; border-radius: 8px; border: 2px solid #64748b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-weight: bold; color: transparent; transition: 0.2s; }
+  .card.done .check-box { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .card-body { flex: 1; }
+  .card-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+  .time-tag { font-size: 0.78rem; font-weight: 700; color: var(--blue); }
+  .tag-dpa { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 700; }
+  .tag-std { background: var(--blue-bg); color: var(--blue); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  .tag-food { background: var(--green-bg); color: var(--green); font-size: 0.68rem; padding: 2px 6px; border-radius: 5px; font-weight: 600; }
+  .item-name { font-size: 0.94rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .item-zone { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; }
+  .item-note { font-size: 0.79rem; color: var(--text-muted); line-height: 1.35; }
+  /* สไตล์หน้าต่างการเดินทาง (Transit Modal) */
+/* === [START: CSS แผนที่เดินทาง 3D ใหม่] === */
+.transit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: flex-end;
+  font-family: -apple-system, BlinkMacSystemFont, 'Prompt', sans-serif;
+}
+.transit-modal.active { display: flex; }
+
+.transit-sheet {
+  background: #f8fafc;
+  width: 100%;
+  max-width: 540px;
+  max-height: 92vh;
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+  animation: slideUpSheet 0.3s ease-out;
+}
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.transit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+.transit-header h3 { margin: 0; font-size: 16px; color: #0f172a; font-weight: 700; }
+.transit-close {
+  background: #f1f5f9; border: none; width: 32px; height: 32px;
+  border-radius: 50%; font-size: 16px; color: #475569; cursor: pointer;
+}
+
+/* กรอบแผนที่ 3D และโหมดเต็มจอ */
+.map-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #38bdf8;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+}
+.map-viewport.fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  z-index: 10005;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+.map-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.map-viewport.fullscreen .map-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.map-bg-img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.map-svg-overlay {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+}
+
+/* ปุ่มลอยตัวบนมุมภาพ */
+.map-floating-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 20;
+}
+.glass-btn {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.glass-btn.active { background: rgba(37, 99, 235, 0.85); border-color: #93c5fd; }
+
+/* ป้ายชื่อสถานที่บนแผนที่ */
+.map-pins-layer {
+  position: absolute; inset: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.map-pins-layer.hidden { opacity: 0; }
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  border: 1.5px solid #cbd5e1;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.map-pin.dimmed { opacity: 0.35; }
+
+/* วงแหวนไฟกระพริบชี้จุด */
+.spotlight-ring {
+  position: absolute;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 3px solid #facc15;
+  background: rgba(250, 204, 21, 0.25);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: none;
+  animation: pulseSpot 1.4s infinite;
+}
+@keyframes pulseSpot {
+  0% { transform: translate(-50%, -50%) scale(0.7); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+/* แถบสลับโหมดเดินทาง */
+.mode-tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e2e8f0;
+}
+.mode-tab {
+  padding: 10px; border-radius: 12px; border: 1.5px solid #e2e8f0;
+  background: #f8fafc; font-size: 13px; font-weight: 700; color: #475569;
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.mode-tab.active.mtr {
+  background: #eff6ff; border-color: #2563eb; color: #1d4ed8;
+}
+.mode-tab.active.car {
+  background: #f0fdf4; border-color: #16a34a; color: #15803d;
+}
+
+/* รายการ Step แบบกดกางได้ */
+.steps-container {
+  padding: 12px 16px 24px; overflow-y: auto; flex: 1;
+}
+.step-card {
+  background: #ffffff; border-radius: 14px; padding: 12px 14px;
+  margin-bottom: 10px; border: 1.5px solid #e2e8f0;
+  cursor: pointer; transition: all 0.2s;
+}
+.step-card.active {
+  border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+}
+.step-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.step-badge {
+  width: 24px; height: 24px; border-radius: 50%; background: #2563eb;
+  color: #fff; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.car-mode .step-badge { background: #16a34a; }
+.step-title { font-size: 13.5px; font-weight: 700; color: #1e293b; flex: 1; }
+.step-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+.step-details {
+  display: none; margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed #cbd5e1; font-size: 12px; color: #334155; line-height: 1.5;
+}
+.step-card.active .step-details { display: block; }
+
+.action-shortcut-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 8px; padding: 8px 12px; border-radius: 10px;
+  background: #0f172a; color: #ffffff; font-size: 12px; font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer; width: 100%; justify-content: center;
+}
+.action-shortcut-btn.secondary { background: #e2e8f0; color: #0f172a; margin-top: 6px; }
+
+/* ป๊อปอัปย่อยสำหรับแสดงข้อมูล/ป้ายภาษาจีน */
+.sub-info-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+  z-index: 10010; justify-content: center; align-items: center; padding: 20px;
+}
+.sub-info-overlay.active { display: flex; }
+.sub-info-box {
+  background: #ffffff; border-radius: 20px; padding: 20px;
+  width: 100%; max-width: 380px; text-align: center;
+}
+/* === [END: CSS แผนที่เดินทาง 3D ใหม่] === */
+  
+</style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="top-bar">
-    <div class="app-title">🏰 HK Disneyland VIP Plan</div>
+<header>
+  <div class="header-top">
+    <h1>🏰 HK Disneyland VIP Plan</h1>
     <div class="header-actions">
-      <button class="btn-sm" onclick="toggleSunlightMode()">☀️ สู้แดด</button>
-      <button class="btn-sm" onclick="resetPlan()">รีเซ็ต</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">☀️ สู้แดด</button>
+      <button class="icon-btn" onclick="resetProgress()">รีเซ็ต</button>
     </div>
   </div>
-
-  <!-- ตัวนับสิทธิ์ Premier Access 8 เครื่องเล่น -->
-  <div class="premier-tracker">
+  <div class="dpa-bar">
     <div>
-      <div style="font-size: 13px; font-weight: 600; color: #fbbf24;">🎟️ สิทธิ์ Premier Access (8 เครื่องเล่น)</div>
-      <div class="premier-dots" id="premier-dots"></div>
+      <div class="dpa-label">🎟️ สิทธิ์ Premier Access (8 เครื่องเล่น)</div>
+      <div class="dpa-dots" id="dpaDots"></div>
     </div>
-    <div class="premier-count" id="premier-counter">0 / 8</div>
+    <div class="dpa-count" id="dpaCount">0 / 8</div>
+  </div>
+</header>
+
+<div class="map-section">
+  <div class="map-toolbar">
+    <button class="toolbar-btn active" id="mapToggleBtn" onclick="handleMapToggleBtn()">🗺️ แผนที่ 3D</button>
+    <button class="toolbar-btn" id="facilityBtn" onclick="toggleFacilities()">🚻💧 ห้องน้ำ/น้ำ</button>
+    <button class="toolbar-btn ride-picker-btn" id="ridePickerBtn" onclick="toggleRideDrawer()">🎢 เลือกเครื่องเล่น</button>
   </div>
 
-  <!-- แถบปุ่มโหมด -->
-  <div class="mode-bar">
-    <button class="mode-btn active-blue" id="btn-mode-normal" onclick="setSelectionMode('normal')">🗺️ แผนที่ 3D</button>
-    <button class="mode-btn" onclick="openModal('facility-modal')">🚻💧 ห้องน้ำ/น้ำ</button>
-    <button class="mode-btn" id="btn-mode-premier" onclick="setSelectionMode('premier')">🎢 เลือกเครื่องเล่น (8)</button>
+  <div class="ride-drawer" id="rideDrawer">
+    <div class="drawer-tabs">
+      <button class="drawer-tab-btn active" id="tab-all" onclick="setDrawerTab('all')">แสดงทั้งหมด</button>
+      <button class="drawer-tab-btn tab-premier" id="tab-premier" onclick="setDrawerTab('premier')">8 Premier</button>
+      <button class="drawer-tab-btn" id="tab-normal" onclick="setDrawerTab('normal')">3 คิวปกติ</button>
+    </div>
+    <div class="ride-chips" id="rideChips"></div>
   </div>
 
-  <!-- แผนที่ Interactive -->
-  <div class="map-wrapper">
-    <div class="zoom-badge" id="zoom-level-text">ซูม: 100%</div>
-    <div class="map-canvas" id="map-canvas">
-      <!-- เปลี่ยนชื่อไฟล์รูปแผนที่ตรงนี้หากมีรูปแผนที่ใน GitHub ของคุณ -->
-      <img src="map.jpg" alt="HK Disneyland Map" class="map-bg" onerror="this.style.display='none'">
+  <div class="map-wrapper" id="mapWrapper">
+    <div class="zoom-info" id="zoomInfo">ซูม: 100%</div>
+    
+    <button class="exit-fs-btn" id="exitFsBtn" aria-label="ปิดเต็มจอ">✕</button>
+    
+    <div class="zoom-controls" id="zoomControls">
+      <button class="zoom-btn" onclick="zoom(0.35)">+</button>
+      <button class="zoom-btn" onclick="zoom(-0.35)">-</button>
+      <div class="bottom-btn-row">
+        <button class="zoom-btn fs-icon-btn" title="ขยายเต็มจอ" onclick="enterFullscreen()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+        </button>
+        <button class="zoom-btn" onclick="resetZoom()">1x</button>
+      </div>
+    </div>
+
+    <svg id="parkMap" viewBox="0 0 400 250">
+      <g id="map3DLayer">
+        <image href="map.jpg" x="0" y="0" width="400" height="250" preserveAspectRatio="xMidYMid slice" onerror="this.setAttribute('href', 'https://raw.githubusercontent.com/Aki-Ino/Images/refs/heads/main/image_16.png')" />
+      </g>
+
+      <g id="mapSVGLayer" style="display: none;">
+        <defs>
+          <radialGradient id="parkBg" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="#86efac" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#14532d" stop-opacity="0.35"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="250" fill="url(#parkBg)"/>
+        <path d="M 25,15 L 155,15 L 145,78 L 20,78 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5"/>
+        <polygon points="45,55 70,18 95,55" fill="#f8fafc" stroke="#38bdf8" stroke-width="1"/>
+        <polygon points="80,55 102,24 125,55" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+        <text x="85" y="12" fill="#0369a1" font-size="6.5" font-weight="800" text-anchor="middle">WORLD OF FROZEN</text>
+
+        <path d="M 162,15 L 278,15 L 268,90 L 152,90 Z" fill="#f3e8ff" stroke="#9333ea" stroke-width="1.5"/>
+        <circle cx="215" cy="42" r="14" fill="#f472b6" opacity="0.5"/>
+        <text x="215" y="12" fill="#7e22ce" font-size="6.5" font-weight="800" text-anchor="middle">FANTASYLAND</text>
+
+        <path d="M 285,55 L 385,55 L 385,185 L 268,175 Z" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
+        <circle cx="355" cy="95" r="18" fill="#cbd5e1" stroke="#475569" stroke-width="1.2"/>
+        <text x="332" y="50" fill="#0e7490" font-size="6.5" font-weight="800" text-anchor="middle">TOMORROWLAND</text>
+
+        <path d="M 20,84 L 132,84 L 132,135 L 20,135 Z" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+        <text x="76" y="81" fill="#c2410c" font-size="6.2" font-weight="800" text-anchor="middle">TOY STORY LAND</text>
+
+        <path d="M 20,141 L 118,141 L 118,186 L 20,186 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="69" y="139" fill="#15803d" font-size="6.2" font-weight="800" text-anchor="middle">MYSTIC POINT</text>
+
+        <path d="M 20,192 L 130,192 L 130,240 L 20,240 Z" fill="#fed7aa" stroke="#b45309" stroke-width="1.5"/>
+        <text x="75" y="190" fill="#92400e" font-size="6.2" font-weight="800" text-anchor="middle">GRIZZLY GULCH</text>
+
+        <path d="M 136,142 L 192,142 L 192,215 L 136,215 Z" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+        <circle cx="164" cy="178" r="16" fill="#38bdf8" opacity="0.45"/>
+        <circle cx="164" cy="178" r="8" fill="#15803d"/>
+        <text x="164" y="139" fill="#047857" font-size="6" font-weight="800" text-anchor="middle">ADVENTURELAND</text>
+
+        <path d="M 200,235 L 200,122 M 200,115 L 110,55 M 200,115 L 215,55 M 200,115 L 315,120 M 200,115 L 105,110 M 95,110 L 80,165 L 80,215 M 200,155 L 164,178" stroke="#cbd5e1" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <rect x="190" y="138" width="20" height="92" rx="4" fill="#fecdd3" stroke="#e11d48" stroke-width="1.2"/>
+        <text x="200" y="185" fill="#9f1239" font-size="5.5" font-weight="800" text-anchor="middle" transform="rotate(-90 200,185)">MAIN STREET U.S.A.</text>
+
+        <circle cx="200" cy="115" r="18" fill="#fbcfe8" stroke="#db2777" stroke-width="1.8"/>
+        <polygon points="193,120 200,100 207,120" fill="#db2777"/>
+        <text x="200" y="128" fill="#831843" font-size="5.5" font-weight="900" text-anchor="middle">CASTLE</text>
+
+        <rect x="172" y="232" width="56" height="13" rx="4" fill="#dc2626"/>
+        <text x="200" y="241" fill="#ffffff" font-size="6.5" font-weight="bold" text-anchor="middle">ทางเข้า / ออก (GATE)</text>
+      </g>
+
+      <g id="routeLayer"></g>
+      <g id="facilitiesLayer" style="display:none;"></g>
+      <g id="pinsLayer"></g>
+    </svg>
+  </div>
+  <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; margin-top: 8px;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
+  <button class="toolbar-btn" style="background: #6366f1; color: #fff; margin-top: 8px;" onclick="openTransitModal()">🚇 เดินทางไปสวนสนุก (5 คน)</button>
+
+<!-- === [START: HTML แผนที่เดินทาง 3D ใหม่] === -->
+<div id="transitModal" class="transit-modal">
+  <div class="transit-sheet">
+    <div class="transit-header">
+      <h3>🗺️ เส้นทางไป Hong Kong Disneyland (5 ท่าน)</h3>
+      <button class="transit-close" onclick="closeTransitModal()">✕</button>
+    </div>
+
+    <!-- กรอบแสดงแผนที่ 3D -->
+    <div id="mapViewport" class="map-viewport">
+      <div class="map-floating-controls">
+        <button id="togglePinsBtn" class="glass-btn active" onclick="toggleMapPins()">🏷️ ป้ายชื่อ</button>
+        <button id="toggleFsBtn" class="glass-btn" onclick="toggleMapFullscreen()">⛶ เต็มจอ</button>
+      </div>
+
+      <div id="mapCanvas" class="map-canvas">
+        <img src="transit-bg.png" alt="แผนที่เดินทาง" class="map-bg-img">
+
+        <!-- เลเยอร์เส้นทางแอนิเมชัน SVG -->
+        <svg class="map-svg-overlay" viewBox="0 0 1000 562" preserveAspectRatio="none">
+          <!-- เส้นทาง MTR -->
+          <g id="svgRouteMtr">
+            <path id="pathMtr" d="M 885 455 Q 945 340 935 200 Q 925 125 780 80 Q 620 140 430 105 Q 250 85 215 135 Q 110 190 120 265 Q 145 320 280 345" 
+                  fill="none" stroke="#ec4899" stroke-width="5" stroke-dasharray="10,8" stroke-linecap="round"/>
+            <g>
+              <circle r="13" fill="#ffffff" stroke="#db2777" stroke-width="3"/>
+              <text y="4" text-anchor="middle" font-size="13">🚇</text>
+              <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathMtr"/>
+              </animateMotion>
+            </g>
+          </g>
+
+          <!-- เส้นทางรถยนต์ UberXL / Taxi -->
+          <g id="svgRouteCar" style="display:none;">
+            <path id="pathCar" d="M 885 330 Q 800 310 730 240 Q 705 150 675 140 Q 600 185 435 275 Q 370 330 395 415 Q 415 485 300 470" 
+                  fill="none" stroke="#22c55e" stroke-width="5" stroke-dasharray="10,8" stroke-linecap="round"/>
+            <g>
+              <circle r="13" fill="#ffffff" stroke="#16a34a" stroke-width="3"/>
+              <text y="4" text-anchor="middle" font-size="13">🚐</text>
+              <animateMotion dur="6.5s" repeatCount="indefinite">
+                <mpath href="#pathCar"/>
+              </animateMotion>
+            </g>
+          </g>
+        </svg>
+
+        <!-- เลเยอร์ป้ายชื่อสถานที่ -->
+        <div id="mapPinsLayer" class="map-pins-layer">
+          <div class="map-pin" style="top: 56%; left: 91%;">🏨 B P International</div>
+          <div class="map-pin pin-mtr" style="top: 84%; left: 88%;">🚇 สถานี Jordan</div>
+          <div class="map-pin pin-mtr" style="top: 12%; left: 79%;">🔄 Lai King (สายสีส้ม)</div>
+          <div class="map-pin pin-car" style="top: 47%; left: 53%;">🌉 สะพานชิงหม่า</div>
+          <div class="map-pin pin-mtr" style="top: 18%; left: 22%;">🐭 Sunny Bay (สายดิสนีย์)</div>
+          <div class="map-pin" style="top: 63%; left: 14%;">🏰 HK Disneyland</div>
+        </div>
+
+        <!-- วงแหวนไฟกระพริบชี้จุด -->
+        <div id="spotlightRing" class="spotlight-ring"></div>
+      </div>
+    </div>
+
+    <!-- แถบเลือกวิธีเดินทาง -->
+    <div class="mode-tabs">
+      <button id="tabMtr" class="mode-tab active mtr" onclick="switchTransitMode('mtr')">
+        🚇 รถไฟฟ้า MTR<br><small style="font-weight:500;">~45 นาที | ประหยัด</small>
+      </button>
+      <button id="tabCar" class="mode-tab" onclick="switchTransitMode('car')">
+        🚐 UberXL / แท็กซี่<br><small style="font-weight:500;">~28 นาที | สะดวก 5 คน</small>
+      </button>
+    </div>
+
+    <!-- รายการ Step การเดินทาง -->
+    <div id="stepsContainer" class="steps-container"></div>
+  </div>
+</div>
+
+<!-- ป๊อปอัปย่อยสำหรับปุ่มลัด -->
+<div id="subInfoOverlay" class="sub-info-overlay" onclick="closeSubInfo()">
+  <div class="sub-info-box" onclick="event.stopPropagation()">
+    <div id="subInfoContent"></div>
+    <button class="action-shortcut-btn" style="margin-top:16px;" onclick="closeSubInfo()">ปิดหน้าต่าง</button>
+  </div>
+</div>
+<!-- === [END: HTML แผนที่เดินทาง 3D ใหม่] === -->
+  
+
+<div class="nav-banner" id="navBanner"></div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">ทั้งหมด (14)</button>
+  <button class="filter-btn" id="filter-dpa" onclick="setFilter('dpa')">🎟️ Premier Access (8)</button>
+  <button class="filter-btn" id="filter-todo" onclick="setFilter('todo')">⏳ ยังไม่เล่น</button>
+  <button class="filter-btn" id="filter-single" style="display:none;" onclick="setFilter('single')">🎯 เฉพาะจุดที่เลือก</button>
+</div>
+
+<div class="timeline" id="timelineContainer"></div>
+
+<script>
+const itinerary = [
+  {
+    id: 1, rideKey: "sliding", rideGroup: "normal",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:00 น.", name: "Wandering Oaken's Sliding Sleighs", shortName: "❄️ Sliding Sleighs",
+    zone: "World of Frozen", type: "std", dpaNum: null,
+    x: 62, y: 52,
+    routePath: "M 200,232 L 200,115 L 62,52",
+    arrow: "⬆️",
+    direction: "เดินตรงผ่านถนน Main Street ทะลุกลางปราสาท ตรงดิ่งไปโซน World of Frozen (ซ้ายบน) ทันที",
+    note: "ไม่มีในบัตร Premier Access ต้องต่อคิวปกติเป็นเครื่องเล่นแรกของวัน"
+  },
+  {
+    id: 2, rideKey: "frozen", rideGroup: "premier",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:15 น.", name: "Frozen Ever After (รอบเช้า - คิวปกติ)", shortName: "❄️ Frozen (รอบเช้า)",
+    zone: "World of Frozen", type: "std", dpaNum: null,
+    x: 112, y: 34,
+    routePath: "M 62,52 L 112,34",
+    arrow: "➡️",
+    direction: "เดินขยับมาทางขวาภายในโซนหิมะ",
+    note: "เก็บคิวปกติก่อนช่วงคนน้อย แล้วเก็บสิทธิ์บัตรลัดคิวไว้ใช้อีกรอบตอนบ่าย"
+  },
+  {
+    id: 3, rideKey: "pooh", rideGroup: "normal",
+    phase: "ช่วงเช้าพิเศษ : Early Entry (09:00 – 10:00 น.)",
+    time: "09:40 น.", name: "The Many Adventures of Winnie the Pooh", shortName: "🍯 Winnie the Pooh",
+    zone: "Fantasyland", type: "std", dpaNum: null,
+    x: 248, y: 62,
+    routePath: "M 112,34 L 200,56 L 248,62",
+    arrow: "➡️",
+    direction: "ออกจากโซนหิมะ เดินลัดสวนหลังปราสาทไปทางขวา",
+    note: "ไม่มีในบัตร Premier Access ช่วงเช้านี้คิวสั้นมาก รีบเก็บก่อนสวนสนุกเปิดเต็มรูปแบบ"
+  },
+  {
+    id: 4, rideKey: "toystory", rideGroup: "normal",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "10:00 น.", name: "RC Racer & Toy Soldier Parachute Drop", shortName: "🚀 Toy Story",
+    zone: "Toy Story Land", type: "std", dpaNum: null,
+    x: 78, y: 112,
+    routePath: "M 248,62 L 200,115 L 78,112",
+    arrow: "↙️",
+    direction: "กลับมาที่ลานปราสาท เดินตัดไปทางซ้ายเข้าโซนของเล่น",
+    note: "โซนนี้ไม่มีบัตร Premier Access ให้ใช้ รีบเล่นก่อนคนแน่นและแดดร้อน"
+  },
+  {
+    id: 5, rideKey: "mystic", rideGroup: "premier",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "11:00 น.", name: "Mystic Manor", shortName: "👁️ Mystic Manor",
+    zone: "Mystic Point", type: "dpa", dpaNum: 1,
+    x: 50, y: 162,
+    routePath: "M 78,112 L 50,162",
+    arrow: "⬇️",
+    direction: "เดินลงใต้ต่อเนื่องจากโซนของเล่น",
+    note: "เริ่มใช้บัตร Premier Access สิทธิ์ที่ 1 เดินเข้าช่องทางด่วนได้เลย"
+  },
+  {
+    id: 6, rideKey: "grizzly", rideGroup: "premier",
+    phase: "ช่วงสาย : เก็บโซนที่ไม่มีบัตร Fast Pass (10:00 – 12:00 น.)",
+    time: "11:25 น.", name: "Big Grizzly Mountain Runaway Mine Cars", shortName: "🐻 Grizzly Mountain",
+    zone: "Grizzly Gulch", type: "dpa", dpaNum: 2,
+    x: 72, y: 218,
+    routePath: "M 50,162 L 72,218",
+    arrow: "⬇️",
+    direction: "เดินลงใต้ต่อจาก Mystic Point เข้าสู่โซนเหมืองแร่",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 2 ลัดคิวรถไฟเหาะเหมืองแร่"
+  },
+  {
+    id: 7, rideKey: "food", rideGroup: "other",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "12:00 น.", name: "พักทานอาหารกลางวัน (Explorer's Club / Royal Banquet)", shortName: "🍽️ พักทานอาหาร",
+    zone: "Mystic Point / Fantasyland", type: "food", dpaNum: null,
+    x: 112, y: 174,
+    routePath: "M 72,218 L 62,165 L 112,174",
+    arrow: "⬆️",
+    direction: "เดินย้อนกลับขึ้นมาทานที่ Explorer's Club บริเวณคฤหาสน์",
+    note: "พักหลบแดดช่วงที่คนหนาแน่นที่สุด"
+  },
+  {
+    id: 8, rideKey: "smallworld", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "13:15 น.", name: "\"it's a small world\"", shortName: "🛶 small world",
+    zone: "Fantasyland", type: "dpa", dpaNum: 3,
+    x: 242, y: 34,
+    routePath: "M 112,174 L 200,115 L 242,34",
+    arrow: "↗️",
+    direction: "ตัดผ่านหน้าปราสาทเดินขึ้นไปยังด้านบนสุดของ Fantasyland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 3 ล่องเรือตากแอร์เย็นๆ ช่วงบ่ายที่คนเยอะ"
+  },
+  {
+    id: 9, rideKey: "frozen", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "13:35 น.", name: "Frozen Ever After (รอบบ่าย - ใช้บัตรลัดคิว)", shortName: "❄️ Frozen (รอบบ่าย)",
+    zone: "World of Frozen", type: "dpa", dpaNum: 4,
+    x: 126, y: 60,
+    routePath: "M 242,34 L 185,48 L 126,60",
+    arrow: "⬅️",
+    direction: "เดินออกจาก small world เลี้ยวซ้ายเข้าโซน World of Frozen ที่อยู่ติดกันทันที",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 4 ลัดคิวช่วงบ่ายพีคไทม์ (ประหยัดเวลารอ 60-90 นาที)"
+  },
+  {
+    id: 10, rideKey: "philhar", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "14:05 น.", name: "Mickey's PhilharMagic", shortName: "🎭 PhilharMagic",
+    zone: "Fantasyland", type: "dpa", dpaNum: 5,
+    x: 205, y: 78,
+    routePath: "M 126,60 L 205,78",
+    arrow: "↘️",
+    direction: "เดินออกจากโซนหิมะ ตัดผ่านหลังปราสาทมาทางขวา เพื่อเตรียมข้ามฝั่งไป Tomorrowland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 5 ดูหนัง 4 มิติห้องแอร์ เป็นจุดพักขาก่อนข้ามโซน"
+  },
+  {
+    id: 11, rideKey: "spacemountain", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "14:30 น.", name: "Hyperspace Mountain", shortName: "🌌 Space Mountain",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 6,
+    x: 348, y: 92,
+    routePath: "M 205,78 L 235,112 L 348,92",
+    arrow: "➡️",
+    direction: "เดินต่อเนื่องจาก PhilharMagic ข้ามสะพานเข้าสู่โซน Tomorrowland ฝั่งขวาสุด",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 6 รถไฟเหาะอวกาศในความมืด"
+  },
+  {
+    id: 12, rideKey: "ironman", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "15:00 น.", name: "Iron Man Experience", shortName: "🔴 Iron Man",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 7,
+    x: 345, y: 132,
+    routePath: "M 348,92 L 345,132",
+    arrow: "⬇️",
+    direction: "เดินถัดลงมาด้านในโซน Tomorrowland",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 7 ซิมูเลเตอร์ 3 มิติ"
+  },
+  {
+    id: 13, rideKey: "antman", rideGroup: "premier",
+    phase: "ช่วงบ่าย : พักทานข้าว & ไล่ใช้บัตรที่เหลือ (12:00 – 16:00 น.)",
+    time: "15:30 น.", name: "Ant-Man and The Wasp: Nano Battle!", shortName: "🐜 Ant-Man",
+    zone: "Tomorrowland", type: "dpa", dpaNum: 8,
+    x: 312, y: 158,
+    routePath: "M 345,132 L 312,158",
+    arrow: "↙️",
+    direction: "เดินขยับมาทางทางออกโซนอวกาศ",
+    note: "ใช้บัตร Premier Access สิทธิ์ที่ 8 (ใบสุดท้าย) ยิงปืนเลเซอร์เก็บคะแนน"
+  },
+  {
+    id: 14, rideKey: "castle", rideGroup: "other",
+    phase: "ช่วงเย็น : เก็บตก & ถ่ายรูปหน้าปราสาท (16:00 – 17:00 น.)",
+    time: "16:00 น.", name: "ถ่ายรูปปราสาท / Jungle River Cruise / ช้อปปิ้ง", shortName: "📸 ปราสาท & ช้อป",
+    zone: "Castle Hub / Adventureland / Main Street", type: "std", dpaNum: null,
+    x: 200, y: 118,
+    routePath: "M 312,158 L 200,118",
+    arrow: "⬇️",
+    direction: "เดินกลับมาถ่ายรูปลานหน้าปราสาท แล้วช้อปปิ้งถนน Main Street มุ่งหน้าออกประตู",
+    note: "เก็บครบ 100% พักผ่อนและถ่ายรูปตามอัธยาศัย"
+  }
+];
+
+const rideChipCatalog = [
+  { key: "mystic", label: "👁️ Mystic Manor", group: "premier", defaultId: 5 },
+  { key: "grizzly", label: "🐻 Grizzly Mountain", group: "premier", defaultId: 6 },
+  { key: "smallworld", label: "🛶 small world", group: "premier", defaultId: 8 },
+  { key: "frozen", label: "❄️ Frozen", group: "premier", defaultId: 9 },
+  { key: "philhar", label: "🎭 PhilharMagic", group: "premier", defaultId: 10 },
+  { key: "spacemountain", label: "🌌 Space Mountain", group: "premier", defaultId: 11 },
+  { key: "ironman", label: "🔴 Iron Man", group: "premier", defaultId: 12 },
+  { key: "antman", label: "🐜 Ant-Man", group: "premier", defaultId: 13 },
+  { key: "sliding", label: "❄️ Sliding Sleighs", group: "normal", defaultId: 1 },
+  { key: "pooh", label: "🍯 Winnie the Pooh", group: "normal", defaultId: 3 },
+  { key: "toystory", label: "🚀 Toy Story", group: "normal", defaultId: 4 }
+];
+
+const facilities = [
+  { x: 42, y: 68, label: "🚻💧 Frozen" },
+  { x: 170, y: 42, label: "🚻💧 Fantasyland" },
+  { x: 35, y: 122, label: "🚻 Toy Story" },
+  { x: 42, y: 175, label: "🚻💧 Mystic" },
+  { x: 155, y: 152, label: "🚻💧 Adventure" },
+  { x: 292, y: 115, label: "🚻💧 Tomorrow" },
+  { x: 182, y: 215, label: "🚻💧 Main St." }
+];
+
+let completedIds = JSON.parse(localStorage.getItem('hkdl_done') || '[]');
+let selectedId = parseInt(localStorage.getItem('hkdl_selected')) || 1;
+let highlightedRideKeys = [];
+let drawerTab = 'all';
+let isExploreMode = false;
+let currentFilter = 'all';
+let showFacilities = false;
+let is3DMap = true;
+let isFullscreen = false;
+
+if (localStorage.getItem('hkdl_theme') === 'light') {
+  document.body.classList.add('light-mode');
+  document.getElementById('themeBtn').innerText = '🌙 กลางคืน';
+}
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('themeBtn').innerText = isLight ? '🌙 กลางคืน' : '☀️ สู้แดด';
+  localStorage.setItem('hkdl_theme', isLight ? 'light' : 'dark');
+}
+
+function handleMapToggleBtn() {
+  if (isExploreMode || currentFilter === 'single' || currentFilter === 'highlighted' || highlightedRideKeys.length > 0 || document.getElementById('rideDrawer').classList.contains('open')) {
+    document.getElementById('rideDrawer').classList.remove('open');
+    document.getElementById('ridePickerBtn').classList.remove('active');
+    clearHighlightRides();
+    return;
+  }
+  is3DMap = !is3DMap;
+  document.getElementById('map3DLayer').style.display = is3DMap ? 'block' : 'none';
+  document.getElementById('mapSVGLayer').style.display = is3DMap ? 'none' : 'block';
+  const btn = document.getElementById('mapToggleBtn');
+  btn.innerText = is3DMap ? '🗺️ แผนที่ 3D' : '🗺️ แผนที่ออฟไลน์';
+  btn.classList.toggle('active', is3DMap);
+}
+
+function toggleFacilities() {
+  showFacilities = !showFacilities;
+  const btn = document.getElementById('facilityBtn');
+  const layer = document.getElementById('facilitiesLayer');
+  btn.classList.toggle('active', showFacilities);
+  layer.style.display = showFacilities ? 'block' : 'none';
+}
+
+function toggleRideDrawer() {
+  const drawer = document.getElementById('rideDrawer');
+  const btn = document.getElementById('ridePickerBtn');
+  const isOpen = drawer.classList.toggle('open');
+  
+  if (isOpen) {
+    isExploreMode = true;
+  }
+  
+  btn.classList.toggle('active', isOpen || isExploreMode || highlightedRideKeys.length > 0 || drawerTab !== 'all');
+  renderMap();
+}
+
+function setDrawerTab(tabName) {
+  drawerTab = tabName;
+  highlightedRideKeys = [];
+  isExploreMode = true;
+
+  document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+
+  if (tabName === 'premier') {
+    setFilter('dpa');
+  } else if (tabName === 'normal') {
+    setFilter('normal');
+  } else {
+    setFilter('all');
+  }
+
+  renderRideChips();
+  renderMap();
+}
+
+function toggleHighlightRide(rideKey, defaultId) {
+  isExploreMode = true;
+  const idx = highlightedRideKeys.indexOf(rideKey);
+  if (idx === -1) {
+    highlightedRideKeys.push(rideKey);
+    selectedId = defaultId;
+  } else {
+    highlightedRideKeys.splice(idx, 1);
+  }
+
+  if (highlightedRideKeys.length > 0) {
+    currentFilter = 'highlighted';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    const singleBtn = document.getElementById('filter-single');
+    singleBtn.style.display = 'inline-block';
+    singleBtn.innerText = `🎯 เฉพาะที่เลือก (${highlightedRideKeys.length})`;
+    singleBtn.classList.add('active');
+  } else {
+    if (drawerTab === 'premier') setFilter('dpa');
+    else if (drawerTab === 'normal') setFilter('normal');
+    else setFilter('all');
+  }
+
+  renderRideChips();
+  renderMap();
+  renderBanner();
+  renderTimeline();
+}
+
+function clearHighlightRides() {
+  highlightedRideKeys = [];
+  drawerTab = 'all';
+  isExploreMode = false;
+  document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-all').classList.add('active');
+  document.getElementById('ridePickerBtn').classList.remove('active');
+  setFilter('all');
+  renderRideChips();
+  renderMap();
+}
+
+function enterFullscreen() {
+  isFullscreen = true;
+  const wrapper = document.getElementById('mapWrapper');
+  wrapper.classList.add('is-fullscreen');
+  resetZoom();
+}
+
+function exitFullscreen() {
+  isFullscreen = false;
+  const wrapper = document.getElementById('mapWrapper');
+  wrapper.classList.remove('is-fullscreen');
+  resetZoom();
+}
+
+document.getElementById('exitFsBtn').addEventListener('touchstart', (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+  exitFullscreen();
+});
+document.getElementById('exitFsBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  exitFullscreen();
+});
+document.getElementById('zoomControls').addEventListener('touchstart', (e) => {
+  e.stopPropagation();
+});
+
+function setFilter(filterType) {
+  currentFilter = filterType;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`filter-${filterType}`);
+  if (targetBtn) targetBtn.classList.add('active');
+  if (filterType !== 'single' && filterType !== 'highlighted' && filterType !== 'normal') {
+    document.getElementById('filter-single').style.display = 'none';
+  } else if (filterType === 'normal') {
+    const singleBtn = document.getElementById('filter-single');
+    singleBtn.style.display = 'inline-block';
+    singleBtn.innerText = '🚶 3 คิวปกติ';
+    singleBtn.classList.add('active');
+  }
+  renderTimeline();
+}
+
+let scale = 1, startScale = 1;
+let translateX = 0, translateY = 0;
+let lastTouchX = 0, lastTouchY = 0;
+let isPanning = false;
+
+const mapWrapper = document.getElementById('mapWrapper');
+const parkMap = document.getElementById('parkMap');
+const zoomInfo = document.getElementById('zoomInfo');
+
+function isRotatedPortrait() {
+  return isFullscreen && window.innerHeight > window.innerWidth;
+}
+
+function getLogicalDimensions() {
+  if (isRotatedPortrait()) {
+    return { w: window.innerHeight, h: window.innerWidth };
+  }
+  const rect = mapWrapper.getBoundingClientRect();
+  return { w: rect.width, h: rect.height };
+}
+
+function updateTransform() {
+  scale = Math.max(1, Math.min(scale, 5));
+  const dim = getLogicalDimensions();
+  const maxX = dim.w * (scale - 1);
+  const maxY = dim.h * (scale - 1);
+  translateX = Math.max(-maxX, Math.min(0, translateX));
+  translateY = Math.max(-maxY, Math.min(0, translateY));
+  
+  parkMap.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  zoomInfo.innerText = `ซูม: ${Math.round(scale * 100)}%`;
+}
+
+mapWrapper.addEventListener('touchstart', (e) => {
+  if (e.target.closest('#exitFsBtn') || e.target.closest('#zoomControls')) return;
+  const touches = Array.from(e.touches);
+  if (touches.length === 1) {
+    isPanning = true;
+    lastTouchX = touches[0].clientX;
+    lastTouchY = touches[0].clientY;
+  } else if (touches.length === 2) {
+    isPanning = false;
+    startScale = scale;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    mapWrapper.dataset.dist = Math.sqrt(dx * dx + dy * dy);
+  }
+}, { passive: false });
+
+mapWrapper.addEventListener('touchmove', (e) => {
+  if (e.target.closest('#exitFsBtn') || e.target.closest('#zoomControls')) return;
+  e.preventDefault();
+  const touches = Array.from(e.touches);
+  if (isPanning && touches.length === 1) {
+    const rawDx = touches[0].clientX - lastTouchX;
+    const rawDy = touches[0].clientY - lastTouchY;
+    lastTouchX = touches[0].clientX;
+    lastTouchY = touches[0].clientY;
+
+    if (isRotatedPortrait()) {
+      translateX += rawDy;
+      translateY -= rawDx;
+    } else {
+      translateX += rawDx;
+      translateY += rawDy;
+    }
+    updateTransform();
+  } else if (touches.length === 2) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const startDist = parseFloat(mapWrapper.dataset.dist) || dist;
+    scale = startScale * (dist / startDist);
+    updateTransform();
+  }
+}, { passive: false });
+
+mapWrapper.addEventListener('touchend', () => { isPanning = false; });
+
+function zoom(amount) {
+  const prevScale = scale;
+  scale = Math.max(1, Math.min(scale + amount, 5));
+  const dim = getLogicalDimensions();
+  const ratio = scale / prevScale;
+  translateX = (dim.w / 2) - ((dim.w / 2) - translateX) * ratio;
+  translateY = (dim.h / 2) - ((dim.h / 2) - translateY) * ratio;
+  updateTransform();
+}
+
+function resetZoom() {
+  scale = 1; translateX = 0; translateY = 0;
+  updateTransform();
+}
+
+function saveState() {
+  localStorage.setItem('hkdl_done', JSON.stringify(completedIds));
+  localStorage.setItem('hkdl_selected', selectedId);
+}
+
+function toggleDone(e, id) {
+  e.stopPropagation();
+  const step = itinerary.find(item => item.id === id);
+  const isCurrentlyDone = completedIds.includes(id);
+
+  if (!isCurrentlyDone) {
+    if (!confirm(`ยืนยันว่าทำภารกิจที่ ${id} (${step.name}) สำเร็จแล้วใช่ไหม?`)) return;
+    completedIds.push(id);
+    const nextStep = itinerary.find(item => item.id > id && !completedIds.includes(item.id));
+    if (nextStep) selectedId = nextStep.id;
+  } else {
+    if (!confirm(`ต้องการยกเลิกการติ๊กถูกภารกิจที่ ${id} (${step.name}) ใช่หรือไม่?`)) return;
+    completedIds = completedIds.filter(item => item !== id);
+  }
+  saveState(); renderAll();
+}
+
+function selectStep(id, fromMap = false) {
+  selectedId = id;
+  saveState();
+
+  if (fromMap) {
+    const singleBtn = document.getElementById('filter-single');
+    singleBtn.style.display = 'inline-block';
+    singleBtn.innerText = `🎯 เฉพาะลำดับที่ ${id}`;
+    currentFilter = 'single';
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    singleBtn.classList.add('active');
+  }
+
+  renderAll();
+
+  if (fromMap && !isFullscreen) {
+    setTimeout(() => {
+      const cardEl = document.getElementById(`card-${id}`);
+      if (cardEl) {
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 80);
+  }
+}
+
+function resetProgress() {
+  if (confirm('⚠️ คำเตือน: ต้องการล้างข้อมูลที่ติ๊กไว้และสิทธิ์บัตร Premier Access ทั้งหมดใช่หรือไม่?')) {
+    completedIds = []; selectedId = 1;
+    document.getElementById('rideDrawer').classList.remove('open');
+    saveState(); clearHighlightRides(); renderAll();
+  }
+}
+
+function renderRideChips() {
+  const container = document.getElementById('rideChips');
+  container.innerHTML = '';
+
+  const visibleChips = rideChipCatalog.filter(chip => {
+    if (drawerTab === 'premier') return chip.group === 'premier';
+    if (drawerTab === 'normal') return chip.group === 'normal';
+    return true;
+  });
+
+  visibleChips.forEach(chip => {
+    const btn = document.createElement('button');
+    const isSelected = highlightedRideKeys.includes(chip.key);
+    btn.className = 'ride-chip' + (isSelected ? ' selected' : '');
+    btn.innerText = chip.label;
+    btn.onclick = () => toggleHighlightRide(chip.key, chip.defaultId);
+    container.appendChild(btn);
+  });
+}
+
+function renderFacilities() {
+  const layer = document.getElementById('facilitiesLayer');
+  layer.innerHTML = '';
+  facilities.forEach(f => {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", f.x - 16); rect.setAttribute("y", f.y - 5);
+    rect.setAttribute("width", 32); rect.setAttribute("height", 9); rect.setAttribute("rx", 4);
+    rect.setAttribute("fill", "#0284c7"); rect.setAttribute("stroke", "#ffffff"); rect.setAttribute("stroke-width", "0.8");
+    g.appendChild(rect);
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    txt.setAttribute("x", f.x); txt.setAttribute("y", f.y + 1.5);
+    txt.setAttribute("text-anchor", "middle"); txt.setAttribute("font-size", "4.5");
+    txt.setAttribute("font-weight", "bold"); txt.setAttribute("fill", "#ffffff");
+    txt.textContent = f.label;
+    g.appendChild(txt); layer.appendChild(g);
+  });
+}
+
+function renderDPA() {
+  const usedDpaCount = itinerary.filter(i => i.type === 'dpa' && completedIds.includes(i.id)).length;
+  document.getElementById('dpaCount').innerText = `${usedDpaCount} / 8`;
+  const dotsContainer = document.getElementById('dpaDots');
+  dotsContainer.innerHTML = '';
+  for (let i = 1; i <= 8; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i <= usedDpaCount ? ' used' : '');
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function renderMap() {
+  const routeLayer = document.getElementById('routeLayer');
+  const pinsLayer = document.getElementById('pinsLayer');
+  routeLayer.innerHTML = ''; pinsLayer.innerHTML = '';
+
+  const currentIdx = itinerary.findIndex(i => i.id === selectedId);
+  const currentStep = itinerary[currentIdx];
+  const prevStep = currentIdx > 0 ? itinerary[currentIdx - 1] : { x: 200, y: 232 };
+
+  if (!isExploreMode) {
+    const pathData = currentStep.routePath || `M ${prevStep.x},${prevStep.y} L ${currentStep.x},${currentStep.y}`;
+    const pathNode = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathNode.setAttribute("d", pathData);
+    pathNode.setAttribute("class", "nav-route");
+    routeLayer.appendChild(pathNode);
+
+    const points = pathData.trim().split(/[ML\s]+/).filter(Boolean);
+    let arrowAngle = 0;
+    if (points.length >= 2) {
+      const prevPt = points[points.length - 2].split(',');
+      const currPt = points[points.length - 1].split(',');
+      const dx = parseFloat(currPt[0]) - parseFloat(prevPt[0]);
+      const dy = parseFloat(currPt[1]) - parseFloat(prevPt[1]);
+      arrowAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+    }
+    
+    const arrowDist = 13;
+    const ax = currentStep.x - Math.cos(arrowAngle * Math.PI / 180) * arrowDist;
+    const ay = currentStep.y - Math.sin(arrowAngle * Math.PI / 180) * arrowDist;
+    
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    arrow.setAttribute("points", "-5,-4 5,0 -5,4");
+    arrow.setAttribute("fill", "#ef4444");
+    arrow.setAttribute("stroke", "#ffffff");
+    arrow.setAttribute("stroke-width", "0.8");
+    arrow.setAttribute("transform", `translate(${ax},${ay}) rotate(${arrowAngle})`);
+    routeLayer.appendChild(arrow);
+  }
+
+  const hasSpecificRideSelected = highlightedRideKeys.length > 0;
+
+  const isItemActiveOnMap = (item) => {
+    if (hasSpecificRideSelected) {
+      return highlightedRideKeys.includes(item.rideKey);
+    }
+    if (isExploreMode) {
+      if (drawerTab === 'premier') return item.rideGroup === 'premier';
+      if (drawerTab === 'normal') return item.rideGroup === 'normal';
+    }
+    return true;
+  };
+
+  const sortedPins = [...itinerary].sort((a, b) => {
+    const aAct = isItemActiveOnMap(a) ? 1 : 0;
+    const bAct = isItemActiveOnMap(b) ? 1 : 0;
+    return aAct - bAct;
+  });
+
+  sortedPins.forEach(item => {
+    const isDone = completedIds.includes(item.id);
+    const isSelected = !isExploreMode && (item.id === selectedId);
+    const isActive = isItemActiveOnMap(item);
+    const isHighlighted = hasSpecificRideSelected && highlightedRideKeys.includes(item.rideKey);
+
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    let cls = "pin-group";
+    if (isDone) cls += " done";
+    if (!isActive) cls += " dimmed";
+    g.setAttribute("class", cls);
+    g.ontouchstart = (e) => { e.stopPropagation(); };
+    g.onclick = (e) => { e.stopPropagation(); selectStep(item.id, true); };
+
+    if (isSelected || isHighlighted) {
+      const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      pulse.setAttribute("cx", item.x); pulse.setAttribute("cy", item.y);
+      pulse.setAttribute("class", "pulse-circle"); g.appendChild(pulse);
+    }
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", item.x); circle.setAttribute("cy", item.y);
+    circle.setAttribute("r", (isSelected || isHighlighted) ? "7.8" : "5.8");
+    
+    let fill = "#0284c7";
+    if (item.type === 'dpa') fill = "#f59e0b";
+    if (item.type === 'food') fill = "#10b981";
+    if (isDone) fill = "#64748b";
+
+    circle.setAttribute("fill", fill); circle.setAttribute("stroke", "#ffffff");
+    circle.setAttribute("stroke-width", (isSelected || isHighlighted) ? "2" : "1.2"); g.appendChild(circle);
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", item.x); text.setAttribute("y", item.y + 2.3);
+    text.setAttribute("text-anchor", "middle"); text.setAttribute("font-size", "7");
+    text.setAttribute("font-weight", "bold"); text.setAttribute("fill", "#ffffff");
+    text.textContent = isDone ? "✓" : item.id; g.appendChild(text);
+
+    const labelY = item.y - 11;
+    const txtLen = item.shortName.length * 2.6 + 10;
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", item.x - (txtLen / 2)); rect.setAttribute("y", labelY - 4.8);
+    rect.setAttribute("width", txtLen); rect.setAttribute("height", 7.8);
+    rect.setAttribute("class", "pin-label-bg"); g.appendChild(rect);
+
+    const lblText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    lblText.setAttribute("x", item.x); lblText.setAttribute("y", labelY + 1.1);
+    lblText.setAttribute("class", "pin-label-text");
+    lblText.textContent = `${item.id}. ${item.shortName}`; g.appendChild(lblText);
+
+    pinsLayer.appendChild(g);
+  });
+}
+
+function renderBanner() {
+  const step = itinerary.find(i => i.id === selectedId);
+  const banner = document.getElementById('navBanner');
+  let badgeHtml = `<span class="nav-badge badge-std">ต่อคิวปกติ (Standby)</span>`;
+  if (step.type === 'dpa') badgeHtml = `<span class="nav-badge badge-dpa">⚡ ใช้บัตร Premier Access (สิทธิ์ที่ ${step.dpaNum}/8)</span>`;
+  else if (step.type === 'food') badgeHtml = `<span class="nav-badge badge-std">🍽️ พักทานอาหาร</span>`;
+
+  banner.innerHTML = `
+    <div class="nav-header">
+      <span class="nav-time">⏰ ควรเข้าเวลา ${step.time}</span>
+      ${badgeHtml}
+    </div>
+    <div class="nav-title">${step.id}. ${step.name}</div>
+    <div class="nav-dir">
+      <span class="dir-arrow">${step.arrow}</span>
+      <span><strong>เส้นทางเดิน:</strong> ${step.direction}</span>
+    </div>
+    <div class="nav-tip">💡 ${step.note}</div>
+  `;
+}
+
+function renderTimeline() {
+  const container = document.getElementById('timelineContainer');
+  container.innerHTML = '';
+  let currentPhase = '';
+
+  const filteredList = itinerary.filter(item => {
+    if (currentFilter === 'highlighted') return highlightedRideKeys.includes(item.rideKey);
+    if (currentFilter === 'single') return item.id === selectedId;
+    if (currentFilter === 'dpa') return item.type === 'dpa';
+    if (currentFilter === 'normal') return item.rideGroup === 'normal';
+    if (currentFilter === 'todo') return !completedIds.includes(item.id);
+    return true;
+  });
+
+  if (filteredList.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted);">🎉 เก็บครบทุกรายการในหมวดนี้แล้ว!</div>`;
+    return;
+  }
+
+  filteredList.forEach(item => {
+    if (item.phase !== currentPhase) {
+      currentPhase = item.phase;
+      const pDiv = document.createElement('div');
+      pDiv.className = 'phase-title'; pDiv.innerHTML = `📍 ${currentPhase}`;
+      container.appendChild(pDiv);
+    }
+
+    const isDone = completedIds.includes(item.id);
+    const isSelected = item.id === selectedId;
+
+    let tagHtml = `<span class="tag-std">ต่อคิวปกติ</span>`;
+    if (item.type === 'dpa') tagHtml = `<span class="tag-dpa">⚡ Premier Access #${item.dpaNum}</span>`;
+    if (item.type === 'food') tagHtml = `<span class="tag-food">🍽️ พักกลางวัน</span>`;
+
+    const card = document.createElement('div');
+    card.id = `card-${item.id}`;
+    card.className = `card ${isSelected ? 'selected' : ''} ${isDone ? 'done' : ''}`;
+    card.onclick = () => selectStep(item.id, false);
+
+    card.innerHTML = `
+      <div class="check-box" onclick="toggleDone(event, ${item.id})">✓</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="time-tag">${item.time} • ลำดับที่ ${item.id}</span>
+          ${tagHtml}
+        </div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-zone">โซน: ${item.zone}</div>
+        <div class="item-note">${item.note}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  if (currentFilter === 'single' || currentFilter === 'highlighted' || currentFilter === 'normal') {
+    const showAllBtn = document.createElement('button');
+    showAllBtn.className = 'filter-btn';
+    showAllBtn.style.cssText = 'width: 100%; padding: 10px; margin-top: 4px; text-align: center;';
+    showAllBtn.innerText = '📋 แสดงตารางเวลาทั้งหมด (14 รายการ)';
+    showAllBtn.onclick = () => {
+      document.getElementById('rideDrawer').classList.remove('open');
+      clearHighlightRides();
+    };
+    container.appendChild(showAllBtn);
+  }
+}
+
+function renderAll() {
+  renderRideChips();
+  renderFacilities();
+  renderDPA();
+  renderMap();
+  renderBanner();
+  renderTimeline();
+}
+
+renderAll();
+let gpsWatcher = null;
+let isTrackingGPS = false;
+
+function toggleGPS() {
+  const btn = document.getElementById('gpsBtn');
+  if (!isTrackingGPS) {
+    if ("geolocation" in navigator) {
+      isTrackingGPS = true;
+      btn.innerText = "📍 กำลังระบุตำแหน่ง...";
+      btn.style.background = "#059669";
       
-      <!-- เลเยอร์วาดเส้นประสีแดง -->
-      <svg id="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-      
-      <!-- หมุดตัวเลขเครื่องเล่น -->
-      <div id="map-pins-layer"></div>
+      const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+      gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
+    } else {
+      alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
+    }
+  } else {
+    stopGPS(btn);
+  }
+}
+
+function updateGPSMarker(position) {
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  const btn = document.getElementById('gpsBtn');
+
+  // เช็กว่าพิกัดอยู่นอกเขตฮ่องกงดิสนีย์แลนด์หรือไม่
+  if (lat < 22.3050 || lat > 22.3220 || lon < 114.0320 || lon > 114.0520) {
+    if (btn) btn.innerText = "📍 คุณอยู่นอกเขตสวนสนุก";
+    const gpsGroup = document.getElementById('gps-user-group');
+    if (gpsGroup) gpsGroup.remove(); // ลบจุดสีฟ้าออก ไม่ให้ค้างกลางแผนที่
+    return;
+  }
+
+  if (btn) btn.innerText = "📍 กำลังติดตามตำแหน่ง";
+
+  // พิกัดอ้างอิง 5 จุด และตำแหน่ง X,Y บน SVG (400x250)
+  const anchors = [
+    { name: 'NW', lat: 22.3160, lon: 114.0380, x: 25, y: 15 },
+    { name: 'NE', lat: 22.3160, lon: 114.0450, x: 385, y: 55 },
+    { name: 'SW', lat: 22.3100, lon: 114.0380, x: 20, y: 240 },
+    { name: 'SE', lat: 22.3100, lon: 114.0450, x: 385, y: 185 },
+    { name: 'C',  lat: 22.3130, lon: 114.0415, x: 200, y: 115 }
+  ];
+  // ... (โค้ดส่วนคำนวณและวาดหมุดด้านล่างคงเดิม) ...
+
+  let totalWeight = 0;
+  let simulatedX = 0;
+  let simulatedY = 0;
+
+  anchors.forEach(anchor => {
+    const dLat = lat - anchor.lat;
+    const dLon = lon - anchor.lon;
+    const weight = 1 / (dLat * dLat + dLon * dLon + 0.0000001);
+    simulatedX += anchor.x * weight;
+    simulatedY += anchor.y * weight;
+    totalWeight += weight;
+  });
+
+  simulatedX /= totalWeight;
+  simulatedY /= totalWeight;
+
+  const pinsLayer = document.getElementById('pinsLayer');
+  let gpsGroup = document.getElementById('gps-user-group');
+
+  if (!gpsGroup) {
+    gpsGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    gpsGroup.id = "gps-user-group";
+
+    const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    pulse.id = "gps-pulse-circle";
+    pulse.setAttribute("r", "25");
+    pulse.setAttribute("fill", "url(#gpsPulse)");
+    gpsGroup.appendChild(pulse);
+
+    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    dot.id = "gps-dot-circle";
+    dot.setAttribute("r", "8");
+    dot.setAttribute("fill", "#2563eb");
+    dot.setAttribute("stroke", "#ffffff");
+    dot.setAttribute("stroke-width", "2");
+    gpsGroup.appendChild(dot);
+
+    pinsLayer.appendChild(gpsGroup);
+  }
+
+  gpsGroup.setAttribute("transform", `translate(${simulatedX}, ${simulatedY})`);
+}
+
+function handleGPSError(err) {
+  console.warn(`GPS Error (${err.code}): ${err.message}`);
+  const btn = document.getElementById('gpsBtn');
+  if(btn) btn.innerText = "📍 สัญญาณ GPS ขัดข้อง";
+}
+
+function stopGPS(btn) {
+  if (gpsWatcher !== null) {
+    navigator.geolocation.clearWatch(gpsWatcher);
+    gpsWatcher = null;
+  }
+  isTrackingGPS = false;
+  btn.innerText = "📍 แสดงตำแหน่งฉัน";
+  btn.style.background = "#10b981";
+  const gpsGroup = document.getElementById('gps-user-group');
+  if (gpsGroup) gpsGroup.remove();
+}
+
+// หยุดดึงพิกัดอัตโนมัติเมื่อปิดหน้าจอหรือสลับแอป เพื่อประหยัดแบตเตอรี่
+document.addEventListener("visibilitychange", () => {
+  const btn = document.getElementById('gpsBtn');
+  if (document.hidden) {
+    if (gpsWatcher !== null) {
+      navigator.geolocation.clearWatch(gpsWatcher);
+      gpsWatcher = null;
+    }
+  } else if (isTrackingGPS && gpsWatcher === null) {
+    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+    gpsWatcher = navigator.geolocation.watchPosition(updateGPSMarker, handleGPSError, options);
+  }
+});
+  /* === [START: JS แผนที่เดินทาง 3D ใหม่] === */
+const transitData = {
+  mtr: [
+    {
+      step: 1,
+      title: "เดินจาก B P International ไปสถานี Jordan",
+      sub: "ระยะทาง 450 ม. (~6 นาที) | เข้าทางออก Exit C2",
+      zoom: "scale(1.55) translate(-28%, -24%)",
+      spot: { top: "72%", left: "89%" },
+      tip: "เดินออกจากโรงแรมเลียบถนน Austin Rd. มุ่งหน้าแยก Nathan Rd. แนะนำลงทางออก <b>Exit C2</b> เพราะมีลิฟต์สะดวกสำหรับเด็กและรถเข็น",
+      btnText: "📍 เปิดพิกัดทางลงสถานี Jordan (Exit C2)",
+      btnAction: "window.open('https://maps.google.com/?q=Jordan+Station+Exit+C2+Hong+Kong', '_blank')"
+    },
+    {
+      step: 2,
+      title: "ขึ้นสายสีแดง (Tsuen Wan) ลงสถานี Lai King",
+      sub: "นั่ง 6 สถานี (~12 นาที) | เดินข้ามชานชาลาเปลี่ยนสาย",
+      zoom: "scale(1.6) translate(-22%, 22%)",
+      spot: { top: "15%", left: "78%" },
+      tip: "ลงรถที่สถานี <b>Lai King</b> แล้วเดินข้ามฝั่งชานชาลาตรงหน้าได้เลย (ไม่ต้องขึ้น-ลงบันได) เพื่อต่อรถไฟสายสีส้ม (Tung Chung Line)",
+      btnText: "💰 เช็กยอดค่าโดยสาร MTR รวม 5 คน",
+      btnAction: "showSubInfo('fareMtr')"
+    },
+    {
+      step: 3,
+      title: "ขึ้นสายสีส้มไป Sunny Bay ต่อสายดิสนีย์",
+      sub: "นั่ง 2 สถานี (~10 นาที) | เปลี่ยนเป็นขบวนสีชมพู",
+      zoom: "scale(1.6) translate(22%, 20%)",
+      spot: { top: "22%", left: "23%" },
+      tip: "ลงที่ <b>Sunny Bay</b> เดินข้ามชานชาลามาขึ้นขบวน <b>Disneyland Resort Line</b> (หน้าต่างรูปหัวมิกกี้) รถออกทุก 5-10 นาที",
+      btnText: "⏱️ เช็กเวลาขบวนรถรอบเช้า (Early Entry)",
+      btnAction: "showSubInfo('scheduleMtr')"
+    },
+    {
+      step: 4,
+      title: "ถึงสถานี Hong Kong Disneyland Resort",
+      sub: "นั่ง 1 สถานี (~5 นาที) | เดินเข้าลานน้ำพุ",
+      zoom: "scale(1.55) translate(26%, -18%)",
+      spot: { top: "68%", left: "16%" },
+      tip: "เดินออกจากสถานีผ่านซุ้มประตูหลัก มุ่งหน้าสู่จุดตรวจกระเป๋าและถ่ายรูปเช็กอินที่น้ำพุมิกกี้ปลาวาฬก่อนเข้าพาร์ค",
+      btnText: "🎟️ เช็กลิสต์เตรียมตัวก่อนเข้าพาร์ค (5 ท่าน)",
+      btnAction: "showSubInfo('checklistPark')"
+    }
+  ],
+  car: [
+    {
+      step: 1,
+      title: "เรียกรถ UberXL หน้าโรงแรม B P International",
+      sub: "จุดรับ: Main Lobby (Austin Rd.) | นั่งได้สูงสุด 6 คน",
+      zoom: "scale(1.55) translate(-28%, -14%)",
+      spot: { top: "58%", left: "91%" },
+      tip: "กดเรียกประเภทรถ <b>UberXL</b> (รถแวน 6 ที่นั่ง) เพื่อให้ทั้ง 5 คนนั่งสบายและวางกระเป๋าเป้ได้ครบ ปักหมุดรับที่หน้าประตูหลักโรงแรม",
+      btnText: "🚕 เปิดแอป Uber / ปักหมุดจุดรับหน้าโรงแรม",
+      btnAction: "window.open('https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=Hong%20Kong%20Disneyland', '_blank')"
+    },
+    {
+      step: 2,
+      title: "ขึ้นทางด่วน Route 8 ข้ามสะพานแขวนชิงหม่า",
+      sub: "ใช้เวลาวิ่งบนทางด่วน ~20 นาที | ชมวิวอ่าววิคตอเรีย",
+      zoom: "scale(1.5) translate(0%, 0%)",
+      spot: { top: "48%", left: "53%" },
+      tip: "เส้นทางวิ่งตรงยาวผ่านอุโมงค์และข้ามสะพานชิงหม่า ไม่ต้องต่อรถ เหมาะมากในวันที่ต้องรีบทำเวลาช่วงเช้า",
+      btnText: "🧾 ดูสรุปค่าโดยสาร + ค่าทางด่วน (หาร 5 คน)",
+      btnAction: "showSubInfo('fareCar')"
+    },
+    {
+      step: 3,
+      title: "ถึงจุดส่งผู้โดยสารหน้า Hong Kong Disneyland",
+      sub: "จอดส่งใกล้ทางเดินเข้าลานน้ำพุมิกกี้ปลาวาฬ",
+      zoom: "scale(1.55) translate(24%, -22%)",
+      spot: { top: "76%", left: "26%" },
+      tip: "รถจะจอดส่งที่จุด Drop-off เดินต่ออีกเพียง 3 นาทีถึงจุดตรวจกระเป๋าหน้าสวนสนุก",
+      btnText: "🀄 โชว์ป้ายชื่อภาษาจีนให้คนขับดู (เต็มจอ)",
+      btnAction: "showSubInfo('chineseSign')"
+    }
+  ]
+};
+
+let currentMode = 'mtr';
+let pinsVisible = true;
+
+function openTransitModal() {
+  document.getElementById('transitModal').classList.add('active');
+  switchTransitMode('mtr');
+}
+
+function closeTransitModal() {
+  document.getElementById('transitModal').classList.remove('active');
+  resetMapZoom();
+}
+
+function switchTransitMode(mode) {
+  currentMode = mode;
+  resetMapZoom();
+
+  document.getElementById('tabMtr').className = mode === 'mtr' ? 'mode-tab active mtr' : 'mode-tab';
+  document.getElementById('tabCar').className = mode === 'car' ? 'mode-tab active car' : 'mode-tab';
+
+  document.getElementById('svgRouteMtr').style.display = mode === 'mtr' ? 'block' : 'none';
+  document.getElementById('svgRouteCar').style.display = mode === 'car' ? 'block' : 'none';
+
+  document.querySelectorAll('.pin-mtr').forEach(el => el.classList.toggle('dimmed', mode !== 'mtr'));
+  document.querySelectorAll('.pin-car').forEach(el => el.classList.toggle('dimmed', mode !== 'car'));
+
+  const container = document.getElementById('stepsContainer');
+  container.className = mode === 'car' ? 'steps-container car-mode' : 'steps-container';
+  container.innerHTML = transitData[mode].map((item, idx) => `
+    <div class="step-card" id="stepCard-${idx}" onclick="selectStep(${idx})">
+      <div class="step-header">
+        <div class="step-badge">${item.step}</div>
+        <div style="flex:1;">
+          <div class="step-title">${item.title}</div>
+          <div class="step-sub">${item.sub}</div>
+        </div>
+        <span style="font-size:12px; color:#94a3b8;">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>${item.tip}</div>
+        <button class="action-shortcut-btn" onclick="${item.btnAction}">${item.btnText}</button>
+        <button class="action-shortcut-btn secondary" onclick="resetMapZoom()">🔄 รีเซ็ตมุมมองแผนที่เต็มใบ</button>
+      </div>
     </div>
-
-    <div class="zoom-controls">
-      <button class="zoom-btn" onclick="changeZoom(0.2)">+</button>
-      <button class="zoom-btn" onclick="changeZoom(-0.2)">-</button>
-      <button class="zoom-btn" style="font-size: 11px;" onclick="resetZoom()">1x</button>
-    </div>
-  </div>
-
-  <!-- ปุ่มเสริม: ตำแหน่งฉัน & คู่มือเดินทางจากโรงแรมไปดิสนีย์ (5 คน) -->
-  <div class="sub-action-bar">
-    <button class="pill-btn pill-green" onclick="highlightStartGate()">📍 แสดงตำแหน่งฉัน</button>
-    <button class="pill-btn pill-purple" onclick="openModal('travel-modal')">🚇 เดินทางไปสวนสนุก (5 คน)</button>
-  </div>
-
-  <!-- กล่องข้อมูลสีฟ้าใต้แผนที่ -->
-  <div class="info-card-blue" id="dynamic-info-box">
-    <div class="info-time-badge" id="info-time">⏰ ควรเข้าเวลา 09:00 น.</div><br>
-    <div class="info-premier-tag" id="info-tag">ต่อคิวปกติ (เปิดสวนสนุก)</div>
-    <div class="info-ride-title" id="info-title">1. Wandering Oaken's Sliding Sleighs</div>
-    <div class="info-route-box" id="info-route">↗️ เส้นทางเดิน: เดินตรงผ่านปราสาทมุ่งหน้าสู่โซน World of Frozen</div>
-    <div class="info-tip" id="info-tip">💡 แตะหมุดตัวเลขบนแผนที่ หรือแตะการ์ดด้านล่างเพื่อดูเส้นทางและฟังเพลงธีม</div>
-  </div>
-
-  <!-- แถบตัวกรองรายการ -->
-  <div class="filter-tabs">
-    <button class="filter-tab active" onclick="filterCards('all', this)">ทั้งหมด (12)</button>
-    <button class="filter-tab" onclick="filterCards('premier', this)">🎟️ Premier Access (8)</button>
-    <button class="filter-tab" onclick="filterCards('selected', this)">✅ ที่เลือกไว้</button>
-  </div>
-
-  <!-- รายการตารางเวลา -->
-  <div class="schedule-list" id="schedule-list"></div>
-
-  <!-- ==========================================
-       Modal 1: การเดินทางจากโรงแรมไปดิสนีย์แลนด์ (สำหรับ 5 คน)
-       ========================================== -->
-  <div class="modal-overlay" id="travel-modal" onclick="closeModal('travel-modal')">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title">🚇 การเดินทางจากโรงแรมไป Disneyland (5 คน)</div>
-        <button class="modal-close" onclick="closeModal('travel-modal')">✕</button>
-      </div>
-
-      <div class="transit-card">
-        <h4>ทางเลือกที่ 1: รถไฟใต้ดิน MTR (แนะนำ - ถึงตรงเวลาเป๊ะ)</h4>
-        <div class="transit-step">⏰ <b>เวลาออกเดินทาง:</b> ออกจากโรงแรมไม่เกิน <b>07:45 น.</b> (เผื่อเวลาถึงหน้าประตู 08:30 น.)</div>
-        <div class="transit-step">1️⃣ ขึ้นรถไฟสายสีแดง <span class="line-tag" style="background:#ef4444;">Tsuen Wan Line</span> มุ่งหน้าไปทาง <b>Tsuen Wan</b> ลงที่สถานี <b>Lai King (ไล่คิง)</b></div>
-        <div class="transit-step">2️⃣ เดินข้ามชานชาลาฝั่งตรงข้าม ต่อสายสีส้ม <span class="line-tag" style="background:#f97316;">Tung Chung Line</span> มุ่งหน้าไปทาง Tung Chung ลงที่สถานี <b>Sunny Bay (ซันนี่เบย์)</b></div>
-        <div class="transit-step">3️⃣ ต่อรถไฟขบวนดิสนีย์ <span class="line-tag" style="background:#ec4899;">Disneyland Resort Line</span> (หน้าต่างรูปหัวมิกกี้) นั่งอีก 1 สถานี ถึง <b>Disneyland Resort</b> ทันที</div>
-        <div class="transit-step" style="color:#38bdf8; margin-top:4px;">💳 ค่าโดยสาร: ~22–26 HKD/คน (แตะบัตร Octopus หรือบัตรเครดิต Visa/Mastercard ผ่านประตูได้เลย)</div>
-      </div>
-
-      <div class="transit-card">
-        <h4>ทางเลือกที่ 2: รถแท็กซี่จากหน้าโรงแรม (สบายสุดสำหรับ 5 คน)</h4>
-        <div class="transit-step">🚕 <b>จำนวนรถ:</b> กฎหมายฮ่องกงนั่งได้คันละ 4–5 คน (หากมีเด็กเล็กด้วยอาจต้องเรียก <b>แท็กซี่สีแดง 2 คัน</b> หรือรถตู้ 7 ที่นั่ง via Uber)</div>
-        <div class="transit-step">⏱️ <b>เวลาเดินทาง:</b> ประมาณ 25–30 นาที (ออกจากโรงแรม 08:00 น.)</div>
-        <div class="transit-step" style="color:#38bdf8; margin-top:4px;">💵 ค่าโดยสาร: ประมาณ 220–260 HKD / คัน (รวมค่าทางด่วน)</div>
-      </div>
-
-      <div class="transit-card" style="border-color: #10b981;">
-        <h4 style="color:#10b981;">📍 จุดนัดพบและเตรียมตัวหน้าประตู</h4>
-        <div class="transit-step">• เตรียม <b>QR Code บัตรเข้าสวนสนุก + บัตร Premier Access</b> ในแอป HK Disneyland ให้พร้อม</div>
-        <div class="transit-step">• ผ่านจุดตรวจกระเป๋า (ห้ามพกไม้เซลฟี่แบบยืดยาว และขวดแก้ว)</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       Modal 2: จุดห้องน้ำและจุดเติมน้ำดื่มฟรี
-       ========================================== -->
-  <div class="modal-overlay" id="facility-modal" onclick="closeModal('facility-modal')">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title">🚻💧 จุดห้องน้ำและจุดเติมน้ำดื่มฟรี</div>
-        <button class="modal-close" onclick="closeModal('facility-modal')">✕</button>
-      </div>
-      <div class="transit-card">
-        <h4>จุดเติมน้ำดื่มฟรี (Water Refill Stations)</h4>
-        <div class="transit-step">• พกขวดน้ำเปล่าเข้าไปเติมได้ฟรี ประหยัดค่าน้ำขวดละ 35 HKD</div>
-        <div class="transit-step">• <b>World of Frozen:</b> ข้างห้องน้ำใกล้ทางเข้าหมู่บ้านเอเรนเดล</div>
-        <div class="transit-step">• <b>Fantasyland:</b> หน้าห้องน้ำใกล้ร้าน Royal Banquet Hall</div>
-        <div class="transit-step">• <b>Tomorrowland:</b> ข้างทางออกเครื่องเล่น Hyprespace Mountain</div>
-        <div class="transit-step">• <b>Mystic Point / Grizzly Gulch:</b> หน้าห้องน้ำตรงทางเชื่อมระหว่าง 2 โซน</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       ส่วนควบคุมเสียงเพลงทั้งเว็บ
-       ========================================== -->
-  <div id="yt-hidden-player"></div>
-
-  <div id="disney-audio-widget">
-    <button id="master-mute-btn" class="audio-btn" onclick="toggleMasterMute()" title="เปิด/ปิดเสียงทั้งเว็บ">🔊</button>
-    <div class="audio-info">
-      <span id="audio-mode-badge" class="audio-status-label">พร้อมเล่นเพลงธีม</span>
-      <span id="current-track-title">แตะเครื่องเล่นเพื่อฟังเพลง</span>
-    </div>
-    <input type="range" id="volume-slider" min="0" max="100" value="70" oninput="changeMasterVolume(this.value)">
-    <button id="next-track-btn" class="audio-btn" onclick="playNextInQueue()" title="สุ่มเพลงถัดไป" style="display: none;">⏭️</button>
-  </div>
-
-  <!-- YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    // ==========================================
-    // 1. ฐานข้อมูลเครื่องเล่น + พิกัดแผนที่ + ลิงก์เพลงหลัก/สำรอง
-    // ==========================================
-    const attractionsData = [
-      {
-        id: 'wandering', num: 1, order: 1,
-        name: "Wandering Oaken's Sliding Sleighs",
-        zone: "World of Frozen", time: "09:00 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access",
-        route: "เดินตรงผ่านหน้าปราสาทเข้าสู่โซน World of Frozen ด้านซ้ายมือ",
-        tip: "รถไฟเหาะขนาดย่อมชมวิวหมู่บ้านเอเรนเดล แนะนำเก็บช่วงเช้าหรือใช้บัตรลัดคิว",
-        x: 22, y: 24,
-        primaryYT: 'muP9sBRE7YI', backupYT: 'L0MK7qz13bU'
-      },
-      {
-        id: 'frozen', num: 2, order: 2,
-        name: "Frozen Ever After",
-        zone: "World of Frozen", time: "09:15 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access",
-        route: "อยู่ติดกับ Wandering Oaken's ใจกลางหมู่บ้านเอเรนเดล",
-        tip: "ไฮไลต์อันดับ 1 ล่องเรือชมปราสาทน้ำแข็งเอลซ่า มีเพลงเพราะตลอดทาง",
-        x: 32, y: 20,
-        primaryYT: 'muP9sBRE7YI', backupYT: 'L0MK7qz13bU'
-      },
-      {
-        id: 'pooh', num: 3, order: 3,
-        name: "The Many Adventures of Winnie the Pooh",
-        zone: "Fantasyland", time: "09:40 น.",
-        isPremier: false, premierLabel: "ต่อคิวปกติ (ไม่มีบัตรลัดคิว)",
-        route: "เดินออกจากโซน Frozen เข้าสู่ Fantasyland ฝั่งขวา",
-        tip: "ไม่มีในบัตร Premier Access ช่วงเช้าคิวสั้นมาก รีบเก็บก่อนคนเยอะ",
-        x: 64, y: 31,
-        primaryYT: 'wD3B1eQ_K2M', backupYT: 'g77R-0_wJg0'
-      },
-      {
-        id: 'rc-racer', num: 4, order: 4,
-        name: "RC Racer & Toy Soldier Parachute Drop",
-        zone: "Toy Story Land", time: "10:00 น.",
-        isPremier: false, premierLabel: "ต่อคิวปกติ (เก็บช่วงสาย)",
-        route: "เดินลงมาทางซ้ายของปราสาทเข้าสู่โซนของเล่นยักษ์ Toy Story Land",
-        tip: "โซนนี้ไม่มีบัตร Premier Access ให้ใช้ รีบเล่นก่อนแดดร้อนจัด",
-        x: 26, y: 48,
-        primaryYT: 'XNkPkpDRfec', backupYT: 'ECab8JnTnVI'
-      },
-      {
-        id: 'mystic', num: 5, order: 5,
-        name: "Mystic Manor",
-        zone: "Mystic Point", time: "11:00 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #1",
-        route: "เดินต่อจาก Toy Story Land ลงมาทางซ้ายสู่คฤหาสน์ลึกลับ Mystic Point",
-        tip: "เริ่มใช้บัตร Premier Access เดินเข้าช่องทางด่วนได้เลย ดนตรีประกอบโดย Danny Elfman",
-        x: 18, y: 63,
-        primaryYT: 'vM_wipW_U2w', backupYT: 'h_Z1t0Q_B8M'
-      },
-      {
-        id: 'grizzly', num: 6, order: 6,
-        name: "Big Grizzly Mountain Runaway Mine Cars",
-        zone: "Grizzly Gulch", time: "11:25 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #2",
-        route: "เดินต่อเนื่องลงมาด้านล่างซ้ายสุดของแผนที่ โซนเหมืองแร่หมีกริซลี่",
-        tip: "รถไฟเหาะสุดมันส์มีช่วงถอยหลังและพุ่งทะยาน ใช้สิทธิ์บัตรลัดคิวได้เลย",
-        x: 22, y: 78,
-        primaryYT: 'h_Z1t0Q_B8M', backupYT: 'vM_wipW_U2w'
-      },
-      {
-        id: 'smallworld', num: 8, order: 7,
-        name: '"it\'s a small world"',
-        zone: "Fantasyland", time: "13:15 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #3",
-        route: "ตัดผ่านหน้าปราสาทเดินขึ้นไปยังด้านบนสุดของ Fantasyland",
-        tip: "ล่องเรือตากแอร์เย็นๆ ช่วงบ่ายที่คนเยอะ ฟังเพลง it's a small world เพลินๆ",
-        x: 61, y: 21,
-        primaryYT: 'bXm_tpIM5VI', backupYT: '7t527oB1F8w'
-      },
-      {
-        id: 'philharmagic', num: 10, order: 8,
-        name: "Mickey's PhilharMagic",
-        zone: "Fantasyland", time: "13:45 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #4",
-        route: "อยู่ใจกลาง Fantasyland ด้านหลังปราสาทพอดี",
-        tip: "โรงหนัง 4D รวมเพลงดิสนีย์สุดคลาสสิก นั่งพักขาตากแอร์สบายๆ",
-        x: 52, y: 34,
-        primaryYT: 'g77R-0_wJg0', backupYT: 'bXm_tpIM5VI'
-      },
-      {
-        id: 'hyperspace', num: 11, order: 9,
-        name: "Hyperspace Mountain",
-        zone: "Tomorrowland", time: "14:30 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #5",
-        route: "เดินข้ามมาฝั่งขวาสุดของแผนที่เข้าสู่โซนอวกาศ Tomorrowland",
-        tip: "รถไฟเหาะในความมืดธีม Star Wars ใช้บัตรลัดคิวไม่ต้องรอคิวนาน",
-        x: 85, y: 42,
-        primaryYT: '4rQSGZkq7dc', backupYT: '_D0ZQPqeJkk'
-      },
-      {
-        id: 'ironman', num: 12, order: 10,
-        name: "Iron Man Experience",
-        zone: "Tomorrowland", time: "15:00 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #6",
-        route: "เดินถัดลงมาจาก Hyperspace Mountain ในโซน Tomorrowland",
-        tip: "บินชมเมืองฮ่องกงไปกับไอรอนแมน ใช้สิทธิ์ Premier Access เข้าได้ทันที",
-        x: 84, y: 54,
-        primaryYT: '8lvlTXgZn8c', backupYT: 'K9M2fD0g7fA'
-      },
-      {
-        id: 'antman', num: 13, order: 11,
-        name: "Ant-Man and The Wasp: Nano Battle!",
-        zone: "Tomorrowland", time: "15:30 น.",
-        isPremier: true, premierLabel: "สิทธิ์ Premier Access #7",
-        route: "อยู่ติดกับ Iron Man Experience ฝั่งขวาของ Tomorrowland",
-        tip: "เกมยิงปืนเลเซอร์แข่งทำคะแนน ใช้สิทธิ์ Premier Access ใบสุดท้ายของโซนนี้",
-        x: 80, y: 63,
-        primaryYT: 'K9M2fD0g7fA', backupYT: '8lvlTXgZn8c'
-      },
-      {
-        id: 'castle', num: 14, order: 12,
-        name: "Castle of Magical Dreams (จุดชมพลุ)",
-        zone: "Main Street / Hub", time: "20:00 น.",
-        isPremier: false, premierLabel: "ไฮไลต์ปิดท้ายวัน",
-        route: "เดินกลับมารวมตัวที่ลานวงเวียนหน้าปราสาทใจกลางสวนสนุก",
-        tip: "ชมการแสดงแสงสีเสียงและพลุ Momentous ปิดท้ายวันอย่างประทับใจ",
-        x: 50, y: 48,
-        primaryYT: 'g77R-0_wJg0', backupYT: 'muP9sBRE7YI'
-      }
-    ];
-
-    // ==========================================
-    // 2. ตัวแปรสถานะของระบบ Interactive & แผนที่
-    // ==========================================
-    let selectionMode = 'normal';
-    let activeRideId = 'wandering';
-    let previousRideId = null;
-    let selectedPremierIds = [];
-    let currentFilter = 'all';
-    let mapZoom = 1;
-
-    window.addEventListener('DOMContentLoaded', () => {
-      renderPremierDots();
-      renderMapPins();
-      renderScheduleCards();
-      selectAttraction('wandering', false);
-    });
-
-    function openModal(id) {
-      document.getElementById(id).classList.add('open');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('open');
-    }
-
-    function renderPremierDots() {
-      const container = document.getElementById('premier-dots');
-      container.innerHTML = '';
-      for (let i = 0; i < 8; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'p-dot' + (i < selectedPremierIds.length ? ' filled' : '');
-        container.appendChild(dot);
-      }
-      document.getElementById('premier-counter').innerText = `${selectedPremierIds.length} / 8`;
-    }
-
-    function renderMapPins() {
-      const layer = document.getElementById('map-pins-layer');
-      layer.innerHTML = '';
-
-      attractionsData.forEach(item => {
-        const pin = document.createElement('div');
-        pin.className = 'map-pin';
-        pin.id = `pin-${item.id}`;
-        pin.style.left = `${item.x}%`;
-        pin.style.top = `${item.y}%`;
-
-        if (selectionMode === 'normal' && activeRideId === item.id) {
-          pin.classList.add('active');
-        }
-        const pIndex = selectedPremierIds.indexOf(item.id);
-        if (pIndex !== -1) {
-          pin.classList.add('premier-selected');
-        }
-
-        const displayNum = (selectionMode === 'premier' && pIndex !== -1) ? `#${pIndex + 1}` : item.num;
-
-        pin.innerHTML = `
-          <div class="pin-label">${item.num}. ${item.name.split(' ')[0]}</div>
-          <div class="pin-circle">${displayNum}</div>
-        `;
-
-        pin.onclick = (e) => {
-          e.stopPropagation();
-          handleAttractionClick(item.id);
-        };
-
-        layer.appendChild(pin);
-      });
-    }
-
-    function renderScheduleCards() {
-      const list = document.getElementById('schedule-list');
-      list.innerHTML = '';
-
-      const filtered = attractionsData.filter(item => {
-        if (currentFilter === 'premier') return item.isPremier;
-        if (currentFilter === 'selected') return selectedPremierIds.includes(item.id);
-        return true;
-      });
-
-      filtered.forEach(item => {
-        const isChecked = selectedPremierIds.includes(item.id);
-        const isActive = activeRideId === item.id;
-
-        const card = document.createElement('div');
-        card.className = `ride-card ${isActive ? 'active-card' : ''} ${isChecked ? 'checked-card' : ''}`;
-        card.id = `card-${item.id}`;
-
-        card.innerHTML = `
-          <div class="ride-checkbox" onclick="togglePremierCheck(event, '${item.id}')">
-            ${isChecked ? '✓' : ''}
-          </div>
-          <div class="ride-card-body">
-            <div class="ride-card-header">
-              <span class="ride-time">${item.time} • ลำดับที่ ${item.order}</span>
-              <span class="badge-type ${item.isPremier ? 'badge-premier' : 'badge-normal'}">
-                ${item.isPremier ? '⚡ ' + item.premierLabel : 'ต่อคิวปกติ'}
-              </span>
-            </div>
-            <div class="ride-name">${item.num}. ${item.name}</div>
-            <div class="ride-zone">โซน: ${item.zone}</div>
-            <div class="ride-desc">${item.tip}</div>
-          </div>
-        `;
-
-        card.onclick = () => {
-          handleAttractionClick(item.id);
-        };
-
-        list.appendChild(card);
-      });
-    }
-
-    function handleAttractionClick(rideId) {
-      if (selectionMode === 'premier') {
-        togglePremierSelection(rideId);
-      } else {
-        selectAttraction(rideId, true);
-      }
-    }
-
-    function selectAttraction(rideId, triggerAudio = true) {
-      if (activeRideId && activeRideId !== rideId) {
-        previousRideId = activeRideId;
-      }
-      activeRideId = rideId;
-
-      const item = attractionsData.find(a => a.id === rideId);
-      if (!item) return;
-
-      document.getElementById('info-time').innerText = `⏰ ควรเข้าเวลา ${item.time}`;
-      document.getElementById('info-tag').innerText = item.premierLabel;
-      document.getElementById('info-title').innerText = `${item.num}. ${item.name}`;
-      document.getElementById('info-route').innerText = `↗️ เส้นทางเดิน: ${item.route}`;
-      document.getElementById('info-tip').innerText = `💡 ${item.tip}`;
-
-      renderMapPins();
-      renderScheduleCards();
-      drawSingleDashedRoute(previousRideId, activeRideId);
-
-      if (triggerAudio) {
-        toggleSingleRideAudio(rideId);
-      }
-    }
-
-    function togglePremierCheck(event, rideId) {
-      event.stopPropagation();
-      togglePremierSelection(rideId);
-    }
-
-    function togglePremierSelection(rideId) {
-      const idx = selectedPremierIds.indexOf(rideId);
-      let isAdded = false;
-
-      if (idx !== -1) {
-        selectedPremierIds.splice(idx, 1);
-        isAdded = false;
-      } else {
-        if (selectedPremierIds.length >= 8) {
-          alert('คุณเลือกครบ 8 สิทธิ์ Premier Access แล้วครับ หากต้องการเปลี่ยนให้ติ๊กเครื่องเล่นเดิมออกก่อน');
-          return;
-        }
-        selectedPremierIds.push(rideId);
-        isAdded = true;
-      }
-
-      const item = attractionsData.find(a => a.id === rideId);
-      if (item) {
-        document.getElementById('info-time').innerText = `⏰ ควรเข้าเวลา ${item.time}`;
-        document.getElementById('info-tag').innerText = isAdded
-          ? `เลือกเข้าแผนแล้ว (ลำดับที่ ${selectedPremierIds.length}/8)`
-          : `นำออกจากแผนแล้ว`;
-        document.getElementById('info-title').innerText = `${item.num}. ${item.name}`;
-        document.getElementById('info-route').innerText = `↗️ เส้นทางเดิน: ${item.route}`;
-      }
-
-      renderPremierDots();
-      renderMapPins();
-      renderScheduleCards();
-      drawMultiDashedRoute(selectedPremierIds);
-      updateMultiRideAudio(rideId, isAdded);
-    }
-
-    function setSelectionMode(mode) {
-      selectionMode = mode;
-      const btnNormal = document.getElementById('btn-mode-normal');
-      const btnPremier = document.getElementById('btn-mode-premier');
-
-      if (mode === 'premier') {
-        btnPremier.classList.add('active-gold');
-        btnNormal.classList.remove('active-blue');
-        drawMultiDashedRoute(selectedPremierIds);
-      } else {
-        btnNormal.classList.add('active-blue');
-        btnPremier.classList.remove('active-gold');
-        drawSingleDashedRoute(previousRideId, activeRideId);
-      }
-      renderMapPins();
-    }
-
-    function drawSingleDashedRoute(fromId, toId) {
-      const svg = document.getElementById('route-svg');
-      svg.innerHTML = '';
-
-      if (!fromId || !toId || fromId === toId) return;
-      const fromItem = attractionsData.find(a => a.id === fromId);
-      const toItem = attractionsData.find(a => a.id === toId);
-      if (!fromItem || !toItem) return;
-
-      addArrowMarker(svg);
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', fromItem.x);
-      line.setAttribute('y1', fromItem.y);
-      line.setAttribute('x2', toItem.x);
-      line.setAttribute('y2', toItem.y);
-      line.setAttribute('class', 'route-line');
-      line.setAttribute('marker-end', 'url(#arrowhead)');
-      svg.appendChild(line);
-    }
-
-    function drawMultiDashedRoute(idList) {
-      const svg = document.getElementById('route-svg');
-      svg.innerHTML = '';
-      if (idList.length < 2) return;
-
-      addArrowMarker(svg);
-      for (let i = 0; i < idList.length - 1; i++) {
-        const fromItem = attractionsData.find(a => a.id === idList[i]);
-        const toItem = attractionsData.find(a => a.id === idList[i + 1]);
-        if (fromItem && toItem) {
-          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          line.setAttribute('x1', fromItem.x);
-          line.setAttribute('y1', fromItem.y);
-          line.setAttribute('x2', toItem.x);
-          line.setAttribute('y2', toItem.y);
-          line.setAttribute('class', 'route-line');
-          line.setAttribute('marker-end', 'url(#arrowhead)');
-          svg.appendChild(line);
-        }
-      }
-    }
-
-    function addArrowMarker(svg) {
-      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-      defs.innerHTML = `
-        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-          <polygon points="0 0, 6 3, 0 6" fill="#ef4444" />
-        </marker>
-      `;
-      svg.appendChild(defs);
-    }
-
-    function filterCards(type, btnEl) {
-      currentFilter = type;
-      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-      renderScheduleCards();
-    }
-
-    function changeZoom(delta) {
-      mapZoom = Math.min(2, Math.max(1, +(mapZoom + delta).toFixed(1)));
-      document.getElementById('map-canvas').style.transform = `scale(${mapZoom})`;
-      document.getElementById('zoom-level-text').innerText = `ซูม: ${Math.round(mapZoom * 100)}%`;
-    }
-
-    function resetZoom() {
-      mapZoom = 1;
-      document.getElementById('map-canvas').style.transform = 'scale(1)';
-      document.getElementById('zoom-level-text').innerText = 'ซูม: 100%';
-    }
-
-    function toggleSunlightMode() {
-      document.body.classList.toggle('sunlight-mode');
-    }
-
-    function highlightStartGate() {
-      selectAttraction('castle', true);
-    }
-
-    function resetPlan() {
-      selectedPremierIds = [];
-      previousRideId = null;
-      stopAudio();
-      activeSingleRide = null;
-      multiRideQueue = [];
-      renderPremierDots();
-      selectAttraction('wandering', false);
-      document.getElementById('route-svg').innerHTML = '';
-    }
-
-    // ==========================================
-    // 5. ระบบจัดการเสียงเพลงและเพลย์ลิสต์ YouTube (หลัก + สำรอง)
-    // ==========================================
-    let ytPlayer;
-    let isPlayerReady = false;
-    let isMuted = false;
-    let currentVolume = 70;
-
-    let currentAudioMode = 'single';
-    let activeSingleRide = null;
-    let multiRideQueue = [];
-    let currentPlayingKey = null;
-    let useBackupLink = false;
-
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('yt-hidden-player', {
-        height: '1',
-        width: '1',
-        playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0, 'rel': 0 },
-        events: {
-          'onReady': () => { isPlayerReady = true; ytPlayer.setVolume(currentVolume); },
-          'onStateChange': onPlayerStateChange,
-          'onError': onPlayerError
-        }
-      });
-    }
-
-    function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.ENDED) {
-        if (currentAudioMode === 'single' && activeSingleRide) {
-          ytPlayer.playVideo();
-        } else if (currentAudioMode === 'multi' && multiRideQueue.length > 0) {
-          playNextInQueue();
-        }
-      }
-    }
-
-    function onPlayerError() {
-      if (currentPlayingKey && !useBackupLink) {
-        useBackupLink = true;
-        loadAndPlayTrack(currentPlayingKey, true);
-      } else if (currentAudioMode === 'multi' && multiRideQueue.length > 1) {
-        playNextInQueue();
-      }
-    }
-
-    function loadAndPlayTrack(rideKey, isBackup = false) {
-      const track = attractionsData.find(a => a.id === rideKey);
-      if (!isPlayerReady || !track) return;
-
-      const videoId = isBackup ? track.backupYT : track.primaryYT;
-      currentPlayingKey = rideKey;
-      useBackupLink = isBackup;
-
-      ytPlayer.loadVideoById(videoId);
-      if (isMuted) {
-        ytPlayer.mute();
-      } else {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(currentVolume);
-      }
-
-      document.getElementById('current-track-title').innerText = track.name;
-      document.getElementById('audio-mode-badge').innerText =
-        currentAudioMode === 'multi' ? `สุ่มคิว (${multiRideQueue.length} เครื่องเล่น)` : 'กำลังเล่นเพลงธีม';
-    }
-
-    function stopAudio() {
-      if (isPlayerReady) ytPlayer.stopVideo();
-      currentPlayingKey = null;
-      document.getElementById('current-track-title').innerText = 'หยุดเล่นเพลงชั่วคราว';
-      document.getElementById('audio-mode-badge').innerText = 'ปิดเสียง';
-    }
-
-    function toggleSingleRideAudio(rideKey) {
-      currentAudioMode = 'single';
-      multiRideQueue = [];
-      document.getElementById('next-track-btn').style.display = 'none';
-
-      if (activeSingleRide === rideKey) {
-        activeSingleRide = null;
-        stopAudio();
-      } else {
-        activeSingleRide = rideKey;
-        loadAndPlayTrack(rideKey, false);
-      }
-    }
-
-    function updateMultiRideAudio(rideKey, isSelected) {
-      currentAudioMode = 'multi';
-      activeSingleRide = null;
-
-      if (isSelected) {
-        if (!multiRideQueue.includes(rideKey)) multiRideQueue.push(rideKey);
-      } else {
-        multiRideQueue = multiRideQueue.filter(k => k !== rideKey);
-      }
-
-      document.getElementById('next-track-btn').style.display = multiRideQueue.length > 1 ? 'flex' : 'none';
-
-      if (multiRideQueue.length === 0) {
-        stopAudio();
-        document.getElementById('current-track-title').innerText = 'เลือกเครื่องเล่นเพื่อเริ่มคิว';
-      } else if (!multiRideQueue.includes(currentPlayingKey)) {
-        playNextInQueue();
-      } else {
-        document.getElementById('audio-mode-badge').innerText = `สุ่มคิว (${multiRideQueue.length} เครื่องเล่น)`;
-      }
-    }
-
-    function playNextInQueue() {
-      if (multiRideQueue.length === 0) return;
-      if (multiRideQueue.length === 1) {
-        loadAndPlayTrack(multiRideQueue[0], false);
-        return;
-      }
-      const candidates = multiRideQueue.filter(k => k !== currentPlayingKey);
-      const randomKey = candidates[Math.floor(Math.random() * candidates.length)];
-      loadAndPlayTrack(randomKey, false);
-    }
-
-    function toggleMasterMute() {
-      isMuted = !isMuted;
-      const btn = document.getElementById('master-mute-btn');
-      if (isMuted) {
-        if (isPlayerReady) ytPlayer.mute();
-        btn.innerText = '🔇';
-        btn.classList.add('muted');
-      } else {
-        if (isPlayerReady) {
-          ytPlayer.unMute();
-          ytPlayer.setVolume(currentVolume);
-        }
-        btn.innerText = '🔊';
-        btn.classList.remove('muted');
-      }
-    }
-
-    function changeMasterVolume(val) {
-      currentVolume = parseInt(val, 10);
-      if (isPlayerReady) {
-        ytPlayer.setVolume(currentVolume);
-        if (currentVolume > 0 && isMuted) toggleMasterMute();
-      }
-    }
-  </script>
+  `).join('');
+}
+
+function selectStep(idx) {
+  const item = transitData[currentMode][idx];
+  document.querySelectorAll('.step-card').forEach((card, i) => {
+    card.classList.toggle('active', i === idx);
+  });
+
+  const canvas = document.getElementById('mapCanvas');
+  const ring = document.getElementById('spotlightRing');
+  canvas.style.transform = item.zoom;
+  ring.style.top = item.spot.top;
+  ring.style.left = item.spot.left;
+  ring.style.display = 'block';
+}
+
+function resetMapZoom() {
+  document.getElementById('mapCanvas').style.transform = 'scale(1) translate(0, 0)';
+  document.getElementById('spotlightRing').style.display = 'none';
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+}
+
+function toggleMapPins() {
+  pinsVisible = !pinsVisible;
+  document.getElementById('mapPinsLayer').classList.toggle('hidden', !pinsVisible);
+  document.getElementById('togglePinsBtn').classList.toggle('active', pinsVisible);
+}
+
+function toggleMapFullscreen() {
+  const vp = document.getElementById('mapViewport');
+  const btn = document.getElementById('toggleFsBtn');
+  const isFs = vp.classList.toggle('fullscreen');
+  btn.innerHTML = isFs ? '✕ ย่อกลับ' : '⛶ เต็มจอ';
+  if (isFs) resetMapZoom();
+}
+
+function showSubInfo(type) {
+  const box = document.getElementById('subInfoContent');
+  const contents = {
+    fareMtr: `
+      <h3 style="margin-top:0; color:#1d4ed8;">💰 ประมาณการค่า MTR (Jordan ➔ Disneyland)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ผู้ใหญ่ (บัตร Octopus / บัตรเครดิต):</b> ~21.5 HKD / คน<br>
+        • <b>เด็ก (อายุ 3-11 ปี ใช้บัตร Child Octopus):</b> ~10.5 HKD / คน<br>
+        • <b>รวม 5 ท่าน (ประมาณการ):</b> <b>~96 - 107 HKD</b> (~410 - 455 บาท)<br>
+        <small style="color:#64748b;">*เด็กอายุต่ำกว่า 3 ปีขึ้นฟรี / แตะบัตรเครดิต Visa/Mastercard ผ่านประตูได้เลย</small>
+      </p>`,
+    scheduleMtr: `
+      <h3 style="margin-top:0; color:#db2777;">⏱️ รอบรถไฟสายดิสนีย์ (Sunny Bay)</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ขบวนแรกจาก Sunny Bay:</b> 06:15 น.<br>
+        • <b>ความถี่ช่วงเช้า (07:30 - 09:30 น.):</b> รถออกทุกๆ <b>5 - 10 นาที</b><br>
+        • <b>คำแนะนำ Early Entry:</b> ควรออกจากโรงแรม B P International ไม่เกิน <b>07:45 น.</b> เพื่อไปถึงหน้าพาร์คก่อน 08:30 น.
+      </p>`,
+    checklistPark: `
+      <h3 style="margin-top:0; color:#0f172a;">🎟️ เช็กลิสต์ก่อนผ่านประตูเข้าพาร์ค</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        1. เปิดเตรียม <b>QR Code บัตรเข้าพาร์ค + บัตร Early Entry</b> ในแอป HKDL<br>
+        2. เตรียมพาสปอร์ตตัวจริง (เผื่อเจ้าหน้าที่สุ่มตรวจชื่อบนบัตร)<br>
+        3. ห้ามนำไม้เซลฟี่แบบยืดได้ และขวดแก้วเข้าสวนสนุก (น้ำดื่มขวดพลาสติกนำเข้าได้)
+      </p>`,
+    fareCar: `
+      <h3 style="margin-top:0; color:#15803d;">🧾 ประมาณการค่า UberXL / แท็กซี่</h3>
+      <p style="font-size:13px; color:#475569; text-align:left; line-height:1.6;">
+        • <b>ค่าโดยสาร UberXL (รถใหญ่ 6 ที่นั่ง):</b> ~230 - 270 HKD<br>
+        • <b>ค่าทางด่วนอุโมงค์ (Western Harbour):</b> รวมในแอปแล้ว<br>
+        • <b>เฉลี่ยตกคนละ (หาร 5 ท่าน):</b> <b>~48 - 54 HKD</b> (~205 - 230 บาท/คน)<br>
+        <small style="color:#16a34a;">*คุ้มมากสำหรับ 5 คน ไม่ต้องเดินเปลี่ยนสายและถึงหน้าประตูเลย</small>
+      </p>`,
+    chineseSign: `
+      <div style="padding:10px 0;">
+        <div style="font-size:12px; color:#64748b; margin-bottom:6px;">ยื่นหน้าจอนี้ให้คนขับแท็กซี่ดูได้เลยครับ</div>
+        <div style="font-size:32px; font-weight:800; color:#0f172a; letter-spacing:2px; margin:10px 0;">香港迪士尼樂園</div>
+        <div style="font-size:16px; font-weight:700; color:#2563eb;">Hong Kong Disneyland</div>
+        <div style="font-size:12px; color:#64748b; margin-top:6px;">(จุดส่งผู้โดยสาร / Drop-off Area)</div>
+      </div>`
+  };
+  box.innerHTML = contents[type] || '';
+  document.getElementById('subInfoOverlay').classList.add('active');
+}
+
+function closeSubInfo() {
+  document.getElementById('subInfoOverlay').classList.remove('active');
+}
+/* === [END: JS แผนที่เดินทาง 3D ใหม่] === */
+    
+</script>
 </body>
 </html>
