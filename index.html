@@ -884,6 +884,35 @@
     border-color: #0284c7;
   }
 
+
+  /* Toast Notification */
+  .chat-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(15, 23, 42, 0.95);
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 24px;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.18);
+    z-index: 100005;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: 90%;
+    box-sizing: border-box;
+  }
+  .chat-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
 </style>
 </head>
 <body>
@@ -1597,7 +1626,7 @@
     </div>
   </div>
 
-  <!-- =====================================================================
+    <!-- =====================================================================
        MODAL: SMART TRIP ASSISTANT (FLOATING CHAT BOT - NO API KEY)
        ===================================================================== -->
   <div id="smartChatDrawer" class="smart-chat-modal">
@@ -1620,20 +1649,29 @@
         </div>
       </div>
 
-      <!-- Quick Prompt Chips -->
+      <!-- ขั้นที่ 1: Quick Prompt Chips (ใช้งานในแอปทันที) -->
       <div style="padding:6px 10px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; gap:6px; overflow-x:auto; white-space:nowrap;">
         <button onclick="askBot('disney')" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🏰 ไป Disneyland</button>
         <button onclick="askBot('lym')" style="background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🦞 ไปเล่ยหยู่มุน</button>
         <button onclick="askBot('np')" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🚠 ไปนองปิง 360</button>
-        <button onclick="askBot('luggage')" style="background:#fdf4ff; color:#86198f; border:1px solid #f5d0fe; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🧳 ฝากกระเป๋า 28"</button>
+        <button onclick="askBot('luggage')" style="background:#fdf4ff; color:#86198f; border:1px solid #f5d0fe; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🧳 จุดฝากกระเป๋า</button>
         <button onclick="askBot('airport')" style="background:#f0fdfa; color:#0f766e; border:1px solid #99f6e4; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">✈️ ไปสนามบิน</button>
         <button onclick="askBot('taxi')" style="background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🚕 แท็กซี่ 5 ท่าน</button>
       </div>
 
-      <!-- Input box -->
+      <!-- ขั้นที่ 1: ช่องพิมพ์ถาม-ตอบกับ Offline Smart Bot -->
       <div style="padding:8px 12px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; gap:6px; align-items:center;">
         <input id="chatTextInput" type="text" placeholder="พิมพ์ถามเส้นทาง เช่น ไปดิสนีย์ยังไง, ฝากกระเป๋า..." onkeydown="if(event.key==='Enter') sendSmartQuery()" style="flex:1; padding:8px 12px; border-radius:10px; border:1.5px solid #cbd5e1; font-size:12px; outline:none;">
         <button onclick="sendSmartQuery()" style="background:#0284c7; color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:bold; font-size:12px; cursor:pointer;">ส่ง</button>
+      </div>
+
+      <!-- ขั้นที่ 2: ทางเลือกถาม AI ตัวเต็ม (วางใต้ช่องพิมพ์ปุ่มเดียว เรียบง่ายไม่รก) -->
+      <div style="padding:6px 12px 10px; background:#f8fafc; border-top:1px dashed #cbd5e1; display:flex; justify-content:center;">
+        <button onclick="askGeminiTrip()" style="width:100%; background:linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%); border:1.5px solid #06b6d4; color:#0891b2; font-weight:700; font-size:11.5px; padding:7px 12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:0.2s;">
+          <span>✨</span>
+          <span>ถามเรื่องอื่นต่อใน Gem ทริปนี้</span>
+          <span style="font-size:10px; color:#0284c7; background:#e0f2fe; padding:1px 6px; border-radius:6px; font-weight:800;">เปิด Gem</span>
+        </button>
       </div>
     </div>
   </div>
@@ -3066,13 +3104,19 @@ function closeEmergencyModal() {
 /* =====================================================================
    FLOATING SMART TRIP ASSISTANT (CHAT BOT - NO API KEY)
    ===================================================================== */
+// [ใส่ลิงก์ GEM ของคุณตรงนี้] หากยังไม่ได้ใส่ให้ใช้ "https://gemini.google.com/app"
+const GEM_TRIP_URL = "https://gemini.google.com/app";
+let lastUserQuestion = "";
+
 function toggleSmartChat() {
   document.getElementById('smartChatDrawer').classList.toggle('active');
 }
 
 function askBot(topic) {
   const box = document.getElementById('chatMessagesBox');
+  let qText = "";
   if (topic === 'disney') {
+    qText = "ไป Disneyland ต่อรถไฟ MTR ยังไง?";
     box.innerHTML += `
       <div class="chat-bubble-user">🏰 ไป Disneyland ต่อรถไฟ MTR ยังไง?</div>
       <div class="chat-bubble-ai">
@@ -3084,6 +3128,7 @@ function askBot(topic) {
         <small style="color:#64748b;">*รวม 5 ท่าน ~96-107 HKD หรือเรียก UberXL ~230-270 HKD</small>
       </div>`;
   } else if (topic === 'lym') {
+    qText = "ไปเล่ยหยู่มุน นั่ง MTR กี่สถานี?";
     box.innerHTML += `
       <div class="chat-bubble-user">🦞 ไปเล่ยหยู่มุน นั่ง MTR กี่สถานี?</div>
       <div class="chat-bubble-ai">
@@ -3095,6 +3140,7 @@ function askBot(topic) {
         <small style="color:#16a34a;">*แนะนำ: 5 ท่านเรียก UberXL นั่งรวดเดียว 35 นาที ไม่ต้องเปลี่ยนรถไฟครับ</small>
       </div>`;
   } else if (topic === 'np') {
+    qText = "ไปนองปิง 360 เดินทางยังไง?";
     box.innerHTML += `
       <div class="chat-bubble-user">🚠 ไปนองปิง 360 เดินทางยังไง?</div>
       <div class="chat-bubble-ai">
@@ -3105,14 +3151,16 @@ function askBot(topic) {
         <small style="color:#64748b;">*ควรซื้อ E-Voucher ล่วงหน้าเพื่อเข้าช่อง Voucher Redemption ไม่ต้องต่อแถวซื้อตั๋วสด</small>
       </div>`;
   } else if (topic === 'luggage') {
+    qText = "กระเป๋าเดินทาง 28 นิ้ว ฝากไว้ที่ไหน?";
     box.innerHTML += `
-      <div class="chat-bubble-user">🧳 กระเป๋าเดินทาง 28" ฝากไว้ที่ไหน?</div>
+      <div class="chat-bubble-user">🧳 จุดฝากกระเป๋าเดินทาง 28 นิ้วที่ Tung Chung?</div>
       <div class="chat-bubble-ai">
         <div style="font-weight:bold; color:#7e22ce; margin-bottom:4px;">🧳 จุดฝากกระเป๋าเดินทางที่ Tung Chung:</div>
         • <b>ห้าง Citygate Outlets (ชั้น B2 และ B3):</b> มีตู้ล็อกเกอร์ขนาดใหญ่พิเศษ (Large Locker) จ่ายด้วยบัตร Octopus คิดค่าบริการราย 2 ชม. (~40-60 HKD)<br>
         • <b>เคาน์เตอร์สถานีกระเช้า Tung Chung Terminal:</b> ฝากกับเจ้าหน้าที่ได้ทุกขนาดใบละ ~100-120 HKD/วัน สะดวกมากรับกระเป๋าตอนลงกระเช้าได้เลย
       </div>`;
   } else if (topic === 'airport') {
+    qText = "จากนองปิง/Tung Chung ไปสนามบินยังไง?";
     box.innerHTML += `
       <div class="chat-bubble-user">✈️ จากนองปิง/Tung Chung ไปสนามบินยังไง?</div>
       <div class="chat-bubble-ai">
@@ -3121,6 +3169,7 @@ function askBot(topic) {
         • <b>รถบัสสาย S1:</b> จอดหน้าสถานี Tung Chung วิ่งตรงถึง Terminal 1 ใน 10 นาที (คนละ 3.7 HKD)
       </div>`;
   } else if (topic === 'taxi') {
+    qText = "แท็กซี่ฮ่องกง 5 คนนั่งยังไง?";
     box.innerHTML += `
       <div class="chat-bubble-user">🚕 แท็กซี่ฮ่องกง 5 คนนั่งยังไง?</div>
       <div class="chat-bubble-ai">
@@ -3131,6 +3180,7 @@ function askBot(topic) {
         • หรือกดเรียก <b>UberXL (6 ที่นั่ง)</b> สะดวกที่สุด นั่งได้ครบ 5 คนพร้อมกระเป๋า
       </div>`;
   }
+  if (qText) lastUserQuestion = qText;
   box.scrollTop = box.scrollHeight;
 }
 
@@ -3138,6 +3188,7 @@ function sendSmartQuery() {
   const input = document.getElementById('chatTextInput');
   const q = input.value.trim();
   if (!q) return;
+  lastUserQuestion = q;
   const box = document.getElementById('chatMessagesBox');
   box.innerHTML += `<div class="chat-bubble-user">${q}</div>`;
   input.value = '';
@@ -3167,6 +3218,64 @@ function sendSmartQuery() {
 
   box.innerHTML += `<div class="chat-bubble-ai">${ans}</div>`;
   box.scrollTop = box.scrollHeight;
+}
+
+function askGeminiTrip() {
+  const input = document.getElementById('chatTextInput');
+  let currentText = input ? input.value.trim() : '';
+  let question = currentText || lastUserQuestion || 'ขอคำแนะนำการท่องเที่ยวฮ่องกง';
+
+  const promptWithContext = `[ทริปฮ่องกง 1-3 ม.ค. 2027 | พัก B P International (Jordan) | ครอบครัว 5 ท่าน] คำถาม: ${question}`;
+
+  // Copy prompt to clipboard
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(promptWithContext).catch(() => {
+      fallbackCopyText(promptWithContext);
+    });
+  } else {
+    fallbackCopyText(promptWithContext);
+  }
+
+  // Show Toast
+  showChatToast("📋 คัดลอกคำถามแล้ว! กำลังเปิด Gem — กด 'วาง (Paste)' ในช่องแชทได้เลย");
+
+  // Open window with target name 'geminiTripTab'
+  setTimeout(() => {
+    window.open(GEM_TRIP_URL, 'geminiTripTab', 'noopener');
+  }, 400);
+}
+
+function fallbackCopyText(textToCopy) {
+  const ta = document.createElement('textarea');
+  ta.value = textToCopy;
+  ta.style.position = 'fixed';
+  ta.style.top = '0';
+  ta.style.left = '0';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('Fallback copy error:', err);
+  }
+  document.body.removeChild(ta);
+}
+
+function showChatToast(msg) {
+  let toast = document.getElementById('chatToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'chatToast';
+    toast.className = 'chat-toast';
+    document.body.appendChild(toast);
+  }
+  toast.innerText = msg;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
 }
 
 /* =====================================================================
