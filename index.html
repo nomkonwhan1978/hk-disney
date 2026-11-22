@@ -989,7 +989,7 @@
     <!-- 6 Main Feature Cards (2 Columns) -->
     <div class="dashboard-grid">
       
-      <!-- Card 1: Disneyland Guide (Featured Hero Card) -->
+      <!-- Card 1: Disneyland Guide (Featured Top Hero Card - Span 2) -->
       <div class="dashboard-card" onclick="openParkGuide()" style="grid-column: span 2; background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%); border-color: #fde047;">
         <div style="display:flex; align-items:center; gap:12px; width:100%; text-align:left;">
           <div class="card-icon" style="margin:0; font-size:2.4rem;">🏰</div>
@@ -1004,36 +1004,51 @@
         </div>
       </div>
 
-      <!-- Card 2: Transit Routes (Default to B P -> Disney) -->
+      <!-- Card 2: Transit Routes (Span 1) -->
       <div class="dashboard-card" onclick="openTransitModal()">
         <div class="card-icon">🚆🚕</div>
         <div class="card-title">Transit Routes</div>
-        <div class="card-desc">1) B P ไป Disney (ค่าเริ่มต้น)<br>2) ไปเล่ยหยู่มุน<br>3) นองปิง 360 & จุดฝากกระเป๋า</div>
-        <div class="card-action-link">[เปิดเส้นทาง Disney ➔]</div>
+        <div class="card-desc">1) B P ไป Disney<br>2) ไปเล่ยหยู่มุน<br>3) นองปิง 360 & ฝากกระเป๋า</div>
+        <div class="card-action-link">[เปิดเส้นทาง ➔]</div>
       </div>
 
-      <!-- Card 3: Current Weather (Real-time & 14 Days) -->
+      <!-- Card 3: วัดดัง & มูเตลู (Span 1 - Temples Guide) -->
+      <div class="dashboard-card" onclick="openTempleModal()" style="border-color:#fed7aa; background:linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);">
+        <div class="card-icon">🛕🧧</div>
+        <div class="card-title" style="color:#c2410c;">วัดดัง & ไหว้พระมูเตลู</div>
+        <div class="card-desc">5 วัดฮิตขอพร • ยืมเงินฮองฮำ ผูกด้ายแดง กังหันแชกงหมิว</div>
+        <div class="card-action-link" style="color:#ea580c;">[รูปจริง & แผนที่ Maps ➔]</div>
+      </div>
+
+      <!-- Card 4: Current Weather (Span 1) -->
       <div class="dashboard-card" onclick="openWeatherModal()">
         <div class="card-icon">⛅🧣</div>
         <div class="card-title">Current Weather</div>
-        <div class="card-desc">อากาศสดวันนี้ + พยากรณ์ 14 วันล่วงหน้า & ไกด์แต่งกาย</div>
+        <div class="card-desc">อากาศสด 5 พิกัด + พยากรณ์ 14 วันล่วงหน้า & ไกด์แต่งกาย</div>
         <div class="card-action-link">[เช็กอากาศ & แนวโน้ม]</div>
       </div>
 
-      <!-- Card 4: Convert Currency (Live Rate & Calculator) -->
+      <!-- Card 5: Convert Currency (Span 1) -->
       <div class="dashboard-card" onclick="openCurrencyModal()">
         <div class="card-icon">💱💵</div>
         <div class="card-title">Convert Currency</div>
-        <div class="card-desc">เรตสดอัปเดตวันนี้ คำนวณไว แตะแก้เรตเองได้ตามจริง</div>
+        <div class="card-desc">เรตสดอัปเดตวันนี้ + กราฟย้อนหลัง 1-12M & เครื่องคิดเลข</div>
         <div class="card-action-link">[เครื่องคิดเลขด่วน]</div>
       </div>
 
-      <!-- Card 5: Emergency Info -->
-      <div class="dashboard-card" onclick="openEmergencyModal()">
-        <div class="card-icon">🚨📞</div>
-        <div class="card-title">Emergency info</div>
-        <div class="card-desc">ตำรวจ/พยาบาล 999 • นามบัตรจีนโรงแรม B P ยื่นให้แท็กซี่</div>
-        <div class="card-action-link">[เบอร์ฉุกเฉิน & ป้ายจีน]</div>
+      <!-- Card 6: Emergency Info (Full Width Bottom Card - Span 2) -->
+      <div class="dashboard-card" onclick="openEmergencyModal()" style="grid-column: span 2; background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%); border-color: #fecaca;">
+        <div style="display:flex; align-items:center; gap:12px; width:100%; text-align:left;">
+          <div class="card-icon" style="margin:0; font-size:2.2rem;">🚨📞</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="card-title" style="font-size:0.92rem; color:#b91c1c; margin:0;">Emergency info & ป้ายจีนแท็กซี่</div>
+              <span style="font-size:10px; font-weight:700; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:10px;">SOS 999</span>
+            </div>
+            <div class="card-desc" style="margin-top:2px;">ตำรวจ/พยาบาล 999 • นามบัตรจีนโรงแรม B P International ยื่นให้แท็กซี่พากลับ</div>
+          </div>
+          <span style="color:#dc2626; font-size:1.1rem; font-weight:800;">➔</span>
+        </div>
       </div>
 
     </div>
@@ -1842,7 +1857,255 @@
     </div>
   </div>
 
-<div id="emergencyModal" class="gen-modal" onclick="closeEmergencyModal()">
+  <!-- =====================================================================
+       FULLSCREEN SCREEN: 5 POPULAR HONG KONG TEMPLES (REAL PHOTOS & MAPS)
+       ===================================================================== -->
+  <div id="templeModal" class="fullscreen-view">
+    <!-- Sticky App Bar -->
+    <div class="fullscreen-header">
+      <button class="fullscreen-back-btn" onclick="closeTempleModal()">
+        <span>←</span> <span>กลับหน้าหลัก</span>
+      </button>
+      <div class="fullscreen-title">🛕 5 วัดดังฮ่องกง & ไหว้พระมูเตลู</div>
+      <div style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:12px;">
+        🧧 ทริปปีใหม่ 2027
+      </div>
+    </div>
+
+    <div class="fullscreen-container">
+      
+      <!-- Itinerary Suggestion Banner -->
+      <div style="background:linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:14px; box-shadow:0 8px 20px rgba(194, 65, 12, 0.25);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:13.5px; font-weight:900; letter-spacing:0.3px;">💡 แนะนำการจัดเวลาไหว้พระสำหรับทริป 5 ท่าน:</div>
+          <span style="font-size:24px;">🙏</span>
+        </div>
+        <div style="font-size:12px; line-height:1.6; opacity:0.95; display:flex; flex-direction:column; gap:4px;">
+          <div>• <b>1 ม.ค. (วันถึง):</b> หลังเช็กอินโรงแรม B P International บ่ายๆ แนะนำไป <b>วัดเจ้าแม่กวนอิม ฮองฮำ</b> (นั่งแท็กซี่เพียง 8 นาที ~35 HKD) หรือ <b>วัดหวังต้าเซียน</b> ก่อนกลับมาเดินตลาดกลางคืน</div>
+          <div>• <b>2 ม.ค. (วัน Disney):</b> ท่องเที่ยวและเล่นเครื่องเล่นในสวนสนุกตลอดทั้งวัน</div>
+          <div>• <b>3 ม.ค. (วันกลับ):</b> ขึ้นกระเช้านองปิง ไหว้ <b>พระใหญ่เทียนถาน & วัดโป่หลิน</b> บนยอดเขาเกาะลันเตา ก่อนเดินทางไปสนามบินฮ่องกง</div>
+        </div>
+      </div>
+
+      <!-- Quick Temple Filter Chips -->
+      <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; -webkit-overflow-scrolling:touch;">
+        <button class="weather-chip active" onclick="filterTemples('all')">ทั้งหมด (5 วัด)</button>
+        <button class="weather-chip" onclick="filterTemples('hunghom')">1. วัดฮองฮำ</button>
+        <button class="weather-chip" onclick="filterTemples('wts')">2. หวังต้าเซียน</button>
+        <button class="weather-chip" onclick="filterTemples('chekung')">3. แชกงหมิว</button>
+        <button class="weather-chip" onclick="filterTemples('repulse')">4. รีพัลส์เบย์</button>
+        <button class="weather-chip" onclick="filterTemples('polin')">5. พระใหญ่นองปิง</button>
+      </div>
+
+      <!-- TEMPLE 1: วัดเจ้าแม่กวนอิม ฮองฮำ -->
+      <div id="temple-card-hunghom" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-hunghom.jpg" alt="วัดเจ้าแม่กวนอิม ฮองฮำ" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.82); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            💰 อันดับ 1 เรื่องเงินทอง โชคลาภ & ปิดหนี้
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#10b981; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            ใกล้โรงแรม B P (8 นาที)
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">1. วัดเจ้าแม่กวนอิม ฮองฮำ (Hung Hom)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">紅磡觀音廟 • เก่าแก่ที่สุดแห่งหนึ่งในฮ่องกง (สร้างปี 1873)</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 17:45 น. (เปิดทุกวัน)</div>
+            <div>🚇 <b>การเดินทาง:</b><br>แท็กซี่ 8 นาที (~35 HKD) หรือ MTR Whampoa Exit B</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> โด่งดังระดับโลกเรื่อง <b>"พิธียืมเงินเจ้าแม่กวนอิม (Kwun Yam Treasury Opening)"</b> ขอพรเรื่องความมั่งคั่ง โชคลาภ ธุรกิจราบรื่น ปิดยอดขาย และขอความคุ้มครองให้แคล้วคลาดปลอดภัย<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. ช่วงบ่าย (14:30 - 16:30 น.)</b> หลังเช็กอินโรงแรม B P International แล้วนั่งแท็กซี่มาได้สะดวกรวดเร็วมาก
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hung+Hom+Kwun+Yam+Temple+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeHunghomSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#ea580c;" onclick="showSubInfo('templeHunghomRitual')">
+              🙏 ขั้นตอนและเคล็ดลับการยืมเงินเจ้าแม่กวนอิม
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 2: วัดหวังต้าเซียน -->
+      <div id="temple-card-wts" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-wts.jpg" alt="วัดหวังต้าเซียน" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.82); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            ❤️ อันดับ 1 ขอพรความรัก & สุขภาพ
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#0284c7; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            MTR ถึงหน้าวัด (Exit B2)
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">2. วัดหวังต้าเซียน (Wong Tai Sin Temple)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">嗇色園黃大仙祠 • ศูนย์รวมศรัทธา 3 ศาสนา (เต๋า-พุทธ-ขงจื๊อ)</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>07:30 – 16:30 น. (เปิดทุกวัน)</div>
+            <div>🚇 <b>การเดินทาง:</b><br>MTR สายสีเขียว สถานี Wong Tai Sin (Exit B2)</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fff1f2; border-left:3.5px solid #e11d48; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> โด่งดังเรื่อง <b>"เทพจันทรา (Yue Lao)"</b> ผูกด้ายแดงขอเนื้อคู่หรือเสริมความรักให้มั่นคง และขอพรสุขภาพจาก <b>"เทพเจ้าหวังต้าเซียน"</b> ให้หายจากโรคภัยไข้เจ็บ<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. ช่วงเย็น</b> หรือวันที่ 3 ม.ค. ช่วงเช้า นั่งรถไฟ MTR จากสถานี Jordan ไปต่อสายสีเขียวสะดวกมาก
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Wong+Tai+Sin+Temple+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeWtsSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#e11d48;" onclick="showSubInfo('templeWtsRitual')">
+              🙏 วิธีทำมือล็อกด้ายแดง & ขอพรเทพจันทรา
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 3: วัดแชกงหมิว / วัดกังหัน -->
+      <div id="temple-card-chekung" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-chekung.jpg" alt="วัดแชกงหมิว" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.82); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            🌪️ กังหันทองคำ 4 ใบพัด • พัดปัดเป่าสิ่งไม่ดี
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#f59e0b; color:#000; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            Sha Tin / ซาถิ่น
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">3. วัดแชกงหมิว / วัดกังหัน (Che Kung Temple)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">沙田車公廟 • วัดท่านแม่ทัพผู้เกรียงไกรแห่งราชวงศ์ซ่ง</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>07:00 – 18:00 น. (เปิดทุกวัน)</div>
+            <div>🚇 <b>การเดินทาง:</b><br>MTR Che Kung Temple (Exit B) หรือ Tai Wai Station</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fefce8; border-left:3.5px solid #ca8a04; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> การหมุน <b>"กังหันนำโชคทองเหลือง 3 รอบ"</b> เพื่อพัดพาสิ่งอัปมงคลออกไปและดึงดูดโชคลาภ เงินทอง เดินทางปลอดภัย และสุขภาพแข็งแรง<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. (วันขึ้นปีใหม่)</b> คนฮ่องกงนิยมมาไหว้รับพลังบวกต้นปี
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Che+Kung+Temple+Sha+Tin+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeChekungSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#ca8a04;" onclick="showSubInfo('templeChekungRitual')">
+              🙏 เคล็ดลับหมุนกังหัน 4 ใบพัด & ตีกลอง 3 ครั้ง
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 4: วัดเจ้าแม่กวนอิม รีพัลส์เบย์ -->
+      <div id="temple-card-repulse" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-repulse.jpg" alt="วัดเจ้าแม่กวนอิม รีพัลส์เบย์" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.82); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            🌊 ข้ามสะพานต่ออายุ • เทพเจ้าไฉ่ซิงเอี้ยริมหาด
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#0ea5e9; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            Repulse Bay Beach
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">4. วัดเจ้าแม่กวนอิม รีพัลส์เบย์ (Repulse Bay)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">淺水灣觀音廟 • ริมหาดทรายชื่อดังฝั่งเกาะฮ่องกงตอนใต้</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 18:00 น. (เปิดทุกวัน)</div>
+            <div>🚌 <b>การเดินทาง:</b><br>รถบัสสาย 6, 6X, 260 หรือแท็กซี่ข้ามเกาะ ~20 นาที</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#f0fdf4; border-left:3.5px solid #16a34a; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> <b>"สะพานต่ออายุ (Longevity Bridge)"</b> เชื่อว่าก้าวข้าม 1 ครั้งอายุยืนขึ้น 3 วัน (ห้ามเดินย้อนกลับเด็ดขาด), ลูบเคราและถุงทอง <b>"เทพเจ้าไฉ่ซิงเอี้ย"</b> เพื่อเรียกทรัพย์ และโยนเหรียญเข้าปากปลาทองเสี่ยงทาย<br>
+            • <b>วันแนะนำ:</b> ครึ่งวันเช้า บรรยากาศริมชายหาดรับลมทะเลสดชื่นมาก
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Kwun+Yam+Shrine+Repulse+Bay+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeRepulseSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#16a34a;" onclick="showSubInfo('templeRepulseRitual')">
+              🙏 เคล็ดลับข้ามสะพานต่ออายุ & ลูบเคราไฉ่ซิงเอี้ย
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 5: วัดพระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง) -->
+      <div id="temple-card-polin" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-polin.jpg" alt="พระใหญ่เทียนถานและวัดโป่หลิน" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.82); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            🚠 ยอดเขานองปิง 520m • บันได 268 ขั้น
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#9333ea; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            อยู่ในแผนวันที่ 3 แล้ว
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">5. พระใหญ่เทียนถาน & วัดโป่หลิน (Ngong Ping)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">大嶼山天壇大佛 寶蓮禪寺 • ศูนย์รวมจิตวิญญาณแห่งเกาะลันเตา</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>10:00 – 17:30 น. (เปิดทุกวัน)</div>
+            <div>🚠 <b>การเดินทาง:</b><br>กระเช้า Ngong Ping 360 จาก Tung Chung (~25 นาที)</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#faf5ff; border-left:3.5px solid #9333ea; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> องค์พระพุทธรูปทองสัมฤทธิ์ขนาดใหญ่ประทับบนดอกบัว เสริมบารมี ความเจริญรุ่งเรือง และความสงบในจิตใจ<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค. (วันกลับ)</b> ตรงตามแผนการเดินทางไปนองปิงและจุดฝากกระเป๋าของคุณ 100%
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Tian+Tan+Buddha+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templePolinSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#9333ea;" onclick="closeTempleModal(); openNpModal();">
+              🚠 เปิดระบบนำทาง & ฝากกระเป๋านองปิง 360
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="emergencyModal" class="gen-modal" onclick="closeEmergencyModal()">
     <div class="gen-sheet" onclick="event.stopPropagation()">
       <div class="gen-header">
         <h3>🚨 ข้อมูลฉุกเฉิน & ป้ายจีนแท็กซี่</h3>
@@ -3987,6 +4250,123 @@ function toggleNpFullscreen() {
 function showSubInfo(type) {
   const box = document.getElementById('subInfoContent');
   const contents = {
+    /* ข้อมูลป้ายภาษาจีนและขั้นตอนไหว้ของ 5 วัดดัง */
+    templeHunghomSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#ffedd5; color:#c2410c; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#ea580c; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดฮองฮำ):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#c2410c; font-size:26px;">紅磡 觀音廟</span><br>
+            <span style="font-size:15px; color:#64748b;">(差館里 / Station Lane, Hung Hom)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: หุ่งฮัม กวอนย้ำหมิ่ว (ชาตว้นเหลย)<br>
+          • <b>ระยะทาง:</b> นั่งจากโรงแรม B P International เพียง ~8 นาที ค่ารถ ~35-40 HKD
+        </div>
+      </div>`,
+    templeHunghomRitual: `
+      <h3 style="margin-top:0; color:#c2410c;">💰 พิธียืมเงินเจ้าแม่กวนอิม ฮองฮำ</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>ซื้อชุดไหว้ยืมเงิน:</b> ซื้อชุดกระดาษเงินกระดาษทองและธูปที่ร้านด้านในวัด (~30-50 HKD)<br>
+        2. <b>จุดธูปอธิษฐาน:</b> จุดธูปบอกชื่อ นามสกุล วันเดือนปีเกิด ที่อยู่ และจำนวนเงินที่ตั้งใจจะนำไปทำธุรกิจหรือหมุนเวียน (ขอให้เจาะจง ไม่โลภเกินจริง)<br>
+        3. <b>รับซองอั่งเปายืมเงิน:</b> เจ้าหน้าที่จะให้หยิบซองอั่งเปา (ในซองจะมีตัวเลขวงเงินที่เจ้าแม่ประทานให้ เช่น 100 ล้าน 800 ล้าน)<br>
+        4. <b>เก็บรักษาซอง:</b> เก็บซองอั่งเปาไว้ในกระเป๋าสตางค์หรือโต๊ะทำงานเพื่อเสริมมงคลตลอดปี และเมื่อมีโอกาสกลับมาฮ่องกงให้มาไหว้คืนเงินท่าน
+      </div>`,
+    templeWtsSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#fee2e2; color:#b91c1c; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#fff1f2; border:1.5px solid #fecdd3; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#e11d48; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดหวังต้าเซียน):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#e11d48; font-size:26px;">黃大仙祠</span><br>
+            <span style="font-size:15px; color:#64748b;">(九龍黃大仙竹園村2號 / Wong Tai Sin)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: หว่องต่ายซิ้นฉี่<br>
+          • <b>หรือนั่ง MTR:</b> ลงสถานี Wong Tai Sin ทางออก Exit B2 ถึงหน้าวัดเลย
+        </div>
+      </div>`,
+    templeWtsRitual: `
+      <h3 style="margin-top:0; color:#e11d48;">❤️ วิธีทำมือล็อกด้ายแดง & ขอพรเทพจันทรา</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>รับด้ายแดงฟรี:</b> รับด้ายแดงจากจุดบริการหน้าวิหารเทพจันทรา<br>
+        2. <b>ทำมือล็อกด้ายแดง (มุทรา):</b> กุมมือประสานนิ้วกลางและนิ้วนางเข้าหากัน ใช้นิ้วโป้งหนีบปลายด้ายแดงไว้ (ห้ามทำด้ายหลุดมือจนกว่าจะผูกเสร็จ)<br>
+        3. <b>อธิษฐานต่อหน้าเทพจันทรา:</b> บอกชื่อ นามสกุล และสเปกคนรักที่ปรารถนาอย่างชัดเจน<br>
+        4. <b>เดินไปผูกที่รูปปั้น:</b> สำหรับผู้หญิงให้เดินไปคำนับที่รูปปั้นเจ้าสาว 3 ครั้ง แล้วนำด้ายแดงไปผูกที่เชือกของรูปปั้นเจ้าบ่าว (ผู้ชายทำสลับกัน) ลูบเท้าเจ้าบ่าว/เจ้าสาว 3 ครั้ง
+      </div>`,
+    templeChekungSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#fef3c7; color:#92400e; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#fefce8; border:1.5px solid #fef08a; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#ca8a04; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดกังหัน):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#ca8a04; font-size:26px;">沙田 車公廟</span><br>
+            <span style="font-size:15px; color:#64748b;">(車公廟路 / Che Kung Miu Rd, Sha Tin)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: ซ้าถิ่น แชก๊งหมิ่ว<br>
+          • <b>เวลาเดินทาง:</b> นั่งจาก B P Hotel ประมาณ 15 นาที (~80 HKD)
+        </div>
+      </div>`,
+    templeChekungRitual: `
+      <h3 style="margin-top:0; color:#ca8a04;">🌪️ เคล็ดลับหมุนกังหันทองคำ 3 รอบ & ตีกลอง</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        • <b>กังหันนำโชค 4 ใบพัด:</b> ใบที่ 1 เดินทางปลอดภัย, ใบที่ 2 สุขภาพแข็งแรง, ใบที่ 3 โชคลาภเงินทอง, ใบที่ 4 สมความปรารถนา<br>
+        • <b>วิธีหมุน:</b> ใช้นิ้วชี้หมุนกังหันเบาๆ 3 รอบ (หากปีที่ผ่านมาไม่ค่อยราบรื่นให้หมุน <i>ตามเข็มนาฬิกา</i> เพื่อปัดสิ่งไม่ดีออก / หากปีที่ผ่านมาดีอยู่แล้วให้หมุน <i>ทวนเข็มนาฬิกา</i> เพื่อรักษาความเฮงไว้)<br>
+        • <b>ตีกลอง 3 ครั้ง:</b> เมื่อหมุนเสร็จให้เดินไปตีกลอง 3 ครั้งเพื่อให้พรนั้นดังก้องกังวานไปถึงสวรรค์
+      </div>`,
+    templeRepulseSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#e0f2fe; color:#0369a1; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#0284c7; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปรีพัลส์เบย์):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#0284c7; font-size:26px;">淺水灣 觀音廟及天后廟</span><br>
+            <span style="font-size:15px; color:#64748b;">(海灘道 / Beach Road, Repulse Bay)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: ฉีนโสยวาน กวอนย้ำหมิ่ว ขับ ทิ้นเหาหมิ่ว
+        </div>
+      </div>`,
+    templeRepulseRitual: `
+      <h3 style="margin-top:0; color:#16a34a;">🌊 เคล็ดลับข้ามสะพานต่ออายุ & ลูบเคราไฉ่ซิงเอี้ย</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>ข้ามสะพานต่ออายุ (Longevity Bridge):</b> ก้าวเท้าซ้ายขึ้นสะพานก่อน เดินข้ามไปยังอีกฝั่ง (เชื่อว่าต่ออายุได้ 3 วันต่อ 1 ครั้ง) <b>*ข้อห้ามสำคัญมาก: ห้ามเดินย้อนกลับเด็ดขาด*</b> ให้เดินวนอ้อมกลับมา<br>
+        2. <b>ลูบเคราเทพเจ้าไฉ่ซิงเอี้ย:</b> ใช้มือสองข้างลูบเคราท่านตั้งแต่บนลงล่าง แล้วลูบถุงทองข้างกายท่าน จากนั้นเอามือทั้งสองข้างใส่กระเป๋าเสื้อหรือกระเป๋ากางเกงตัวเอง เป็นการเก็บเงินเข้ากระเป๋า<br>
+        3. <b>เสี่ยงทายปลาทอง:</b> ตั้งจิตอธิษฐานแล้วโยนเหรียญเข้าปากปลาทอง หากเข้าปากเชื่อว่าคำขอจะสมหวังรวดเร็ว
+      </div>`,
+    templePolinSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#f3e8ff; color:#7e22ce; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#faf5ff; border:1.5px solid #d8b4fe; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#9333ea; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปพระใหญ่นองปิง):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#9333ea; font-size:26px;">大嶼山 昂坪天壇大佛</span><br>
+            <span style="font-size:15px; color:#64748b;">(寶蓮禪寺 / Po Lin Monastery, Lantau)</span>
+          </div>
+        </div>
+      </div>`,
+
 
     /* ข้อมูลเฉพาะของทริปไปนองปิง (Ngong Ping 360) & สนามบิน */
         airportChineseSign: `
@@ -4163,6 +4543,41 @@ function showSubInfo(type) {
    ===================================================================== */
 let isNavigatingBack = false;
 
+
+/* =====================================================================
+   TEMPLE GUIDE JAVASCRIPT LOGIC
+   ===================================================================== */
+function openTempleModal() {
+  document.getElementById('templeModal').classList.add('active');
+  pushModalHistory('templeModal');
+}
+
+function closeTempleModal() {
+  dismissModal('templeModal', () => {
+    document.getElementById('templeModal').classList.remove('active');
+  });
+}
+
+function filterTemples(id) {
+  // Update button active
+  document.querySelectorAll('#templeModal .weather-chip').forEach(btn => btn.classList.remove('active'));
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+  const cards = document.querySelectorAll('.temple-item-card');
+  if (id === 'all') {
+    cards.forEach(c => c.style.display = 'block');
+  } else {
+    cards.forEach(c => {
+      if (c.id === 'temple-card-' + id) {
+        c.style.display = 'block';
+        c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  }
+}
+
 function pushModalHistory(id) {
   if (window.location.hash !== '#' + id) {
     history.pushState({ modalId: id }, '', '#' + id);
@@ -4189,6 +4604,12 @@ window.addEventListener('popstate', (e) => {
   }
 
   // 2. Close transit modals
+    // Close temple modal
+  const tpm = document.getElementById('templeModal');
+  if (tpm && tpm.classList.contains('active')) {
+    tpm.classList.remove('active');
+  }
+
   const tm = document.getElementById('transitModal');
   if (tm && tm.classList.contains('active')) {
     tm.classList.remove('active');
