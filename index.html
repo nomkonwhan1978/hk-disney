@@ -766,6 +766,162 @@
     to { transform: translateY(0); }
   }
 
+
+  /* =====================================================================
+     FULLSCREEN SCREENS (Weather & Currency)
+     ===================================================================== */
+  .fullscreen-view {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #f8fafc;
+    z-index: 10005;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    font-family: -apple-system, BlinkMacSystemFont, 'Prompt', sans-serif;
+  }
+  .fullscreen-view.active {
+    display: block;
+    animation: fadeInScreen 0.22s ease-out;
+  }
+  @keyframes fadeInScreen {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fullscreen-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .fullscreen-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #0f172a;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .fullscreen-back-btn:hover {
+    background: #e2e8f0;
+  }
+  .fullscreen-title {
+    font-weight: 800;
+    font-size: 15px;
+    color: #0f172a;
+  }
+  .fullscreen-refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+    padding: 7px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.15s;
+    border: none;
+  }
+
+  .fullscreen-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px 16px 50px;
+  }
+
+  /* Location chips for weather */
+  .weather-chip-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .weather-chip {
+    flex-shrink: 0;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    color: #334155;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .weather-chip.active {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+  }
+
+  /* Currency trend tabs */
+  .trend-tabs {
+    display: flex;
+    background: #e2e8f0;
+    border-radius: 12px;
+    padding: 3px;
+    margin-bottom: 12px;
+  }
+  .trend-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 6px;
+    font-weight: 700;
+    font-size: 12px;
+    color: #64748b;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .trend-tab-btn.active {
+    background: #ffffff;
+    color: #047857;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  /* Quick HKD chips */
+  .quick-hkd-btn {
+    flex: 1;
+    min-width: 65px;
+    padding: 8px 6px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 12.5px;
+    color: #0f172a;
+    cursor: pointer;
+    transition: 0.15s;
+    text-align: center;
+  }
+  .quick-hkd-btn:hover {
+    border-color: #059669;
+    background: #ecfdf5;
+  }
+
 </style>
 </head>
 <body>
@@ -1385,116 +1541,258 @@
     <!-- =====================================================================
        MODAL: CURRENT WEATHER (REAL-TIME TODAY + 14 DAYS FORECAST + TRIP GUIDE)
        ===================================================================== -->
-  <div id="weatherModal" class="gen-modal" onclick="closeWeatherModal()">
-    <div class="gen-sheet" onclick="event.stopPropagation()">
-      <div class="gen-header">
-        <h3>⛅ พยากรณ์อากาศฮ่องกง (Live & 14 วัน)</h3>
-        <button onclick="closeWeatherModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
+    <!-- =====================================================================
+       FULLSCREEN SCREEN: CURRENT WEATHER & 14-DAY FORECAST BY LOCATION
+       ===================================================================== -->
+  <div id="weatherModal" class="fullscreen-view">
+    <!-- Sticky App Bar -->
+    <div class="fullscreen-header">
+      <button class="fullscreen-back-btn" onclick="closeWeatherModal()">
+        <span>←</span> <span>กลับหน้าหลัก</span>
+      </button>
+      <div class="fullscreen-title">⛅ พยากรณ์อากาศ & 14 วัน</div>
+      <button class="fullscreen-refresh-btn" style="background:#e0f2fe; color:#0284c7;" onclick="refreshCurrentLocationWeather()">
+        <span id="weatherRefreshSpin">🔄</span> <span>รีเฟรช</span>
+      </button>
+    </div>
+
+    <div class="fullscreen-container">
+      
+      <!-- Location Selector Chips -->
+      <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📍 เลือกจุดหมายที่ต้องการดูอากาศเฉพาะเจาะจง:</span>
+        <span id="locWeatherStatusPill" style="font-size:10.5px; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:10px; font-weight:700;">🟢 โหลดข้อมูลสด</span>
       </div>
-      <div class="gen-body">
-        
-        <!-- Live Real-time Card -->
-        <div id="liveWeatherCard" style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:0 4px 15px rgba(2, 132, 199, 0.25);">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div>
-              <div style="font-size:11px; text-transform:uppercase; font-weight:700; opacity:0.85; letter-spacing:0.5px;">สภาพอากาศฮ่องกง ณ ขณะนี้ (Real-time)</div>
-              <div style="display:flex; align-items:baseline; gap:8px; margin:4px 0;">
-                <span id="liveTempDisplay" style="font-size:38px; font-weight:900; line-height:1;">--°C</span>
-                <span id="liveConditionText" style="font-size:14px; font-weight:700; opacity:0.95;">กำลังโหลด...</span>
+      <div class="weather-chip-row">
+        <button id="wchip-hk" class="weather-chip active" onclick="selectWeatherLocation('hk')">
+          <span>🇭🇰</span> <span>ภาพรวมฮ่องกง</span>
+        </button>
+        <button id="wchip-disney" class="weather-chip" onclick="selectWeatherLocation('disney')">
+          <span>🏰</span> <span>Disneyland</span>
+        </button>
+        <button id="wchip-jordan" class="weather-chip" onclick="selectWeatherLocation('jordan')">
+          <span>🏨</span> <span>B P Hotel / Jordan</span>
+        </button>
+        <button id="wchip-lym" class="weather-chip" onclick="selectWeatherLocation('lym')">
+          <span>🦞</span> <span>เล่ยหยู่มุน</span>
+        </button>
+        <button id="wchip-np" class="weather-chip" onclick="selectWeatherLocation('np')">
+          <span>🚠</span> <span>นองปิง 360 & พระใหญ่</span>
+        </button>
+      </div>
+
+      <!-- Location Badge & Subtitle -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div id="locNameDisplay" style="font-weight:800; font-size:14px; color:#0f172a;">ภาพรวมฮ่องกง (Hong Kong Overall)</div>
+          <div id="locSubtitleDisplay" style="font-size:11px; color:#64748b; margin-top:2px;">หอดูดาวฮ่องกง (HK Observatory) • จิมซาจุ่ย / เซ็นทรัล</div>
+        </div>
+        <div id="locElevBadge" style="font-size:10.5px; font-weight:700; background:#f1f5f9; color:#475569; padding:4px 8px; border-radius:8px; text-align:right;">
+          ระดับพื้นราบ
+        </div>
+      </div>
+
+      <!-- Live Real-time Card -->
+      <div id="liveWeatherCard" style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:0 8px 24px rgba(2, 132, 199, 0.28); position:relative; overflow:hidden;">
+        <div style="position:absolute; right:-15px; bottom:-20px; font-size:110px; opacity:0.12; pointer-events:none;" id="liveWeatherBgIcon">⛅</div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-size:11px; text-transform:uppercase; font-weight:800; opacity:0.85; letter-spacing:0.6px;">สภาพอากาศ ณ ขณะนี้ (Real-time Live Engine)</div>
+            <div style="display:flex; align-items:baseline; gap:10px; margin:6px 0;">
+              <span id="liveTempDisplay" style="font-size:48px; font-weight:900; line-height:1;">--°C</span>
+              <div>
+                <div id="liveConditionText" style="font-size:16px; font-weight:800; opacity:0.98;">กำลังเชื่อมต่อ Open-Meteo...</div>
+                <div id="liveTimeBadge" style="font-size:11px; opacity:0.8; margin-top:2px;">อัปเดตสดล่าสุด</div>
               </div>
             </div>
-            <div id="liveWeatherIcon" style="font-size:36px; line-height:1;">⛅</div>
           </div>
-          <div style="display:flex; gap:12px; margin-top:10px; font-size:11.5px; opacity:0.9; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">
-            <span>💧 ความชื้น: <b id="liveHumidityDisplay">--%</b></span>
-            <span>💨 ลม: <b id="liveWindDisplay">-- km/h</b></span>
-            <span>🌡️ รู้สึกจริง: <b id="liveApparentDisplay">--°C</b></span>
-          </div>
+          <div id="liveWeatherIcon" style="font-size:46px; line-height:1;">⛅</div>
         </div>
-
-        <!-- 7-14 Day Trend Summary -->
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-bottom:14px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <div style="font-size:12.5px; font-weight:800; color:#0f172a;">📊 แนวโน้มอากาศ 14 วันล่วงหน้า</div>
-            <span id="weatherTrendBadge" style="font-size:10.5px; font-weight:700; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:10px;">กำลังวิเคราะห์...</span>
-          </div>
-          <div id="forecastTrendText" style="font-size:11.5px; color:#475569; line-height:1.45; margin-bottom:10px;">
-            กำลังดึงข้อมูลพยากรณ์อากาศ 14 วันจาก Open-Meteo...
-          </div>
-
-          <!-- 14 Days Horizontal Slider -->
-          <div id="forecastDailyScroll" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px;">
-            <!-- Generated dynamically by JS -->
-          </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:14px; border-top:1px solid rgba(255,255,255,0.22); padding-top:12px; font-size:11.5px;">
+          <div>💧 ความชื้น: <br><b id="liveHumidityDisplay" style="font-size:14px;">--%</b></div>
+          <div>💨 แรงลม: <br><b id="liveWindDisplay" style="font-size:14px;">-- km/h</b></div>
+          <div>🌡️ รู้สึกจริง: <br><b id="liveApparentDisplay" style="font-size:14px;">--°C</b></div>
         </div>
-
-        <!-- Travel Dates Guide (1-3 Jan 2027) -->
-        <div style="background:#fefce8; border:1px solid #fef08a; border-radius:14px; padding:12px;">
-          <div style="font-weight:800; font-size:12.5px; color:#854d0e; margin-bottom:6px;">🧣 คำแนะนำการแต่งกายช่วงเดินทาง (1–3 ม.ค. 2027)</div>
-          <div style="font-size:11.5px; color:#713f12; line-height:1.5;">
-            <div>• <b>1 ม.ค. (วันเดินทางถึง & เช็กอิน):</b> ~16°C–20°C อากาศสบาย เดินช้อปปิ้งเสื้อยืด + เสื้อคลุมเบาๆ</div>
-            <div>• <b>2 ม.ค. (วัน Disney ตลอดวัน):</b> ~14°C–18°C เช้าตรู่รอเปิดประตูและค่ำดูพลุจะลมเย็น แนะนำ <b>Heattech ชั้นใน + แจ็กเก็ตกันลม</b></div>
-            <div>• <b>3 ม.ค. (วันขึ้นเขานองปิง):</b> ~12°C–16°C บนยอดเขานองปิงและลานพระใหญ่ลมแรงกว่าพื้นราบ 3–4°C ควรมีผ้าพันคอหรือหมวกไหมพรมสำหรับเด็กและผู้ใหญ่</div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Targeted Advice for Selected Location -->
+      <div id="locAdviceCard" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:14px; padding:12px 14px; margin-bottom:14px;">
+        <div style="font-weight:800; font-size:12.5px; color:#166534; margin-bottom:4px;">🎯 คำแนะนำสภาพแวดล้อมจุดนี้:</div>
+        <div id="locAdviceText" style="font-size:11.5px; color:#15803d; line-height:1.5;">
+          สภาพอากาศในฮ่องกงช่วงนี้กำลังเย็นสบาย เหมาะสำหรับการเดินเล่นกลางแจ้ง แนะนำสวมเสื้อยืดพร้อมเสื้อคลุมบางๆ
+        </div>
+      </div>
+
+      <!-- 14-Day Trend Analysis Banner -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:14px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:13px; font-weight:800; color:#0f172a;">📊 การวิเคราะห์แนวโน้มสภาพอากาศ 14 วันล่วงหน้า</div>
+          <span id="weatherTrendBadge" style="font-size:11px; font-weight:800; background:#e0f2fe; color:#0284c7; padding:3px 10px; border-radius:12px;">กำลังวิเคราะห์...</span>
+        </div>
+        <div id="forecastTrendText" style="font-size:12px; color:#475569; line-height:1.5; margin-bottom:12px;">
+          กำลังดึงข้อมูลพยากรณ์อากาศ 14 วันจาก Open-Meteo...
+        </div>
+
+        <!-- 14 Days Horizontal Slider -->
+        <div style="font-size:11.5px; font-weight:700; color:#64748b; margin-bottom:6px;">พยากรณ์รายวัน 14 วันข้างหน้า:</div>
+        <div id="forecastDailyScroll" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch;">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+
+      <!-- Travel Dates Guide (1-3 Jan 2027) -->
+      <div style="background:#fefce8; border:1.5px solid #fef08a; border-radius:16px; padding:14px;">
+        <div style="font-weight:800; font-size:13px; color:#854d0e; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <span>🧣</span> <span>สรุปการแต่งกายช่วงเดินทางจริง (1–3 ม.ค. 2027) สำหรับครอบครัว 5 ท่าน</span>
+        </div>
+        <div style="font-size:12px; color:#713f12; line-height:1.55; display:flex; flex-direction:column; gap:6px;">
+          <div>• <b>1 ม.ค. (วันถึง & เช็กอิน B P Hotel):</b> ~16°C–20°C อากาศสบาย เดินช้อปปิ้งจอร์แดน เสื้อยืด + แจ็กเก็ตหรือคาร์ดิแกนเบาๆ</div>
+          <div>• <b>2 ม.ค. (วัน Disney ตลอดวัน):</b> ~14°C–18°C เช้าตรู่รอเปิดประตูและค่ำดูพลุริมทะเลจะลมแรง แนะนำ <b>Heattech ชั้นใน + เสื้อกันลม</b></div>
+          <div>• <b>3 ม.ค. (วันขึ้นกระเช้านองปิง & พระใหญ่):</b> ~12°C–16°C บนยอดเขาลมแรงกว่าพื้นราบ 3–4°C ควรมีผ้าพันคอหรือหมวกไหมพรมสำหรับเด็กและผู้ใหญ่</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- =====================================================================
-       MODAL: CONVERT CURRENCY
+       FULLSCREEN SCREEN: CONVERT CURRENCY & HISTORICAL TRENDS (1, 3, 6, 12 MONTHS)
        ===================================================================== -->
-    <!-- =====================================================================
-       MODAL: CONVERT CURRENCY (REAL-TIME LIVE RATE & QUICK CALCULATOR)
-       ===================================================================== -->
-  <div id="currencyModal" class="gen-modal" onclick="closeCurrencyModal()">
-    <div class="gen-sheet" onclick="event.stopPropagation()">
-      <div class="gen-header">
-        <h3>💱 แปลงค่าเงินด่วน (HKD ↔ THB)</h3>
-        <button onclick="closeCurrencyModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
-      </div>
-      <div class="gen-body">
+  <div id="currencyModal" class="fullscreen-view">
+    <!-- Sticky App Bar -->
+    <div class="fullscreen-header">
+      <button class="fullscreen-back-btn" onclick="closeCurrencyModal()">
+        <span>←</span> <span>กลับหน้าหลัก</span>
+      </button>
+      <div class="fullscreen-title">💱 อัตราแลกเปลี่ยน & แนวโน้ม</div>
+      <button class="fullscreen-refresh-btn" style="background:#ecfdf5; color:#059669;" onclick="fetchLiveExchangeRate(true)">
+        <span id="rateRefreshSpin">🔄</span> <span>อัปเดตเรต</span>
+      </button>
+    </div>
+
+    <div class="fullscreen-container">
+      
+      <!-- Live Current Rate Hero Card -->
+      <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:18px; margin-bottom:14px; box-shadow:0 8px 24px rgba(5, 150, 105, 0.25);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-size:11px; text-transform:uppercase; font-weight:800; opacity:0.88; letter-spacing:0.5px;">อัตราแลกเปลี่ยนสดวันนี้ (HKD ➔ THB)</div>
+            <div style="display:flex; align-items:baseline; gap:8px; margin:4px 0;">
+              <span id="liveRateHeroDisplay" style="font-size:42px; font-weight:900; line-height:1.05;">4.33 ฿</span>
+              <span style="font-size:15px; font-weight:700; opacity:0.95;">/ 1 HKD</span>
+            </div>
+            <div id="liveRateTimeBadge" style="font-size:11px; opacity:0.9; margin-top:2px;">🟢 เรตสดตลาดโลก (Open Exchange Engine)</div>
+          </div>
+          <div style="font-size:38px; line-height:1;">💵</div>
+        </div>
         
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:14px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <label style="font-size:12px; font-weight:700; color:#475569;">อัตราแลกเปลี่ยน (1 HKD = กี่บาท):</label>
-            <input id="calcExchangeRate" type="number" step="0.01" value="4.26" oninput="calcCurrency()" style="width:75px; padding:4px 8px; border-radius:6px; border:1.5px solid #0284c7; font-weight:700; text-align:right; font-size:13px;">
+        <!-- Editable Custom Rate Bar -->
+        <div style="background:rgba(255,255,255,0.18); border-radius:12px; padding:8px 12px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <span>✏️ เรตที่ใช้คำนวณจริง:</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <input id="calcExchangeRate" type="number" step="0.01" value="4.33" oninput="calcCurrency()" style="width:75px; padding:4px 8px; border-radius:6px; border:none; font-weight:800; text-align:right; font-size:14px; color:#065f46; background:#ffffff;">
+            <span style="font-weight:700;">บาท</span>
           </div>
-          <div id="liveRateBadge" style="font-size:11px; color:#0284c7; font-weight:600;">
-            🔄 กำลังเชื่อมต่อเรตสดวันนี้...
+        </div>
+        <div style="font-size:10px; opacity:0.8; margin-top:4px; text-align:right;">*สามารถแตะตัวเลขเพื่อแก้ไขตามเรตบัตรเครดิตหรือร้านแลกเงินจริง</div>
+      </div>
+
+      <!-- Historical Trends Section (1, 3, 6, 12 Months) -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-weight:800; font-size:13.5px; color:#0f172a;">📈 แนวโน้มอัตราแลกเปลี่ยนย้อนหลัง</div>
+          <span id="trendChangeBadge" style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:8px; background:#dcfce7; color:#15803d;">+0.4%</span>
+        </div>
+
+        <!-- Period Select Tabs -->
+        <div class="trend-tabs">
+          <button id="trendTab-1M" class="trend-tab-btn active" onclick="selectTrendPeriod('1M')">1 เดือน</button>
+          <button id="trendTab-3M" class="trend-tab-btn" onclick="selectTrendPeriod('3M')">3 เดือน</button>
+          <button id="trendTab-6M" class="trend-tab-btn" onclick="selectTrendPeriod('6M')">6 เดือน</button>
+          <button id="trendTab-12M" class="trend-tab-btn" onclick="selectTrendPeriod('12M')">12 เดือน (1 ปี)</button>
+        </div>
+
+        <!-- Key Period Statistics -->
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:12px; background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0; text-align:center;">
+          <div>
+            <div style="font-size:10px; color:#64748b; font-weight:700;">📈 สูงสุด</div>
+            <div id="trendHighStat" style="font-size:14px; font-weight:800; color:#dc2626;">4.33 ฿</div>
           </div>
-          <small style="color:#64748b; font-size:10.5px; display:block; margin-top:4px;">*สามารถแตะตัวเลขเพื่อแก้ไขเรตตามบัตรเครดิตหรือร้านแลกเงินจริงได้เลย</small>
+          <div>
+            <div style="font-size:10px; color:#64748b; font-weight:700;">📉 ต่ำสุด</div>
+            <div id="trendLowStat" style="font-size:14px; font-weight:800; color:#16a34a;">4.26 ฿</div>
+          </div>
+          <div>
+            <div style="font-size:10px; color:#64748b; font-weight:700;">⚖️ ค่าเฉลี่ย</div>
+            <div id="trendAvgStat" style="font-size:14px; font-weight:800; color:#0f172a;">4.30 ฿</div>
+          </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:700; color:#0f172a; display:block; margin-bottom:4px;">ใส่ยอดเงินฮ่องกง (HKD):</label>
-          <input id="calcHkdInput" type="number" placeholder="เช่น 100" oninput="calcCurrency()" style="width:100%; padding:10px; font-size:18px; font-weight:800; border-radius:10px; border:1.5px solid #cbd5e1; box-sizing:border-box;">
+        <!-- Interactive SVG Area Chart -->
+        <div style="position:relative; width:100%; height:190px; background:#fafafa; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;">
+          <svg id="rateTrendSvg" viewBox="0 0 540 180" style="width:100%; height:100%; display:block;" preserveAspectRatio="none">
+            <!-- Dynamic SVG Chart injected by JS -->
+          </svg>
+          <div id="chartTooltip" style="position:absolute; display:none; background:#0f172a; color:#fff; padding:4px 8px; border-radius:6px; font-size:10.5px; font-weight:700; pointer-events:none; z-index:10; transform:translate(-50%, -120%);"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:600; margin-top:6px; padding:0 4px;">
+          <span id="chartStartDate">--</span>
+          <span>📅 เส้นแสดงการเคลื่อนไหวราคาแลกเปลี่ยนจริง</span>
+          <span id="chartEndDate">วันนี้</span>
         </div>
 
-        <!-- Quick HKD buttons -->
-        <div style="display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;">
-          <button onclick="setCalcHkd(20)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$20</button>
-          <button onclick="setCalcHkd(50)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$50</button>
-          <button onclick="setCalcHkd(100)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$100</button>
-          <button onclick="setCalcHkd(200)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$200</button>
-          <button onclick="setCalcHkd(500)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$500</button>
-          <button onclick="setCalcHkd(1000)" style="flex:1; padding:6px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:11.5px; cursor:pointer;">$1,000</button>
-        </div>
-
-        <div style="background:#ecfdf5; border:1.5px solid #10b981; border-radius:12px; padding:14px; text-align:center;">
-          <div style="font-size:12px; font-weight:700; color:#047857;">คิดเป็นเงินไทยประมาณ:</div>
-          <div id="calcThbResult" style="font-size:26px; font-weight:900; color:#065f46; margin:4px 0;">0.00 ฿</div>
-          <div id="calcPerPerson" style="font-size:12px; color:#047857;">(หาร 5 ท่าน = ตกคนละ 0.00 ฿)</div>
+        <!-- Trend Travel Insight -->
+        <div id="trendInsightBox" style="background:#f0fdf4; border-left:4px solid #10b981; border-radius:8px; padding:10px 12px; margin-top:12px; font-size:11.5px; color:#166534; line-height:1.5;">
+          💡 <b>มุมมองสำหรับทริปนี้:</b> ช่วงนี้ค่าเงินฮ่องกงเคลื่อนไหวในกรอบที่คุ้มค่าเมื่อเทียบกับช่วงต้นปี แนะนำแลกเก็บไว้บางส่วนหรือใช้ Travel Card (เช่น YouTrip, SCB Planet) รูดซื้อของและแตะขึ้นรถไฟ MTR ได้เรตสดที่ประหยัดที่สุด
         </div>
       </div>
+
+      <!-- Quick Converter Section -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+        <div style="font-weight:800; font-size:13.5px; color:#0f172a; margin-bottom:10px;">🧮 เครื่องคิดเลขคำนวณไว (พร้อมหาร 5 คน)</div>
+        
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">ยอดเงินฮ่องกง (HKD):</label>
+          <div style="position:relative;">
+            <span style="position:absolute; left:12px; top:10px; font-size:20px; font-weight:800; color:#64748b;">$</span>
+            <input id="calcHkdInput" type="number" placeholder="เช่น 100" oninput="calcCurrency()" style="width:100%; padding:10px 10px 10px 32px; font-size:22px; font-weight:900; border-radius:12px; border:2px solid #cbd5e1; box-sizing:border-box; color:#0f172a;">
+          </div>
+        </div>
+
+        <!-- Fast HKD Preset Buttons -->
+        <div style="display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;">
+          <button class="quick-hkd-btn" onclick="setCalcHkd(20)">$20</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(50)">$50</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(100)">$100</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(200)">$200</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(500)">$500</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(1000)">$1,000</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(2000)">$2,000</button>
+          <button class="quick-hkd-btn" onclick="setCalcHkd(5000)">$5,000</button>
+        </div>
+
+        <!-- Calculated Result Box -->
+        <div style="background:#ecfdf5; border:2px solid #10b981; border-radius:14px; padding:16px; text-align:center;">
+          <div style="font-size:12px; font-weight:700; color:#047857;">คิดเป็นเงินไทยประมาณ:</div>
+          <div id="calcThbResult" style="font-size:32px; font-weight:900; color:#065f46; margin:4px 0;">0.00 ฿</div>
+          <div id="calcPerPerson" style="font-size:13px; font-weight:700; color:#047857;">(หาร 5 ท่าน = ตกคนละ 0.00 ฿)</div>
+        </div>
+      </div>
+
+      <!-- Payment Tips Card -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:14px;">
+        <div style="font-weight:800; font-size:12.5px; color:#334155; margin-bottom:6px;">💳 คำแนะนำการชำระเงินในฮ่องกง (5 ท่าน):</div>
+        <div style="font-size:11.5px; color:#64748b; line-height:1.5; space-y:4px;">
+          <div>• <b>Travel Card (YouTrip / SCB Planet):</b> แนะนำใช้แตะจ่ายร้านสะดวกซื้อ 7-Eleven, ใน Disney, ห้าง และแตะผ่านเข้า MTR ได้เลย</div>
+          <div>• <b>เงินสด (Cash):</b> ควรมีติดตัวสำหรับร้านติ่มซำดั้งเดิม, ร้านสตรีทฟู้ดเล่ยหยู่มุน และแท็กซี่แดง (ส่วนใหญ่ไม่รับบัตร)</div>
+          <div>• <b>บัตร Octopus (ปลาหมึก):</b> หากมีติดตัว ใช้แตะซื้อของกินและตู้กดน้ำสะดวกมาก</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- =====================================================================
-       MODAL: EMERGENCY & TAXI CARD
-       ===================================================================== -->
-  <div id="emergencyModal" class="gen-modal" onclick="closeEmergencyModal()">
+<div id="emergencyModal" class="gen-modal" onclick="closeEmergencyModal()">
     <div class="gen-sheet" onclick="event.stopPropagation()">
       <div class="gen-header">
         <h3>🚨 ข้อมูลฉุกเฉิน & ป้ายจีนแท็กซี่</h3>
@@ -2913,37 +3211,6 @@ function closeTransitSelectionModal() {
   document.getElementById('transitSelectionModal').classList.remove('active');
 }
 
-function openWeatherModal() {
-  document.getElementById('weatherModal').classList.add('active');
-  fetchLiveWeather();
-}
-function closeWeatherModal() {
-  document.getElementById('weatherModal').classList.remove('active');
-}
-
-function openCurrencyModal() {
-  document.getElementById('currencyModal').classList.add('active');
-  calcCurrency();
-  fetchLiveExchangeRate();
-}
-function closeCurrencyModal() {
-  document.getElementById('currencyModal').classList.remove('active');
-}
-
-function setCalcHkd(val) {
-  document.getElementById('calcHkdInput').value = val;
-  calcCurrency();
-}
-
-function calcCurrency() {
-  const rate = parseFloat(document.getElementById('calcExchangeRate').value) || 4.26;
-  const hkd = parseFloat(document.getElementById('calcHkdInput').value) || 0;
-  const thb = hkd * rate;
-  document.getElementById('calcThbResult').innerText = thb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ฿';
-  const perPerson = thb / 5;
-  document.getElementById('calcPerPerson').innerText = '(หาร 5 ท่าน = ตกคนละ ' + perPerson.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ฿)';
-}
-
 function openEmergencyModal() {
   document.getElementById('emergencyModal').classList.add('active');
 }
@@ -3067,6 +3334,432 @@ let npMode = 'mtr';
 let npActiveStepIdx = null;
 let npPinsVisible = true;
 let npCamState = { scale: 1, x: 0, y: 0 };
+
+
+/* =====================================================================
+   ENHANCED WEATHER ENGINE (LOCATION SPECIFIC + 14-DAY FORECAST)
+   ===================================================================== */
+const WEATHER_LOCATIONS = {
+  hk: {
+    name: "ภาพรวมฮ่องกง (Hong Kong Overall)",
+    subtitle: "หอดูดาวฮ่องกง (HK Observatory) • จิมซาจุ่ย / เซ็นทรัล",
+    elevation: "ระดับพื้นราบ",
+    lat: 22.3193,
+    lon: 114.1694,
+    advice: "สภาพอากาศในฮ่องกงช่วงนี้กำลังเย็นสบาย เหมาะสำหรับการเดินเล่นกลางแจ้ง แนะนำสวมเสื้อยืดพร้อมเสื้อคลุมหรือคาร์ดิแกนบางๆ"
+  },
+  disney: {
+    name: "Hong Kong Disneyland (เกาะลันเตา)",
+    subtitle: "หุบเขาเพนนีส์เบย์ (Penny's Bay) • สวนสนุกกลางแจ้งริมอ่าว",
+    elevation: "หุบเขาติดทะเล",
+    lat: 22.3130,
+    lon: 114.0413,
+    advice: "🏰 กลางวันเดินเล่นในพาร์คสนุก ~20°C แดดสบาย แต่ช่วง 19:30-21:00 น. รอชมพลุ Momentous ริมปราสาท ลมทะเลจะพัดเข้าและเย็นลงเร็ว แนะนำเตรียมเสื้อแจ็กเก็ตกันลม"
+  },
+  jordan: {
+    name: "โรงแรม B P International / Jordan",
+    subtitle: "ถนน Austin / ย่านจอร์แดน-จิมซาจุ่ย เกาลูน • โรงแรมที่พัก",
+    elevation: "ย่านใจกลางเมือง",
+    lat: 22.3029,
+    lon: 114.1685,
+    advice: "🏨 ย่านใจกลางเมือง ตึกสูงช่วยบังลม อากาศสบายมาก เดินออกจากโรงแรมไปช้อปปิ้งหรือหาของกินมื้อดึกได้สบายๆ ไม่หนาวจัด"
+  },
+  lym: {
+    name: "เล่ยหยู่มุน (Lei Yue Mun)",
+    subtitle: "หมู่บ้านชาวประมง ชายฝั่งช่องแคบวิกตอเรียตะวันออก • มื้อค่ำอาหารทะเล",
+    elevation: "ริมทะเลชายฝั่ง",
+    lat: 22.2877,
+    lon: 114.2389,
+    advice: "🦞 ติดริมอ่าววิกตอเรียช่วงค่ำ (17:30–19:30 น.) ลมทะเลพัดโปร่งสบาย นั่งทานอาหารทะเลริมน้ำชิลล์มาก ควรมีเสื้อคลุมติดตัว"
+  },
+  np: {
+    name: "นองปิง 360 & พระใหญ่ (Ngong Ping Summit)",
+    subtitle: "ยอดเขาเกาะลันเตา (Lantau Peak) • ความสูง ~520 เมตรจากระดับน้ำทะเล",
+    elevation: "ยอดเขาสูง 520m",
+    lat: 22.2540,
+    lon: 113.9050,
+    advice: "🚠 วันขึ้นเขา (3 ม.ค.) บนยอดเขานองปิงและลานพระใหญ่อุณหภูมิต่ำกว่าพื้นราบ 3–4°C และมีลมภูเขาพัดแรง ควรเตรียมผ้าพันคอ หมวกไหมพรม หรือแจ็กเก็ตอุ่นเป็นพิเศษสำหรับเด็กและผู้ใหญ่"
+  }
+};
+
+let currentWeatherLocation = 'hk';
+const weatherCache = {};
+
+function selectWeatherLocation(key) {
+  if (!WEATHER_LOCATIONS[key]) return;
+  currentWeatherLocation = key;
+  
+  // Update chip UI
+  document.querySelectorAll('.weather-chip').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById('wchip-' + key);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const loc = WEATHER_LOCATIONS[key];
+  document.getElementById('locNameDisplay').innerText = loc.name;
+  document.getElementById('locSubtitleDisplay').innerText = loc.subtitle;
+  document.getElementById('locElevBadge').innerText = loc.elevation;
+  document.getElementById('locAdviceText').innerText = loc.advice;
+
+  fetchLocationWeather(key);
+}
+
+function refreshCurrentLocationWeather() {
+  const spin = document.getElementById('weatherRefreshSpin');
+  if (spin) spin.style.transform = 'rotate(360deg)';
+  delete weatherCache[currentWeatherLocation];
+  fetchLocationWeather(currentWeatherLocation);
+  setTimeout(() => { if (spin) spin.style.transform = 'none'; }, 500);
+}
+
+async function fetchLocationWeather(key) {
+  const loc = WEATHER_LOCATIONS[key] || WEATHER_LOCATIONS['hk'];
+  const pill = document.getElementById('locWeatherStatusPill');
+
+  if (weatherCache[key]) {
+    renderWeatherToUI(weatherCache[key]);
+    if (pill) pill.innerText = "⚡ ข้อมูลอัปเดตแล้ว";
+    return;
+  }
+
+  if (pill) pill.innerText = "🔄 กำลังโหลด...";
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FHong_Kong&forecast_days=14`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      weatherCache[key] = data;
+      renderWeatherToUI(data);
+      if (pill) pill.innerText = "🟢 สดจาก Open-Meteo";
+    } else {
+      throw new Error("HTTP error " + res.status);
+    }
+  } catch (err) {
+    console.warn("Weather fetch error, using fallback", err);
+    if (pill) pill.innerText = "💡 โหมดออฟไลน์";
+    renderFallbackWeather(key);
+  }
+}
+
+function getWeatherIconAndDesc(code) {
+  if (code === 0) return { icon: "☀️", text: "ท้องฟ้าแจ่มใส ปลอดโปร่ง" };
+  if (code === 1 || code === 2) return { icon: "🌤️", text: "มีเมฆบางส่วน แดดสบาย" };
+  if (code === 3) return { icon: "☁️", text: "มีเมฆมาก อากาศเย็นสบาย" };
+  if (code >= 45 && code <= 48) return { icon: "🌫️", text: "หมอกบาง ลมเย็น" };
+  if (code >= 51 && code <= 67) return { icon: "🌦️", text: "มีฝนเล็กน้อยโปรยปราย" };
+  if (code >= 80 && code <= 82) return { icon: "🌧️", text: "ฝนตกเป็นช่วงๆ" };
+  if (code >= 95) return { icon: "⛈️", text: "พายุฝนฟ้าคะนอง" };
+  return { icon: "⛅", text: "อากาศเย็นสบาย" };
+}
+
+function renderWeatherToUI(data) {
+  if (!data || !data.current) return;
+  const curr = data.current;
+  const info = getWeatherIconAndDesc(curr.weather_code);
+
+  const tempEl = document.getElementById('liveTempDisplay');
+  const condEl = document.getElementById('liveConditionText');
+  const iconEl = document.getElementById('liveWeatherIcon');
+  const humEl = document.getElementById('liveHumidityDisplay');
+  const windEl = document.getElementById('liveWindDisplay');
+  const appEl = document.getElementById('liveApparentDisplay');
+  const bgIcon = document.getElementById('liveWeatherBgIcon');
+  const timeBadge = document.getElementById('liveTimeBadge');
+
+  if (tempEl) tempEl.innerText = Math.round(curr.temperature_2m) + "°C";
+  if (condEl) condEl.innerText = info.text;
+  if (iconEl) iconEl.innerText = info.icon;
+  if (bgIcon) bgIcon.innerText = info.icon;
+  if (humEl) humEl.innerText = curr.relative_humidity_2m + "%";
+  if (windEl) windEl.innerText = Math.round(curr.wind_speed_10m) + " km/h";
+  if (appEl) appEl.innerText = Math.round(curr.apparent_temperature) + "°C";
+  if (timeBadge) timeBadge.innerText = "อัปเดตสดล่าสุด ณ ขณะนี้";
+
+  // 14-Day Trend Analysis
+  if (data.daily && data.daily.time) {
+    const times = data.daily.time;
+    const maxs = data.daily.temperature_2m_max;
+    const mins = data.daily.temperature_2m_min;
+    const codes = data.daily.weather_code;
+    const rains = data.daily.precipitation_probability_max || [];
+
+    const earlyAvg = (maxs[0] + maxs[1] + maxs[2]) / 3;
+    const lateAvg = (maxs[6] + maxs[7] + maxs[8]) / 3;
+    const diff = lateAvg - earlyAvg;
+
+    const badge = document.getElementById('weatherTrendBadge');
+    const desc = document.getElementById('forecastTrendText');
+
+    if (diff < -1.2) {
+      if (badge) { badge.innerText = "❄️ แนวโน้มหนาวขึ้น"; badge.style.background = "#e0f2fe"; badge.style.color = "#0369a1"; }
+      if (desc) desc.innerHTML = `อุณหภูมิในอีก 1-2 สัปดาห์ข้างหน้ามีแนวโน้ม <b>ลดลงประมาณ ${Math.abs(diff).toFixed(1)}°C</b> อากาศจะเย็นลง ควรเตรียมเสื้อแจ็กเก็ตกันลมเพิ่มสำหรับเด็กและผู้ใหญ่`;
+    } else if (diff > 1.2) {
+      if (badge) { badge.innerText = "🌤️ แนวโน้มอุ่นขึ้น"; badge.style.background = "#fef3c7"; badge.style.color = "#92400e"; }
+      if (desc) desc.innerHTML = `อุณหภูมิในอีก 1-2 สัปดาห์ข้างหน้ามีแนวโน้ม <b>เพิ่มขึ้นประมาณ ${diff.toFixed(1)}°C</b> อากาศจะอุ่นสบาย เดินเที่ยวคล่องตัว`;
+    } else {
+      if (badge) { badge.innerText = "⚖️ อุณหภูมิทรงตัว"; badge.style.background = "#f1f5f9"; badge.style.color = "#475569"; }
+      if (desc) desc.innerHTML = `อุณหภูมิในอีก 14 วันข้างหน้าค่อนข้างคงที่ สบายๆ ช่วงกลางวัน ~${Math.round(earlyAvg)}°C และช่วงค่ำ ~${Math.round(mins[0])}°C`;
+    }
+
+    const scrollBox = document.getElementById('forecastDailyScroll');
+    if (scrollBox) {
+      scrollBox.innerHTML = times.map((t, i) => {
+        const dObj = new Date(t);
+        const dayName = dObj.toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short' });
+        const dayInfo = getWeatherIconAndDesc(codes[i]);
+        return `
+          <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; text-align:center; min-width:82px; flex-shrink:0; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+            <div style="font-size:11px; font-weight:700; color:#475569;">${dayName}</div>
+            <div style="font-size:24px; margin:4px 0;">${dayInfo.icon}</div>
+            <div style="font-size:12px; font-weight:900; color:#0f172a;">${Math.round(maxs[i])}° / <span style="color:#64748b; font-weight:600;">${Math.round(mins[i])}°</span></div>
+            <div style="font-size:10px; color:#0284c7; margin-top:3px; font-weight:700;">💧 ${rains[i] !== undefined ? rains[i] : 0}%</div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+function renderFallbackWeather(key) {
+  const loc = WEATHER_LOCATIONS[key] || WEATHER_LOCATIONS['hk'];
+  const baseTemp = (key === 'np') ? 17 : (key === 'disney' ? 20 : 21);
+  const data = {
+    current: {
+      temperature_2m: baseTemp,
+      relative_humidity_2m: 65,
+      wind_speed_10m: (key === 'np' ? 22 : 14),
+      apparent_temperature: baseTemp - 1,
+      weather_code: 2
+    },
+    daily: {
+      time: Array.from({length: 14}, (_, i) => {
+        const d = new Date(); d.setDate(d.getDate() + i); return d.toISOString().split('T')[0];
+      }),
+      temperature_2m_max: Array.from({length: 14}, (_, i) => baseTemp + (i % 3) - 1),
+      temperature_2m_min: Array.from({length: 14}, (_, i) => baseTemp - 5 + (i % 2)),
+      weather_code: Array.from({length: 14}, (_, i) => (i % 4 === 0 ? 3 : 2)),
+      precipitation_probability_max: [10, 5, 15, 20, 10, 5, 0, 10, 15, 20, 10, 5, 10, 15]
+    }
+  };
+  renderWeatherToUI(data);
+}
+
+function openWeatherModal() {
+  document.getElementById('weatherModal').classList.add('active');
+  selectWeatherLocation(currentWeatherLocation);
+}
+function closeWeatherModal() {
+  document.getElementById('weatherModal').classList.remove('active');
+}
+
+
+/* =====================================================================
+   ENHANCED CURRENCY ENGINE (HISTORICAL TRENDS 1M, 3M, 6M, 12M & LIVE RATE)
+   ===================================================================== */
+const HISTORICAL_TRENDS = {"1M": [{"d": "10-22", "r": 4.304}, {"d": "10-23", "r": 4.302}, {"d": "10-26", "r": 4.309}, {"d": "10-27", "r": 4.305}, {"d": "10-28", "r": 4.305}, {"d": "10-29", "r": 4.302}, {"d": "10-30", "r": 4.299}, {"d": "11-02", "r": 4.303}, {"d": "11-03", "r": 4.302}, {"d": "11-04", "r": 4.288}, {"d": "11-05", "r": 4.262}, {"d": "11-06", "r": 4.281}, {"d": "11-09", "r": 4.271}, {"d": "11-10", "r": 4.265}, {"d": "11-11", "r": 4.294}, {"d": "11-12", "r": 4.311}, {"d": "11-13", "r": 4.323}, {"d": "11-16", "r": 4.319}, {"d": "11-17", "r": 4.313}, {"d": "11-18", "r": 4.33}, {"d": "11-19", "r": 4.322}, {"d": "11-20", "r": 4.325}], "3M": [{"d": "08-21", "r": 4.167}, {"d": "08-26", "r": 4.178}, {"d": "08-31", "r": 4.231}, {"d": "09-03", "r": 4.207}, {"d": "09-08", "r": 4.198}, {"d": "09-11", "r": 4.216}, {"d": "09-16", "r": 4.239}, {"d": "09-21", "r": 4.236}, {"d": "09-24", "r": 4.269}, {"d": "09-29", "r": 4.272}, {"d": "10-02", "r": 4.281}, {"d": "10-07", "r": 4.293}, {"d": "10-12", "r": 4.284}, {"d": "10-15", "r": 4.274}, {"d": "10-20", "r": 4.287}, {"d": "10-23", "r": 4.302}, {"d": "10-28", "r": 4.305}, {"d": "11-02", "r": 4.303}, {"d": "11-05", "r": 4.262}, {"d": "11-10", "r": 4.265}, {"d": "11-13", "r": 4.323}, {"d": "11-18", "r": 4.33}, {"d": "11-20", "r": 4.325}], "6M": [{"d": "05-25", "r": 4.146}, {"d": "06-01", "r": 4.154}, {"d": "06-08", "r": 4.181}, {"d": "06-15", "r": 4.155}, {"d": "06-22", "r": 4.198}, {"d": "06-29", "r": 4.239}, {"d": "07-06", "r": 4.249}, {"d": "07-13", "r": 4.259}, {"d": "07-20", "r": 4.289}, {"d": "07-27", "r": 4.282}, {"d": "08-03", "r": 4.25}, {"d": "08-10", "r": 4.208}, {"d": "08-17", "r": 4.21}, {"d": "08-24", "r": 4.171}, {"d": "08-31", "r": 4.231}, {"d": "09-07", "r": 4.196}, {"d": "09-14", "r": 4.239}, {"d": "09-21", "r": 4.236}, {"d": "09-28", "r": 4.279}, {"d": "10-05", "r": 4.294}, {"d": "10-12", "r": 4.284}, {"d": "10-19", "r": 4.275}, {"d": "10-26", "r": 4.309}, {"d": "11-02", "r": 4.303}, {"d": "11-09", "r": 4.271}, {"d": "11-16", "r": 4.319}, {"d": "11-20", "r": 4.325}], "12M": [{"d": "12-31", "r": 4.069}, {"d": "01-13", "r": 4.034}, {"d": "01-23", "r": 3.997}, {"d": "02-04", "r": 4.049}, {"d": "02-16", "r": 3.979}, {"d": "02-26", "r": 3.97}, {"d": "03-10", "r": 4.042}, {"d": "03-20", "r": 4.181}, {"d": "04-01", "r": 4.148}, {"d": "04-15", "r": 4.097}, {"d": "04-27", "r": 4.121}, {"d": "05-08", "r": 4.116}, {"d": "05-20", "r": 4.171}, {"d": "06-01", "r": 4.154}, {"d": "06-11", "r": 4.205}, {"d": "06-23", "r": 4.235}, {"d": "07-03", "r": 4.225}, {"d": "07-15", "r": 4.292}, {"d": "07-27", "r": 4.282}, {"d": "08-06", "r": 4.215}, {"d": "08-18", "r": 4.215}, {"d": "08-28", "r": 4.204}, {"d": "09-09", "r": 4.192}, {"d": "09-21", "r": 4.236}, {"d": "10-01", "r": 4.289}, {"d": "10-13", "r": 4.28}, {"d": "10-23", "r": 4.302}, {"d": "11-04", "r": 4.288}, {"d": "11-16", "r": 4.319}, {"d": "11-20", "r": 4.325}]};
+let currentTrendPeriod = '1M';
+let currentLiveHkdRate = 4.33;
+
+function selectTrendPeriod(period) {
+  if (!HISTORICAL_TRENDS[period]) return;
+  currentTrendPeriod = period;
+
+  document.querySelectorAll('.trend-tab-btn').forEach(btn => btn.classList.remove('active'));
+  const btn = document.getElementById('trendTab-' + period);
+  if (btn) btn.classList.add('active');
+
+  renderRateTrendChart(period);
+}
+
+function renderRateTrendChart(period) {
+  const pts = HISTORICAL_TRENDS[period] || HISTORICAL_TRENDS['1M'];
+  if (!pts || pts.length === 0) return;
+
+  const rates = pts.map(p => p.r);
+  const minRate = Math.min(...rates);
+  const maxRate = Math.max(...rates);
+  const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+  const firstRate = rates[0];
+  const lastRate = rates[rates.length - 1];
+  const changePct = ((lastRate - firstRate) / firstRate) * 100;
+
+  // Update Stats DOM
+  document.getElementById('trendHighStat').innerText = maxRate.toFixed(3) + " ฿";
+  document.getElementById('trendLowStat').innerText = minRate.toFixed(3) + " ฿";
+  document.getElementById('trendAvgStat').innerText = avgRate.toFixed(3) + " ฿";
+  
+  const changeBadge = document.getElementById('trendChangeBadge');
+  if (changeBadge) {
+    const sign = changePct >= 0 ? "+" : "";
+    changeBadge.innerText = `${sign}${changePct.toFixed(1)}%`;
+    if (changePct > 0) {
+      changeBadge.style.background = "#fee2e2"; changeBadge.style.color = "#991b1b";
+    } else {
+      changeBadge.style.background = "#dcfce7"; changeBadge.style.color = "#15803d";
+    }
+  }
+
+  document.getElementById('chartStartDate').innerText = pts[0].d;
+  document.getElementById('chartEndDate').innerText = pts[pts.length - 1].d;
+
+  // Build SVG Path
+  const W = 540;
+  const H = 180;
+  const padT = 25;
+  const padB = 25;
+  const padL = 35;
+  const padR = 25;
+
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const range = (maxRate - minRate) || 0.1;
+
+  const coords = pts.map((p, idx) => {
+    const x = padL + (idx / (pts.length - 1)) * chartW;
+    const y = padT + (1 - (p.r - minRate) / range) * chartH;
+    return { x, y, r: p.r, d: p.d };
+  });
+
+  // Path Line
+  let pathD = `M ${coords[0].x} ${coords[0].y}`;
+  for (let i = 1; i < coords.length; i++) {
+    // smooth curve with bezier control points
+    const prev = coords[i - 1];
+    const curr = coords[i];
+    const mx = (prev.x + curr.x) / 2;
+    pathD += ` C ${mx} ${prev.y}, ${mx} ${curr.y}, ${curr.x} ${curr.y}`;
+  }
+
+  // Area Fill Path
+  const areaD = `${pathD} L ${coords[coords.length - 1].x} ${H - padB} L ${coords[0].x} ${H - padB} Z`;
+
+  // SVG Elements
+  const svgEl = document.getElementById('rateTrendSvg');
+  if (svgEl) {
+    svgEl.innerHTML = `
+      <defs>
+        <linearGradient id="rateAreaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#10b981" stop-opacity="0.38"/>
+          <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+        </linearGradient>
+      </defs>
+      <!-- Grid Lines -->
+      <line x1="${padL}" y1="${padT}" x2="${W - padR}" y2="${padT}" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+      <line x1="${padL}" y1="${padT + chartH / 2}" x2="${W - padR}" y2="${padT + chartH / 2}" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+      <line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="#cbd5e1" stroke-width="1.5"/>
+
+      <!-- Y Axis Labels -->
+      <text x="${padL - 6}" y="${padT + 4}" fill="#94a3b8" font-size="9" font-weight="700" text-anchor="end">${maxRate.toFixed(2)}</text>
+      <text x="${padL - 6}" y="${padT + chartH / 2 + 3}" fill="#94a3b8" font-size="9" font-weight="700" text-anchor="end">${avgRate.toFixed(2)}</text>
+      <text x="${padL - 6}" y="${H - padB}" fill="#94a3b8" font-size="9" font-weight="700" text-anchor="end">${minRate.toFixed(2)}</text>
+
+      <!-- Area & Line -->
+      <path d="${areaD}" fill="url(#rateAreaGrad)"/>
+      <path d="${pathD}" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Milestone Dots -->
+      ${coords.map((c, i) => {
+        if (i === 0 || i === coords.length - 1 || i % Math.ceil(coords.length / 5) === 0) {
+          return `
+            <circle cx="${c.x}" cy="${c.y}" r="4" fill="#ffffff" stroke="#059669" stroke-width="2.5" 
+                    onmouseenter="showChartTip(evt, '${c.d}', ${c.r})" 
+                    onclick="showChartTip(evt, '${c.d}', ${c.r})"/>
+          `;
+        }
+        return '';
+      }).join('')}
+    `;
+  }
+}
+
+function showChartTip(evt, dateStr, rateVal) {
+  const tip = document.getElementById('chartTooltip');
+  if (!tip) return;
+  tip.innerText = `${dateStr}: ${rateVal.toFixed(3)} ฿`;
+  tip.style.left = evt.offsetX + 'px';
+  tip.style.top = evt.offsetY + 'px';
+  tip.style.display = 'block';
+  setTimeout(() => { if (tip) tip.style.display = 'none'; }, 3000);
+}
+
+async function fetchLiveExchangeRate(showToast = false) {
+  const spin = document.getElementById('rateRefreshSpin');
+  if (spin) spin.style.transform = 'rotate(360deg)';
+
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/HKD');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.rates && data.rates.THB) {
+        const rate = data.rates.THB;
+        currentLiveHkdRate = rate;
+
+        const rateInput = document.getElementById('calcExchangeRate');
+        if (rateInput) rateInput.value = rate.toFixed(2);
+
+        const heroDisplay = document.getElementById('liveRateHeroDisplay');
+        if (heroDisplay) heroDisplay.innerText = rate.toFixed(2) + " ฿";
+
+        const timeBadge = document.getElementById('liveRateTimeBadge');
+        if (timeBadge) timeBadge.innerText = "🟢 เรตสดตลาดโลกวันนี้ (อัปเดตแบบ Real-time)";
+
+        calcCurrency();
+
+        // Update latest point in 1M trend
+        if (HISTORICAL_TRENDS['1M'] && HISTORICAL_TRENDS['1M'].length > 0) {
+          const lastIdx = HISTORICAL_TRENDS['1M'].length - 1;
+          HISTORICAL_TRENDS['1M'][lastIdx].r = parseFloat(rate.toFixed(3));
+          renderRateTrendChart(currentTrendPeriod);
+        }
+
+        if (showToast) {
+          alert("✅ อัปเดตเรตตลาดสากลล่าสุดสำเร็จ: 1 HKD = " + rate.toFixed(2) + " บาท");
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Exchange rate fetch error, using default", err);
+  } finally {
+    setTimeout(() => { if (spin) spin.style.transform = 'none'; }, 500);
+  }
+}
+
+function calcCurrency() {
+  const rateInput = document.getElementById('calcExchangeRate');
+  const rate = parseFloat(rateInput ? rateInput.value : 4.33) || 4.33;
+  const hkdInput = document.getElementById('calcHkdInput');
+  const hkd = parseFloat(hkdInput ? hkdInput.value : 0) || 0;
+
+  const thb = hkd * rate;
+  const perPerson = thb / 5;
+
+  const resEl = document.getElementById('calcThbResult');
+  const perEl = document.getElementById('calcPerPerson');
+
+  if (resEl) {
+    resEl.innerText = thb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ฿';
+  }
+  if (perEl) {
+    perEl.innerText = '(หาร 5 ท่าน = ตกคนละ ' + perPerson.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ฿)';
+  }
+}
+
+function setCalcHkd(val) {
+  const input = document.getElementById('calcHkdInput');
+  if (input) {
+    input.value = val;
+    calcCurrency();
+  }
+}
+
+function openCurrencyModal() {
+  document.getElementById('currencyModal').classList.add('active');
+  selectTrendPeriod(currentTrendPeriod);
+  calcCurrency();
+  fetchLiveExchangeRate(false);
+}
+function closeCurrencyModal() {
+  document.getElementById('currencyModal').classList.remove('active');
+}
 
 function openNpModal() {
   document.getElementById('npModal').classList.add('active');
