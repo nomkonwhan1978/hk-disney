@@ -1866,7 +1866,7 @@
       <button class="fullscreen-back-btn" onclick="closeTempleModal()">
         <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <div class="fullscreen-title">🛕 5 วัดดังฮ่องกง & ไหว้พระมูเตลู</div>
+      <div class="fullscreen-title">🛕 8 สุดยอดวัดดัง & ไหว้พระมูเตลูฮ่องกง</div>
       <div style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:12px;">
         🧧 ทริปปีใหม่ 2027
       </div>
@@ -1881,20 +1881,23 @@
           <span style="font-size:24px;">🙏</span>
         </div>
         <div style="font-size:12px; line-height:1.6; opacity:0.95; display:flex; flex-direction:column; gap:4px;">
-          <div>• <b>1 ม.ค. (วันถึง):</b> หลังเช็กอินโรงแรม B P International บ่ายๆ แนะนำไป <b>วัดเจ้าแม่กวนอิม ฮองฮำ</b> (นั่งแท็กซี่เพียง 8 นาที ~35 HKD) หรือ <b>วัดหวังต้าเซียน</b> ก่อนกลับมาเดินตลาดกลางคืน</div>
-          <div>• <b>2 ม.ค. (วัน Disney):</b> ท่องเที่ยวและเล่นเครื่องเล่นในสวนสนุกตลอดทั้งวัน</div>
-          <div>• <b>3 ม.ค. (วันกลับ):</b> ขึ้นกระเช้านองปิง ไหว้ <b>พระใหญ่เทียนถาน & วัดโป่หลิน</b> บนยอดเขาเกาะลันเตา ก่อนเดินทางไปสนามบินฮ่องกง</div>
+          <div>• <b>1 ม.ค. (วันถึง):</b> เช็กอิน รร. B P แล้วเดินเพียง 8 นาทีไป <b>วัดเจ้าแม่ทับทิม ยามาเต</b> ขอพรเดินทางปลอดภัย หรือนั่งแท็กซี่ 8 นาทีไป <b>วัดเจ้าแม่กวนอิม ฮองฮำ</b> เพื่อทำพิธียืมเงินเสริมดวงปีใหม่</div>
+          <div>• <b>2 ม.ค. (วัน Disney):</b> สวนสนุก Hong Kong Disneyland เต็มวัน</div>
+          <div>• <b>3 ม.ค. (วันกลับ):</b> มูเตลูฝั่งเกาะฮ่องกง <b>วัดปักไต หว่านไจ๋ (เทพเจ้าเปลี่ยนใจ & พลิกดวง)</b> และ <b>วัดหม่านโหม่ว (ธูปขดยักษ์)</b> หรือแวะ <b>วัดแชกงหมิว / หวังต้าเซียน</b> ก่อนปิดท้ายด้วย <b>พระใหญ่เทียนถาน เกาะลันเตา</b> และไปสนามบิน</div>
         </div>
       </div>
 
       <!-- Quick Temple Filter Chips -->
       <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; -webkit-overflow-scrolling:touch;">
-        <button class="weather-chip active" onclick="filterTemples('all')">ทั้งหมด (5 วัด)</button>
+        <button class="weather-chip active" onclick="filterTemples('all')">ทั้งหมด (8 วัด)</button>
         <button class="weather-chip" onclick="filterTemples('hunghom')">1. วัดฮองฮำ</button>
         <button class="weather-chip" onclick="filterTemples('wts')">2. หวังต้าเซียน</button>
         <button class="weather-chip" onclick="filterTemples('chekung')">3. แชกงหมิว</button>
-        <button class="weather-chip" onclick="filterTemples('repulse')">4. รีพัลส์เบย์</button>
-        <button class="weather-chip" onclick="filterTemples('polin')">5. พระใหญ่นองปิง</button>
+        <button class="weather-chip" onclick="filterTemples('paktai')">4. ปักไต หว่านไจ๋</button>
+        <button class="weather-chip" onclick="filterTemples('manmo')">5. หม่านโหม่ว</button>
+        <button class="weather-chip" onclick="filterTemples('tinhau')">6. เจ้าแม่ทับทิม ยามาเต</button>
+        <button class="weather-chip" onclick="filterTemples('repulse')">7. รีพัลส์เบย์</button>
+        <button class="weather-chip" onclick="filterTemples('polin')">8. พระใหญ่นองปิง</button>
       </div>
 
       <!-- TEMPLE 1: วัดเจ้าแม่กวนอิม ฮองฮำ -->
@@ -2020,7 +2023,131 @@
         </div>
       </div>
 
-      <!-- TEMPLE 4: วัดเจ้าแม่กวนอิม รีพัลส์เบย์ -->
+      
+      <!-- TEMPLE 4: วัดปักไต หว่านไจ๋ -->
+      <div id="temple-card-paktai" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-paktai.jpg" alt="วัดปักไต หว่านไจ๋" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.85); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            ⚡ เทพเจ้าเปลี่ยนใจ • พลิกร้ายเป็นดี เสริมอำนาจบารมี
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#4338ca; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            เกาะฮ่องกง (หว่านไจ๋)
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">4. วัดปักไต หว่านไจ๋ (Wan Chai Pak Tai Temple)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">灣仔玉虛宮 (北帝廟) • โบราณสถานระดับ 1 อายุกว่า 160 ปี</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 17:00 น. (เปิดทุกวัน)</div>
+            <div>🚇 <b>การเดินทาง:</b><br>MTR Wan Chai (Exit A3) เดิน 8-10 นาที หรือแท็กซี่</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#eef2ff; border-left:3.5px solid #4338ca; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> โด่งดังเรื่อง <b>"เทพเจ้าเปลี่ยนใจ"</b> ขอพรให้ผู้ที่มีปัญหากับเรา หัวหน้า หรือคู่ค้ายอมเปลี่ยนใจกลับมารักและช่วยเหลือ พลิกชะตาจากดวงตกให้กลับมาปัง เสริมอำนาจบารมี<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค. (หรือช่วงบ่ายหลังแวะเที่ยวฝั่งฮ่องกง)</b> เชื่อมต่อกับวัดหม่านโหม่วหรือช้อปปิ้ง Causeway Bay ได้สะดวกมาก
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Wan+Chai+Pak+Tai+Temple+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templePaktaiSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#4338ca;" onclick="showSubInfo('templePaktaiRitual')">
+              📜 เคล็ดลับไหว้ขอพรเทพเจ้าเปลี่ยนใจ & พลิกดวง
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 5: วัดหม่านโหม่ว ถนนฮอลลีวูด -->
+      <div id="temple-card-manmo" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-manmo.jpg" alt="วัดหม่านโหม่ว ถนนฮอลลีวูด" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.85); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            🔥 ธูปขดยักษ์ในตำนาน • ปัญญา การงาน ชนะคู่แข่ง
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#b45309; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            เกาะฮ่องกง (เชิงวาน/เซ็นทรัล)
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">5. วัดหม่านโหม่ว ถนนฮอลลีวูด (Man Mo Temple)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">上環文武廟 • วัดที่เก่าแก่และขลังที่สุดบนเกาะฮ่องกง (สร้างปี 1847)</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 18:00 น. (เปิดทุกวัน)</div>
+            <div>🚇 <b>การเดินทาง:</b><br>MTR Sheung Wan (Exit A2) เดิน 8-10 นาที หรือ Central Escalator</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fffbeb; border-left:3.5px solid #b45309; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> ไหว้ <b>เทพเหวินชาง (บุ๋น)</b> ขอพรเรื่องสติปัญญา การเรียน การสอบ และตำแหน่งหน้าที่การงาน + ไหว้ <b>เทพกวนอู (บู๊)</b> ขอเรื่องความซื่อสัตย์ ธุรกิจ การค้า ชนะคู่แข่ง<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค.</b> เดินทางต่อจากวัดปักไตหรือเที่ยวชิลๆ ย่านคาเฟ่ Soho, Tai Kwun, PMQ
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Man+Mo+Temple+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeManmoSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#b45309;" onclick="showSubInfo('templeManmoRitual')">
+              📜 เคล็ดลับการไหว้สัมผัสพู่กันทองเหลือง & เทพกวนอู
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 6: วัดเจ้าแม่ทับทิม ทินหัว ยามาเต -->
+      <div id="temple-card-tinhau" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
+        <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
+          <img src="temple-tinhau.jpg" alt="วัดเจ้าแม่ทับทิม ทินหัว ยามาเต" style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div style="position:absolute; top:12px; left:12px; background:rgba(15,23,42,0.85); backdrop-filter:blur(6px); color:#fef08a; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:800;">
+            🌊 เดินทางราบรื่นปลอดภัย • แคล้วคลาด ไร้อุปสรรค
+          </div>
+          <div style="position:absolute; bottom:10px; right:12px; background:#15803d; color:#fff; padding:3px 9px; border-radius:8px; font-size:10.5px; font-weight:700;">
+            ใกล้โรงแรม B P (เดิน 8 นาที)
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">6. วัดเจ้าแม่ทับทิม ทินหัว ยามาเต (Tin Hau Temple)</div>
+              <div style="font-size:12.5px; color:#64748b; font-weight:600;">油麻地天后廟 • อารามโบราณสถานระดับ 1 ร่มรื่นใต้ต้นไทรใหญ่ใจกลางเกาลูน</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+            <div>⏰ <b>เวลาเปิด-ปิด:</b><br>09:00 – 17:00 น. (เปิดทุกวัน)</div>
+            <div>🚶 <b>การเดินทาง:</b><br>เดินจาก รร. B P เพียง 800 ม. (8 นาที) ผ่านถนน Nathan Rd</div>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#f0fdf4; border-left:3.5px solid #15803d; padding:10px 12px; border-radius:8px;">
+            • <b>ความศักดิ์สิทธิ์:</b> องค์เจ้าแม่ทับทิม (มาจู่) เทพแห่งท้องทะเล คุ้มครองการเดินทางให้ราบรื่น ปลอดภัย แคล้วคลาดจากอุบัติเหตุ และเสริมโชคลาภการเงิน<br>
+            • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. (บ่ายวันถึง) หรือเช้าวันที่ 3 ม.ค.</b> เพราะอยู่ใกล้โรงแรมที่สุด ไม่ต้องขึ้นรถไฟฟ้า สามารถเดินเล่นรับลมชิลๆ ได้เลย
+          </div>
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Tin+Hau+Temple+Yau+Ma+Tei+Hong+Kong', '_blank')">
+              📍 เปิด Google Maps
+            </button>
+            <button class="action-shortcut-btn" style="background:#0f172a;" onclick="showSubInfo('templeTinhauSign')">
+              🀄 ป้ายจีนแท็กซี่
+            </button>
+            <button class="action-shortcut-btn" style="grid-column:span 2; background:#15803d;" onclick="showSubInfo('templeTinhauRitual')">
+              📜 เคล็ดลับการขอพรเดินทางปลอดภัย & ค้าขายคล่องตัว
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLE 7: วัดเจ้าแม่กวนอิม รีพัลส์เบย์ -->
       <div id="temple-card-repulse" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
         <div style="position:relative; width:100%; height:200px; background:#f1f5f9;">
           <img src="temple-repulse.jpg" alt="วัดเจ้าแม่กวนอิม รีพัลส์เบย์" style="width:100%; height:100%; object-fit:cover; display:block;">
@@ -2075,7 +2202,7 @@
         <div style="padding:16px;">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
             <div>
-              <div style="font-size:17px; font-weight:900; color:#0f172a;">5. พระใหญ่เทียนถาน & วัดโป่หลิน (Ngong Ping)</div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">8. พระใหญ่เทียนถาน & วัดโป่หลิน (Ngong Ping)</div>
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">大嶼山天壇大佛 寶蓮禪寺 • ศูนย์รวมจิตวิญญาณแห่งเกาะลันเตา</div>
             </div>
           </div>
@@ -4352,6 +4479,85 @@ function showSubInfo(type) {
         2. <b>ลูบเคราเทพเจ้าไฉ่ซิงเอี้ย:</b> ใช้มือสองข้างลูบเคราท่านตั้งแต่บนลงล่าง แล้วลูบถุงทองข้างกายท่าน จากนั้นเอามือทั้งสองข้างใส่กระเป๋าเสื้อหรือกระเป๋ากางเกงตัวเอง เป็นการเก็บเงินเข้ากระเป๋า<br>
         3. <b>เสี่ยงทายปลาทอง:</b> ตั้งจิตอธิษฐานแล้วโยนเหรียญเข้าปากปลาทอง หากเข้าปากเชื่อว่าคำขอจะสมหวังรวดเร็ว
       </div>`,
+    templePaktaiSign: 
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#e0e7ff; color:#4338ca; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#eef2ff; border:1.5px solid #c7d2fe; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#4f46e5; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดปักไต หว่านไจ๋):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#4338ca; font-size:26px;">灣仔 隆安街 玉虛宮（北帝廟）</span><br>
+            <span style="font-size:15px; color:#64748b;">(藍屋後面 / Lung On Street, Wan Chai)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: ว้านไจ๋ หล่งออนก๊าย หยุกโฮยก๊ง (ปั๊กไต่หมิ่ว)<br>
+          • <b>จุดสังเกต:</b> อยู่ด้านหลังตึกสีฟ้า Blue House ย่านหว่านไจ๋ เกาะฮ่องกง<br>
+          • <b>หรือนั่ง MTR:</b> ลงสถานี <b>Wan Chai ทางออก A3</b> แล้วเดินขึ้นทางทิศใต้ประมาณ 8-10 นาที
+        </div>
+      </div>,
+    templePaktaiRitual: 
+      <h3 style="margin-top:0; color:#4338ca;">⚡ เคล็ดลับการไหว้มูเตลู: วัดปักไต หว่านไจ๋ (เทพเจ้าเปลี่ยนใจ & พลิกดวง)</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>ไหว้ฟ้าดิน (เทียนกง):</b> หันหน้าออกหน้าวัด จุดธูปอธิษฐานบอกกล่าวฟ้าดินเพื่อเปิดทางรับพลังสิริมงคล<br>
+        2. <b>กราบไหว้องค์เทพปักไต (ประธานองค์ใหญ่):</b> พระปักไตหรือเทพดาวเหนือองค์สัมฤทธิ์โบราณกว่า 400 ปี ขอพรเรื่อง <b>พลิกดวงชะตาจากร้ายกลายเป็นดี</b> เสริมอำนาจบารมี คุ้มครองความปลอดภัย และสุขภาพแข็งแรง<br>
+        3. <b>ไฮไลท์สำคัญ "ขอพรเทพเจ้าเปลี่ยนใจ":</b> ไหว้เทพฮั้วฮะ (เทพแห่งความปรองดองและสามัคคี) และไท้ส่วยเอี๊ย ตั้งจิตระลึกถึงบุคคลที่มีปัญหาขัดแย้ง เจ้านาย ลูกค้า หรือคู่ค้าธุรกิจ ขอพรให้ท่านช่วย <b>"ดลบันดาลให้พวกเขากลับใจ เปลี่ยนจากร้ายกลายมาเป็นมิตร ช่วยเหลือเกื้อกูลเรา"</b><br>
+        4. <b>เติมน้ำมันตะเกียง:</b> เพื่อเสริมความสว่างไสว รุ่งโรจน์ในชีวิต การงาน และการเงิน
+      </div>,
+    templeManmoSign: 
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#fef3c7; color:#b45309; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#d97706; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดหม่านโหม่ว):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#b45309; font-size:26px;">上環 荷李活道124號 文武廟</span><br>
+            <span style="font-size:15px; color:#64748b;">(124 Hollywood Road, Sheung Wan)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: เสิงหว่าน ห่อเลยหวูดโต่ว หมั่นโหมวหมิ่ว<br>
+          • <b>หรือนั่ง MTR:</b> ลงสถานี <b>Sheung Wan ทางออก A2</b> เดินขึ้น Hollywood Road (~8-10 นาที) หรือลงบันไดเลื่อน Central Mid-Levels Escalator
+        </div>
+      </div>,
+    templeManmoRitual: 
+      <h3 style="margin-top:0; color:#b45309;">🔥 เคล็ดลับการไหว้มูเตลู: วัดหม่านโหม่ว (เทพบุ๋น & เทพบู๊)</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>ไหว้องค์เทพเหวินชาง (เทพบุ๋น):</b> เทพแห่งวรรณกรรม ปัญญา และการสอบ ขอพรเรื่องความก้าวหน้าในหน้าที่การงาน เลื่อนตำแหน่ง การสอบแข่งขัน และสติปัญญาเฉียบแหลม<br>
+        2. <b>สัมผัสพู่กันทองเหลืองยักษ์:</b> เดินไปแตะหรือลูบที่ <b>"พู่กันเหวินชาง"</b> แล้วนำมือมาแตะที่ศีรษะตนเองเพื่อรับพลังสติปัญญา<br>
+        3. <b>ไหว้องค์เทพเจ้ากวนอู (เทพบู๊):</b> เทพแห่งความซื่อสัตย์ ความกล้าหาญ ขอพรเรื่องการทำธุรกิจ ค้าขาย ชนะคู่แข่งทางการค้า และป้องกันคนทรยศหักหลัง<br>
+        4. <b>ชมธูปขดยักษ์แขวนเพดาน:</b> จุดธูปขดรูปกรวยควันกรุ่นอันเป็นเอกลักษณ์ ถ่ายทอดความปรารถนาขึ้นสู่สรวงสวรรค์
+      </div>,
+    templeTinhauSign: 
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#dcfce7; color:#15803d; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客) • หรือเดินจาก รร. BP 8 นาที
+        </div>
+        <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#16a34a; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (ไปวัดเจ้าแม่ทับทิม ยามาเต):</div>
+          <div style="font-size:24px; font-weight:900; color:#0f172a; line-height:1.35;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#15803d; font-size:26px;">油麻地 廟街 眾坊街 天后廟</span><br>
+            <span style="font-size:15px; color:#64748b;">(Public Square Street, Yau Ma Tei)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: เหยาหม่าเต่ย์ มิวไก๊ จ้งฟ้องก๊าย ทิ้นเหาหมิ่ว<br>
+          • <b>เดินจากโรงแรม B P:</b> ออกจากโรงแรม เลี้ยวขวาเดินตรงตามถนน Nathan Road เพียง ~800 ม. ถึงจัตุรัส Public Square Street ติดตลาดหยก (Jade Market)
+        </div>
+      </div>,
+    templeTinhauRitual: 
+      <h3 style="margin-top:0; color:#15803d;">🌊 เคล็ดลับการขอพร: วัดเจ้าแม่ทับทิม ทินหัว ยามาเต</h3>
+      <div style="font-size:12.5px; color:#334155; text-align:left; line-height:1.65;">
+        1. <b>ขอพรเดินทางปลอดภัย (เจ้าแม่มาจู่):</b> เจ้าแม่ทับทิมเป็นเทพแห่งท้องทะเลและการเดินทาง ขอพรให้การเดินทางตลอดทริปฮ่องกง 3 วัน ราบรื่น แคล้วคลาดจากอุบัติเหตุ และภัยอันตรายทั้งปวง<br>
+        2. <b>ขอพรความมั่งคั่งและธุรกิจ:</b> ไหว้ขอพรด้านการค้าขาย ค้าขายคล่องตัว การเงินหมุนเวียนไม่มีสะดุด<br>
+        3. <b>ศาลไท้ส่วยเอี๊ย & เจ้าพ่อเสือ:</b> ภายในบริเวณมีวิหารไท้ส่วยเอี๊ยและศาลเจ้าพ่อเสือ สามารถกราบไหว้ปัดเป่าเคราะห์ ป้องกันศัตรูและอุปสรรค<br>
+        4. <b>เดินชมบรรยากาศตลาดและต้นไทรโบราณ:</b> บริเวณลานหน้าวัดร่มรื่นด้วยต้นไทรยักษ์เก่าแก่ มีร้านค้าท้องถิ่นและตลาดหยกอยู่ใกล้เคียง เหมาะกับการเดินเล่นช่วงเช้าหรือเย็น
+      </div>,
     templePolinSign: `
       <div style="padding:4px 0;">
         <div style="display:inline-block; background:#f3e8ff; color:#7e22ce; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
