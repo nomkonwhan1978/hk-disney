@@ -954,6 +954,28 @@
     box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
   }
 
+
+  /* Temple Transit Toggle Buttons */
+  .temple-transit-btn {
+    flex: 1;
+    padding: 7px 8px;
+    border-radius: 9px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .temple-transit-btn.active {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: #0f172a;
+    box-shadow: 0 2px 6px rgba(15,23,42,0.18);
+  }
+
 </style>
 </head>
 <body>
@@ -1942,6 +1964,63 @@
             • <b>ความศักดิ์สิทธิ์:</b> โด่งดังระดับโลกเรื่อง <b>"พิธียืมเงินเจ้าแม่กวนอิม (Kwun Yam Treasury Opening)"</b> ขอพรเรื่องความมั่งคั่ง โชคลาภ ธุรกิจราบรื่น ปิดยอดขาย และขอความคุ้มครองให้แคล้วคลาดปลอดภัย<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. ช่วงบ่าย (14:30 - 16:30 น.)</b> หลังเช็กอินโรงแรม B P International แล้วนั่งแท็กซี่มาได้สะดวกรวดเร็วมาก
           </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-hunghom" class="temple-transit-btn active" onclick="switchTempleTransit('hunghom', 'mtr')">
+                🚇 รถไฟฟ้า MTR (~18-20 นาที)
+              </button>
+              <button id="btn-taxi-hunghom" class="temple-transit-btn" onclick="switchTempleTransit('hunghom', 'taxi')">
+                🚕 แท็กซี่ / Uber (~8 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-hunghom-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่กวนอิม ฮองฮำ): <span style="font-size:11px; color:#2563eb; font-weight:700;">~18–20 นาที | คนละ ~5.5 HKD</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาที (450 ม.) ไป MTR Jordan (ทางออก C2)</b> ➔ นั่งสายสีแดง 2 สถานีลง <b>Mong Kok</b> ➔ ข้ามชานชาลาต่อสายสีเขียว 2 สถานีลง <b>Ho Man Tin (ทางออก B1)</b> ➔ เดินลงเขาตามถนน Fat Kwong St เลี้ยวเข้า Station Lane ~6 นาทีถึงวัด
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่กวนอิม ฮองฮำ ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~18–20 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดิน 6 นาทีกลับมา <b>MTR Ho Man Tin (ทางออก B1)</b> ➔ สายสีเขียวลง <b>Yau Ma Tei</b> ➔ ข้ามชานชาลาต่อสายสีแดง 1 สถานีถึง <b>Jordan (ทางออก C2 มีลิฟต์)</b> เดิน 6 นาทีกลับเข้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-hunghom-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่กวนอิม ฮองฮำ): <span style="font-size:11px; color:#ea580c; font-weight:700;">~8–10 นาที | ~35–45 HKD (5 ท่าน)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P หรือเรียก UberXL วิ่งผ่านถนน Gascoigne Rd ➔ ถนน Wuhu St เลี้ยวเข้า Station Lane ส่งตรงหน้าซุ้มประตูวัด
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่กวนอิม ฮองฮำ ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~8–10 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดินออกมาหน้าถนนใหญ่ Wuhu St หรือเรียกรถ UberXL ปักหมุดกลับ B P International Hotel วิ่งตรงเลียบถนน Chatham Rd เพียง 8 นาทีถึงโรงแรม
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hung+Hom+Kwun+Yam+Temple+Hong+Kong', '_blank')">
@@ -1999,6 +2078,63 @@
             • <b>ความศักดิ์สิทธิ์:</b> โด่งดังเรื่อง <b>"เทพจันทรา (Yue Lao)"</b> ผูกด้ายแดงขอเนื้อคู่หรือเสริมความรักให้มั่นคง และขอพรสุขภาพจาก <b>"เทพเจ้าหวังต้าเซียน"</b> ให้หายจากโรคภัยไข้เจ็บ<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. ช่วงเย็น</b> หรือวันที่ 3 ม.ค. ช่วงเช้า นั่งรถไฟ MTR จากสถานี Jordan ไปต่อสายสีเขียวสะดวกมาก
           </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-wts" class="temple-transit-btn active" onclick="switchTempleTransit('wts', 'mtr')">
+                🚇 รถไฟฟ้า MTR (~22-25 นาที)
+              </button>
+              <button id="btn-taxi-wts" class="temple-transit-btn" onclick="switchTempleTransit('wts', 'taxi')">
+                🚕 แท็กซี่ / Uber (~15-18 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-wts-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดหวังต้าเซียน): <span style="font-size:11px; color:#2563eb; font-weight:700;">~22–25 นาที | คนละ ~9.5 HKD</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาทีไป MTR Jordan (ทางออก C2)</b> ➔ สายสีแดง (ปลายทาง Tsuen Wan) 3 สถานีลง <b>Mong Kok</b> ➔ เดินข้ามชานชาลาฝั่งตรงข้ามต่อสายสีเขียว (Kwun Tong Line) 5 สถานีลง <b>Wong Tai Sin (ทางออก B2)</b> ➔ ขึ้นบันไดเลื่อนถึงลานหน้าวัดทันที
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดหวังต้าเซียน ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~22–25 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้น <b>MTR Wong Tai Sin (ทางออก B2)</b> สายสีเขียว ➔ ลง <b>Mong Kok</b> ➔ ข้ามชานชาลาต่อสายสีแดง 3 สถานีลง <b>Jordan (ทางออก C2 มีลิฟต์)</b> เดิน 6 นาทีกลับเข้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-wts-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดหวังต้าเซียน): <span style="font-size:11px; color:#ea580c; font-weight:700;">~15–18 นาที | ~70–85 HKD (5 ท่าน)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P วิ่งผ่านถนน Princess Margaret Rd ➔ Waterloo Rd ➔ ถนน Lung Cheung Rd จอดหน้าซุ้มประตูวัดหวังต้าเซียน
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดหวังต้าเซียน ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~15–18 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เรียกแท็กซี่ที่ Taxi Stand หน้าห้าง Temple Mall North (ติด MTR ทางออก B3) หรือกด UberXL ปักหมุดกลับ B P International Hotel
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Wong+Tai+Sin+Temple+Hong+Kong', '_blank')">
@@ -2055,6 +2191,63 @@
           <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fefce8; border-left:3.5px solid #ca8a04; padding:10px 12px; border-radius:8px;">
             • <b>ความศักดิ์สิทธิ์:</b> การหมุน <b>"กังหันนำโชคทองเหลือง 3 รอบ"</b> เพื่อพัดพาสิ่งอัปมงคลออกไปและดึงดูดโชคลาภ เงินทอง เดินทางปลอดภัย และสุขภาพแข็งแรง<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. (วันขึ้นปีใหม่)</b> คนฮ่องกงนิยมมาไหว้รับพลังบวกต้นปี
+          </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-chekung" class="temple-transit-btn active" onclick="switchTempleTransit('chekung', 'mtr')">
+                🚇 รถไฟฟ้า MTR (~25 นาที รวดเดียว!)
+              </button>
+              <button id="btn-taxi-chekung" class="temple-transit-btn" onclick="switchTempleTransit('chekung', 'taxi')">
+                🚕 แท็กซี่ / Uber (~18-20 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-chekung-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดแชกงหมิว (วัดกังหัน)): <span style="font-size:11px; color:#2563eb; font-weight:700;">~25 นาที | คนละ ~10.5 HKD</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>⭐ ต่อเดียวไม่ต้องเปลี่ยนขบวน:</b> เดินจาก รร. B P ไปทางทิศตะวันตก 500 ม. (6 นาที) เข้าสถานี <b>MTR Austin (สายสีน้ำตาล Tuen Ma Line)</b> ➔ นั่งขบวนตรงรวดเดียว 5 สถานีลง <b>Che Kung Temple (ทางออก B)</b> ➔ เดินตามป้ายสะพานลอย 3 นาทีถึงวัดแชกงหมิว
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดแชกงหมิว (วัดกังหัน) ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~25 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้น <b>MTR Che Kung Temple (ทางออก B)</b> สายสีน้ำตาล Tuen Ma Line ➔ <b>นั่งรวดเดียวไม่ต้องเปลี่ยนสาย</b> ลงสถานี <b>Austin (ทางออก F)</b> ➔ เดิน 6 นาทีเข้าโรงแรม B P สะดวกสบายที่สุด
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-chekung-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดแชกงหมิว (วัดกังหัน)): <span style="font-size:11px; color:#ea580c; font-weight:700;">~18–20 นาที | ~85–100 HKD (รวมค่าอุโมงค์)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P วิ่งข้ามอุโมงค์ Lion Rock Tunnel สู่ย่าน Sha Tin จอดหน้าวัด Che Kung Miu Rd.
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดแชกงหมิว (วัดกังหัน) ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~18–20 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เรียกแท็กซี่หน้าวัด หรือกด UberXL วิ่งลอดอุโมงค์ Lion Rock Tunnel กลับมาส่งถึงหน้าโรงแรม B P
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -2114,6 +2307,63 @@
             • <b>ความศักดิ์สิทธิ์:</b> โด่งดังเรื่อง <b>"เทพเจ้าเปลี่ยนใจ"</b> ขอพรให้ผู้ที่มีปัญหากับเรา หัวหน้า หรือคู่ค้ายอมเปลี่ยนใจกลับมารักและช่วยเหลือ พลิกชะตาจากดวงตกให้กลับมาปัง เสริมอำนาจบารมี<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค. (หรือช่วงบ่ายหลังแวะเที่ยวฝั่งฮ่องกง)</b> เชื่อมต่อกับวัดหม่านโหม่วหรือช้อปปิ้ง Causeway Bay ได้สะดวกมาก
           </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-paktai" class="temple-transit-btn active" onclick="switchTempleTransit('paktai', 'mtr')">
+                🚇 รถไฟฟ้า MTR (~20-25 นาที)
+              </button>
+              <button id="btn-taxi-paktai" class="temple-transit-btn" onclick="switchTempleTransit('paktai', 'taxi')">
+                🚕 แท็กซี่ / Uber (~15-18 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-paktai-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดปักไต หว่านไจ๋): <span style="font-size:11px; color:#2563eb; font-weight:700;">~20–25 นาที | คนละ ~13 HKD (ข้ามอ่าว)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาทีไป MTR Jordan (ทางออก C2)</b> ➔ นั่งสายสีแดง 4 สถานีข้ามอ่าวลง <b>Admiralty</b> ➔ ข้ามชานชาลาต่อสายสีน้ำเงิน 1 สถานีลง <b>Wan Chai (ทางออก A3)</b> ➔ เดินข้ามถนน Johnston Rd เข้าซอย Stone Nullah Lane (ผ่านตึก Blue House) ถึงถนน Lung On St (~8-10 นาที)
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดปักไต หว่านไจ๋ ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~20–25 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดิน 8 นาทีกลับมา <b>MTR Wan Chai (ทางออก A3)</b> ➔ สายสีน้ำเงิน 1 สถานีลง <b>Admiralty</b> ➔ ข้ามชานชาลาต่อสายสีแดง 4 สถานีลง <b>Jordan (ทางออก C2 มีลิฟต์)</b> เดิน 6 นาทีกลับเข้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-paktai-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดปักไต หว่านไจ๋): <span style="font-size:11px; color:#ea580c; font-weight:700;">~15–18 นาที | ~90–120 HKD (รวมค่าอุโมงค์ข้ามอ่าว)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P ลอดอุโมงค์ Cross-Harbour Tunnel ขึ้นฝั่ง Wan Chai เลี้ยวเข้า Queen's Road East จอดปากซอย Stone Nullah Lane (หน้าตึก Blue House เดิน 1 นาที)
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดปักไต หว่านไจ๋ ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~15–18 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  กดเรียก UberXL หรือแท็กซี่ที่ปากซอย Stone Nullah Lane / Queen's Road East ลอดอุโมงค์ข้ามกลับฝั่งเกาลูนส่งถึงหน้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Wan+Chai+Pak+Tai+Temple+Hong+Kong', '_blank')">
@@ -2170,6 +2420,63 @@
           <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#fffbeb; border-left:3.5px solid #b45309; padding:10px 12px; border-radius:8px;">
             • <b>ความศักดิ์สิทธิ์:</b> ไหว้ <b>เทพเหวินชาง (บุ๋น)</b> ขอพรเรื่องสติปัญญา การเรียน การสอบ และตำแหน่งหน้าที่การงาน + ไหว้ <b>เทพกวนอู (บู๊)</b> ขอเรื่องความซื่อสัตย์ ธุรกิจ การค้า ชนะคู่แข่ง<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค.</b> เดินทางต่อจากวัดปักไตหรือเที่ยวชิลๆ ย่านคาเฟ่ Soho, Tai Kwun, PMQ
+          </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-manmo" class="temple-transit-btn active" onclick="switchTempleTransit('manmo', 'mtr')">
+                🚇 รถไฟฟ้า MTR (~25-28 นาที)
+              </button>
+              <button id="btn-taxi-manmo" class="temple-transit-btn" onclick="switchTempleTransit('manmo', 'taxi')">
+                🚕 แท็กซี่ / Uber (~15-20 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-manmo-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดหม่านโหม่ว ถนนฮอลลีวูด): <span style="font-size:11px; color:#2563eb; font-weight:700;">~25–28 นาที | คนละ ~13 HKD (ข้ามอ่าว)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาทีไป MTR Jordan (ทางออก C2)</b> ➔ สายสีแดง 5 สถานีข้ามอ่าวลง <b>Central</b> ➔ ต่อสายสีน้ำเงิน 1 สถานีลง <b>Sheung Wan (ทางออก A2)</b> ➔ เดินขึ้นเนินถนน Hillier St เลี้ยวขวาเข้า Queen's Rd Central แล้วขึ้นบันได Ladder St เข้าสู่ Hollywood Rd (~8-10 นาที) หรือขึ้น Central Escalator มาลง Hollywood Rd
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดหม่านโหม่ว ถนนฮอลลีวูด ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~25–28 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดินลงเนินมา <b>MTR Sheung Wan (ทางออก A2)</b> ➔ นั่งสายสีน้ำเงิน 1 สถานีลง <b>Central</b> ➔ ข้ามชานชาลาต่อสายสีแดงข้ามอ่าว 5 สถานีลง <b>Jordan (ทางออก C2)</b> เดิน 6 นาทีเข้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-manmo-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดหม่านโหม่ว ถนนฮอลลีวูด): <span style="font-size:11px; color:#ea580c; font-weight:700;">~15–20 นาที | ~100–130 HKD (รวมค่าอุโมงค์)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P ลอดอุโมงค์ Western Harbour Tunnel หรือ Cross-Harbour Tunnel ขึ้นฝั่ง Sheung Wan ส่งถึงหน้าบันไดวัดหม่านโหม่ว ถนน Hollywood Road ได้เลย
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดหม่านโหม่ว ถนนฮอลลีวูด ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~15–20 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เรียกแท็กซี่ริมถนน Hollywood Road หน้าวัด หรือกด UberXL ปักหมุดกลับ B P International Hotel
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -2228,6 +2535,63 @@
             • <b>ความศักดิ์สิทธิ์:</b> องค์เจ้าแม่ทับทิม (มาจู่) เทพแห่งท้องทะเล คุ้มครองการเดินทางให้ราบรื่น ปลอดภัย แคล้วคลาดจากอุบัติเหตุ และเสริมโชคลาภการเงิน<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 1 ม.ค. (บ่ายวันถึง) หรือเช้าวันที่ 3 ม.ค.</b> เพราะอยู่ใกล้โรงแรมที่สุด ไม่ต้องขึ้นรถไฟฟ้า สามารถเดินเล่นรับลมชิลๆ ได้เลย
           </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-tinhau" class="temple-transit-btn active" onclick="switchTempleTransit('tinhau', 'mtr')">
+                🚶 เดินเท้า 8 นาที (ใกล้โรงแรมที่สุด!)
+              </button>
+              <button id="btn-taxi-tinhau" class="temple-transit-btn" onclick="switchTempleTransit('tinhau', 'taxi')">
+                🚕 แท็กซี่ (~3-5 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-tinhau-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่ทับทิม ยามาเต): <span style="font-size:11px; color:#2563eb; font-weight:700;">~8 นาที | 0 HKD (เดินฟรี)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>🚶 เดินสบายๆ ยามเช้า:</b> ออกจากหน้า รร. B P เลี้ยวขวาเดินตามถนน Austin Rd ถึงสี่แยกถนน Nathan Rd เลี้ยวซ้ายเดินตรงไปทางทิศเหนือผ่านสถานี Jordan ตรงไปเรื่อยๆ จนถึงจัตุรัส Public Square Street สวนต้นไทรใหญ่ วัดอยู่ซ้ายมือติดตลาดหยก (Jade Market) รวมระยะทางเพียง 800 ม.
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่ทับทิม ยามาเต ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~8 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดินออกจากสวนหน้าวัด ย้อนกลับมาตามถนน Nathan Rd มุ่งหน้าลงใต้ เลี้ยวขวาเข้าถนน Austin Rd เดินเข้าสู่โรงแรม B P (8 นาที)
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-tinhau-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่ทับทิม ยามาเต): <span style="font-size:11px; color:#ea580c; font-weight:700;">~3–5 นาที | ~29–35 HKD (มิเตอร์เริ่มต้น)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P เลี้ยวขวาเข้าถนน Nathan Rd นั่งเพียง 3 นาที จอดส่งหน้าจัตุรัส Public Square Street
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่ทับทิม ยามาเต ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~3–5 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  โบกแท็กซี่ริมถนน Nathan Rd นั่งสั้นๆ 3 นาทีกลับมาจอดหน้าล็อบบี้โรงแรม B P
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Tin+Hau+Temple+Yau+Ma+Tei+Hong+Kong', '_blank')">
@@ -2285,6 +2649,63 @@
             • <b>ความศักดิ์สิทธิ์:</b> <b>"สะพานต่ออายุ (Longevity Bridge)"</b> เชื่อว่าก้าวข้าม 1 ครั้งอายุยืนขึ้น 3 วัน (ห้ามเดินย้อนกลับเด็ดขาด), ลูบเคราและถุงทอง <b>"เทพเจ้าไฉ่ซิงเอี้ย"</b> เพื่อเรียกทรัพย์ และโยนเหรียญเข้าปากปลาทองเสี่ยงทาย<br>
             • <b>วันแนะนำ:</b> ครึ่งวันเช้า บรรยากาศริมชายหาดรับลมทะเลสดชื่นมาก
           </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-repulse" class="temple-transit-btn active" onclick="switchTempleTransit('repulse', 'mtr')">
+                🚇 MTR + รถบัส 6X (~40-45 นาที)
+              </button>
+              <button id="btn-taxi-repulse" class="temple-transit-btn" onclick="switchTempleTransit('repulse', 'taxi')">
+                🚕 แท็กซี่ / Uber (~25-30 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-repulse-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่กวนอิม รีพัลส์เบย์): <span style="font-size:11px; color:#2563eb; font-weight:700;">~40–45 นาที | คนละ ~20 HKD (MTR + รถบัส)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาทีไป MTR Jordan (ทางออก C2)</b> ➔ สายสีแดง 5 สถานีลง <b>Central (ทางออก A)</b> ➔ เดินข้ามสะพานลอยไปท่ารถบัสใต้ตึก Exchange Square ➔ ต่อรถบัสสาย <b>6, 6X หรือ 260</b> นั่งชมวิวข้ามเขา ~20 นาที ลงป้าย <b>Repulse Bay Beach</b> ➔ เดินลงชายหาด 2 นาทีถึงศาลเจ้าแม่กวนอิม
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่กวนอิม รีพัลส์เบย์ ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~40–45 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  เดินขึ้นมาป้ายรถบัสฝั่งตรงข้ามหาด Repulse Bay ➔ นั่งรถบัสสาย 6, 6X หรือ 260 กลับมาลงตึก <b>Exchange Square (Central)</b> ➔ นั่ง MTR Central สายสีแดงข้ามอ่าวกลับลง <b>Jordan (ทางออก C2)</b> เดินเข้าโรงแรม B P
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-repulse-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ วัดเจ้าแม่กวนอิม รีพัลส์เบย์): <span style="font-size:11px; color:#ea580c; font-weight:700;">~25–30 นาที | ~140–170 HKD (รวมค่าอุโมงค์)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P หรือเรียก UberXL วิ่งข้ามอุโมงค์ Cross-Harbour Tunnel ➔ ลอดอุโมงค์ Aberdeen Tunnel มุ่งตรงสู่หาด Repulse Bay จอดทางลงศาลริมหาด (สะดวกมากสำหรับ 5 ท่าน)
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (วัดเจ้าแม่กวนอิม รีพัลส์เบย์ ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~25–30 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  กดเรียก UberXL หรือโบกแท็กซี่ริมถนน Repulse Bay Rd หน้าหาด วิ่งตรงกลับโรงแรม B P โดยไม่ต้องรอต่อรถบัส
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <button class="action-shortcut-btn" style="background:#0284c7;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Kwun+Yam+Shrine+Repulse+Bay+Hong+Kong', '_blank')">
@@ -2341,6 +2762,63 @@
           <div style="font-size:12px; color:#475569; line-height:1.55; margin-bottom:14px; background:#faf5ff; border-left:3.5px solid #9333ea; padding:10px 12px; border-radius:8px;">
             • <b>ความศักดิ์สิทธิ์:</b> องค์พระพุทธรูปทองสัมฤทธิ์ขนาดใหญ่ประทับบนดอกบัว เสริมบารมี ความเจริญรุ่งเรือง และความสงบในจิตใจ<br>
             • <b>วันแนะนำ:</b> <b>วันที่ 3 ม.ค. (วันกลับ)</b> ตรงตามแผนการเดินทางไปนองปิงและจุดฝากกระเป๋าของคุณ 100%
+          </div>
+          <!-- Transit Guide: MTR vs Taxi (Round-trip) -->
+          <div class="temple-transit-box" style="margin:12px 0 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px;">
+            <div style="font-size:12px; font-weight:800; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🧭 วิธีเดินทางไป-กลับ (จาก รร. B P International):</span>
+              <span style="font-size:10px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:8px;">ครอบครัว 5 ท่าน</span>
+            </div>
+
+            <!-- Mode Selector Buttons: MTR vs Taxi -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+              <button id="btn-mtr-polin" class="temple-transit-btn active" onclick="switchTempleTransit('polin', 'mtr')">
+                🚇 MTR + กระเช้า 360 (~55-65 นาที)
+              </button>
+              <button id="btn-taxi-polin" class="temple-transit-btn" onclick="switchTempleTransit('polin', 'taxi')">
+                🚕 แท็กซี่ / Uber (~40-50 นาที)
+              </button>
+            </div>
+
+            <!-- Content Pane: MTR -->
+            <div id="transit-content-polin-mtr" class="temple-transit-pane">
+              <div style="margin-bottom:8px; background:#eff6ff; border-left:3.5px solid #2563eb; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#1e40af; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ พระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง)): <span style="font-size:11px; color:#2563eb; font-weight:700;">~55–65 นาที | คนละ ~19 HKD (MTR) + กระเช้า 360</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>เดิน 6 นาทีไป MTR Jordan (ทางออก C2)</b> ➔ สายสีแดง 6 สถานีลง <b>Lai King</b> ➔ ข้ามชานชาลาต่อสายสีส้ม (Tung Chung Line) 3 สถานีลง <b>Tung Chung (ทางออก B)</b> ➔ เดิน 3 นาทีถึงสถานีขึ้นกระเช้า Ngong Ping 360 (นั่งกระเช้า 25 นาที หรือต่อรถบัสสาย 23 ~45 นาที) ถึงหมู่บ้านนองปิงและวัดโป่หลิน
+                </div>
+              </div>
+              <div style="background:#f0fdfa; border-left:3.5px solid #0d9488; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#115e59; margin-bottom:3px;">
+                  🔄 ขากลับ (พระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง) ➔ รร. B P): <span style="font-size:11px; color:#0d9488; font-weight:700;">~55–65 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>• หากกลับ รร. BP:</b> นั่งกระเช้าลง Tung Chung ➔ MTR สายสีส้มลง Lai King ➔ ต่อสายสีแดงลง Jordan (Exit C2)<br><b>• หากตรงไปสนามบิน (แนะนำตามแผน Day 3):</b> นั่งกระเช้าลงมาที่ Tung Chung แล้วนั่งแท็กซี่ไปสนามบินเพียง 10 นาที (~50-65 HKD) หรือขึ้นรถบัสสาย S1 (3.7 HKD ~12 นาที) ถึงสนามบินได้เลย ไม่ต้องย้อนเข้าเมือง
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Pane: Taxi -->
+            <div id="transit-content-polin-taxi" class="temple-transit-pane" style="display:none;">
+              <div style="margin-bottom:8px; background:#fff7ed; border-left:3.5px solid #ea580c; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#9a3412; margin-bottom:3px;">
+                  🚀 ขาไป (รร. B P ➔ พระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง)): <span style="font-size:11px; color:#ea580c; font-weight:700;">~40–50 นาที | ~280–340 HKD (รวมค่าสะพาน)</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  ขึ้นแท็กซี่หน้า รร. B P หรือเรียก UberXL วิ่งทางด่วน West Kowloon Highway ข้ามสะพาน Tsing Ma สู่เกาะลันเตา ไต่เขาสู่วัดโป่หลิน/พระใหญ่นองปิง
+                </div>
+              </div>
+              <div style="background:#fef2f2; border-left:3.5px solid #dc2626; padding:8px 10px; border-radius:6px;">
+                <div style="font-size:11.5px; font-weight:800; color:#991b1b; margin-bottom:3px;">
+                  🔄 ขากลับ (พระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง) ➔ รร. B P): <span style="font-size:11px; color:#dc2626; font-weight:700;">~40–50 นาที</span>
+                </div>
+                <div style="font-size:11px; color:#334155; line-height:1.55;">
+                  <b>• จุดต่อไปสนามบิน:</b> นั่งแท็กซี่ลงจากนองปิงตรงไปสนามบินฮ่องกงได้ทันทีในเวลา ~30 นาที (~180-220 HKD) สะดวกมากสำหรับครอบครัวที่มีกระเป๋าเดินทาง
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Action Buttons -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -4890,6 +5368,26 @@ function closeTempleModal() {
   dismissModal('templeModal', () => {
     document.getElementById('templeModal').classList.remove('active');
   });
+}
+
+
+function switchTempleTransit(templeId, mode) {
+  const mtrBtn = document.getElementById('btn-mtr-' + templeId);
+  const taxiBtn = document.getElementById('btn-taxi-' + templeId);
+  const mtrPane = document.getElementById('transit-content-' + templeId + '-mtr');
+  const taxiPane = document.getElementById('transit-content-' + templeId + '-taxi');
+
+  if (mode === 'mtr') {
+    if (mtrBtn) mtrBtn.classList.add('active');
+    if (taxiBtn) taxiBtn.classList.remove('active');
+    if (mtrPane) mtrPane.style.display = 'block';
+    if (taxiPane) taxiPane.style.display = 'none';
+  } else {
+    if (taxiBtn) taxiBtn.classList.add('active');
+    if (mtrBtn) mtrBtn.classList.remove('active');
+    if (taxiPane) taxiPane.style.display = 'block';
+    if (mtrPane) mtrPane.style.display = 'none';
+  }
 }
 
 function filterTemples(id) {
