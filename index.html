@@ -70,24 +70,6 @@
   .ride-picker-btn { background: rgba(245, 158, 11, 0.18); color: var(--gold); border-color: var(--gold); }
   .ride-picker-btn.active { background: var(--gold); color: #000000; border-color: var(--gold); }
 
-  /* แถบ 3 ปุ่มใต้แผนที่สวนสนุก */
-  .sub-action-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-    margin-top: 8px;
-  }
-  .transit-disney-btn {
-    background: #4f46e5;
-    color: #ffffff;
-    border-color: #4f46e5;
-  }
-  .transit-lym-btn {
-    background: #ea580c;
-    color: #ffffff;
-    border-color: #ea580c;
-  }
-
   .ride-drawer {
     display: none;
     background: var(--card);
@@ -664,256 +646,7 @@
     display: inline-block;
   }
 
-  /* =====================================================================
-     FLOATING BOT BUTTON (FAB) & SMART CHAT DRAWER
-     ===================================================================== */
-  .floating-bot-btn {
-    position: fixed;
-    bottom: 22px;
-    right: 18px;
-    z-index: 1000;
-    background: linear-gradient(135deg, #0284c7 0%, #4338ca 100%);
-    color: #ffffff;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
-    border: 2.5px solid #ffffff;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .floating-bot-btn:hover {
-    transform: scale(1.08);
-  }
-  .bot-face-icon {
-    font-size: 1.55rem;
-    line-height: 1;
-  }
-  .bot-tiny-badge {
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.3px;
-    background: rgba(0,0,0,0.3);
-    padding: 1px 5px;
-    border-radius: 6px;
-    margin-top: 1px;
-    line-height: 1.1;
-  }
-
-  .smart-chat-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(5px);
-    z-index: 10001;
-    justify-content: center;
-    align-items: flex-end;
-  }
-  .smart-chat-modal.active { display: flex; }
-  .smart-chat-sheet {
-    background: #ffffff;
-    width: 100%;
-    max-width: 540px;
-    height: 82vh;
-    max-height: 720px;
-    border-radius: 24px 24px 0 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 -8px 30px rgba(0,0,0,0.25);
-    animation: slideUpSheet 0.25s ease-out;
-  }
-  .chat-msg-box {
-    flex: 1;
-    overflow-y: auto;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 12.5px;
-  }
-  .chat-bubble-ai {
-    background: #f1f5f9;
-    color: #1e293b;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px 16px 16px 4px;
-    padding: 10px 12px;
-    max-width: 90%;
-    line-height: 1.5;
-  }
-  .chat-bubble-user {
-    background: #0284c7;
-    color: #ffffff;
-    border-radius: 16px 16px 4px 16px;
-    padding: 8px 12px;
-    align-self: flex-end;
-    max-width: 85%;
-    line-height: 1.4;
-    text-align: right;
-  }
-  .mtr-badge {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 11px;
-    color: #ffffff;
-    margin: 0 2px;
-  }
-  .badge-red { background: #ef4444; }
-  .badge-orange { background: #f97316; }
-  .badge-pink { background: #f472b6; color: #831843; }
-  .badge-green { background: #10b981; }
-
-  /* =====================================================================
-     COMMON GENERAL MODALS (Transit Selector, Ngong Ping, Local, Weather, Currency, Emergency)
-     ===================================================================== */
-  .gen-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.78);
-    backdrop-filter: blur(6px);
-    z-index: 10000;
-    justify-content: center;
-    align-items: flex-end;
-  }
-  .gen-modal.active { display: flex; }
-  .gen-sheet {
-    background: #ffffff;
-    width: 100%;
-    max-width: 540px;
-    max-height: 88vh;
-    border-radius: 24px 24px 0 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 -10px 35px rgba(0,0,0,0.3);
-    animation: slideUpSheet 0.28s ease-out;
-  }
-  .gen-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 16px;
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .gen-header h3 {
-    font-size: 14px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-  }
-  .gen-body {
-    padding: 16px;
-    overflow-y: auto;
-    font-size: 13px;
-    color: #334155;
-    line-height: 1.5;
-  }
-
-  .route-option-card {
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .route-option-card:hover {
-    border-color: #0284c7;
-    background: #f0f9ff;
-    transform: translateY(-2px);
-  }
-  .route-opt-icon {
-    font-size: 1.8rem;
-    line-height: 1;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #e0f2fe;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .route-opt-title {
-    font-size: 0.88rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin-bottom: 2px;
-  }
-  .route-opt-sub {
-    font-size: 0.72rem;
-    color: #64748b;
-    line-height: 1.35;
-  }
-
-  .time-chip-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 12px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .time-chip-btn {
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    color: #334155;
-    padding: 5px 10px;
-    border-radius: 18px;
-    font-size: 11.5px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: 0.2s;
-  }
-  .time-chip-btn.active {
-    background: #0284c7;
-    color: #ffffff;
-    border-color: #0284c7;
-  }
-
-
-  /* Toast Notification */
-  .chat-toast {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px);
-    background: rgba(15, 23, 42, 0.95);
-    color: #ffffff;
-    padding: 10px 18px;
-    border-radius: 24px;
-    font-size: 11.5px;
-    font-weight: 700;
-    line-height: 1.4;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.18);
-    z-index: 100005;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    max-width: 90%;
-    box-sizing: border-box;
-  }
-  .chat-toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -948,47 +681,46 @@
     <!-- 6 Main Feature Cards (2 Columns) -->
     <div class="dashboard-grid">
       
-      <!-- Card 1: Disneyland Guide -->
-      <div class="dashboard-card" onclick="openParkGuide()">
-        <div class="card-icon">🏰</div>
-        <div class="card-title">Disneyland Guide</div>
-        <div class="card-desc">แผนที่พาร์ค GPS • บัตรลัดคิว DPA 8 สิทธิ์ • ไทม์ไลน์ 14 จุด</div>
-        <div class="card-action-link">[เปิดไกด์สวนสนุก]</div>
+      <!-- Card 1: Disneyland Guide (Featured Hero Card) -->
+      <div class="dashboard-card" onclick="openParkGuide()" style="grid-column: span 2; background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%); border-color: #fde047;">
+        <div style="display:flex; align-items:center; gap:12px; width:100%; text-align:left;">
+          <div class="card-icon" style="margin:0; font-size:2.4rem;">🏰</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="card-title" style="font-size:0.95rem; color:#854d0e; margin:0;">Disneyland Guide</div>
+              <span style="font-size:10px; font-weight:700; background:#fef08a; color:#854d0e; padding:2px 8px; border-radius:10px;">VIP & DPA</span>
+            </div>
+            <div class="card-desc" style="margin-top:2px;">แผนที่พาร์ค GPS • บัตรลัดคิว DPA 8 สิทธิ์ • ไทม์ไลน์ 14 จุด</div>
+          </div>
+          <span style="color:#ca8a04; font-size:1.1rem; font-weight:800;">➔</span>
+        </div>
       </div>
 
-      <!-- Card 2: Transit Routes -->
+      <!-- Card 2: Transit Routes (3 Routes Included) -->
       <div class="dashboard-card" onclick="openTransitSelectionModal()">
         <div class="card-icon">🚆🚕</div>
         <div class="card-title">Transit Routes</div>
-        <div class="card-desc">MTR & แท็กซี่ 5 ที่นั่ง: 1) Disney 2) เล่ยหยู่มุน 3) นองปิง 360</div>
+        <div class="card-desc">1) ไป Disney<br>2) ไปเล่ยหยู่มุน<br>3) นองปิง 360 + สนามบิน</div>
         <div class="card-action-link">[เลือกดู 3 เส้นทาง]</div>
       </div>
 
-      <!-- Card 3: Explore Local Map -->
-      <div class="dashboard-card" onclick="openLocalMapModal()">
-        <div class="card-icon">🗺️📍</div>
-        <div class="card-title">Explore Local Map</div>
-        <div class="card-desc">พิกัดรอบ B P Hotel: ติ่มซำ Jordan • เซเว่น • ทางลัดสวนเกาลูน</div>
-        <div class="card-action-link">[สำรวจรอบตัว]</div>
-      </div>
-
-      <!-- Card 4: Current Weather -->
+      <!-- Card 3: Current Weather (Real-time & 14 Days) -->
       <div class="dashboard-card" onclick="openWeatherModal()">
         <div class="card-icon">⛅🧣</div>
         <div class="card-title">Current Weather</div>
-        <div class="card-desc">ฮ่องกง 1–3 ม.ค.: 14°–19°C ลมเย็นสบาย แนะนำเสื้อคลุม/กันลม</div>
-        <div class="card-action-link">[ดูพยากรณ์รายวัน]</div>
+        <div class="card-desc">อากาศสดวันนี้ + พยากรณ์ 14 วันล่วงหน้า & ไกด์แต่งกาย</div>
+        <div class="card-action-link">[เช็กอากาศ & แนวโน้ม]</div>
       </div>
 
-      <!-- Card 5: Convert Currency -->
+      <!-- Card 4: Convert Currency (Live Rate & Calculator) -->
       <div class="dashboard-card" onclick="openCurrencyModal()">
         <div class="card-icon">💱💵</div>
         <div class="card-title">Convert Currency</div>
-        <div class="card-desc">1 HKD ≈ 4.26 บาท คำนวณเร็ว แตะแก้ไขเรตเงินสด/บัตรได้เอง</div>
+        <div class="card-desc">เรตสดอัปเดตวันนี้ คำนวณไว แตะแก้เรตเองได้ตามจริง</div>
         <div class="card-action-link">[เครื่องคิดเลขด่วน]</div>
       </div>
 
-      <!-- Card 6: Emergency Info -->
+      <!-- Card 5: Emergency Info -->
       <div class="dashboard-card" onclick="openEmergencyModal()">
         <div class="card-icon">🚨📞</div>
         <div class="card-title">Emergency info</div>
@@ -1008,16 +740,7 @@
     </div>
 
   </div>
-
-  <!-- FLOATING ACTION BUTTON (BOT FACE + TINY CHAT BADGE) -->
-  <div class="floating-bot-btn" id="fabBotBtn" onclick="toggleSmartChat()" title="ผู้ช่วย MTR & การเดินทาง">
-    <div class="bot-face-icon">🤖</div>
-    <div class="bot-tiny-badge">Chat</div>
-  </div>
-
-
-
-  <!-- =====================================================================
+<!-- =====================================================================
        2. DISNEYLAND GUIDE SCREEN (WRAPPER FOR ORIGINAL PARK APP)
        ===================================================================== -->
   <div id="parkGuideScreen" style="display: none;">
@@ -1137,11 +860,7 @@
   </div>
 
   <!-- แถบ 3 ปุ่มใต้แผนที่สวนสนุก: GPS | เดินทาง Disney | ไปเล่ยหยู่มุน -->
-  <div class="sub-action-row">
-    <button class="toolbar-btn" id="gpsBtn" style="background: #10b981; color: #fff; border-color: #10b981;" onclick="toggleGPS()">📍 แสดงตำแหน่งฉัน</button>
-    <button class="toolbar-btn transit-disney-btn" onclick="openTransitModal()">🚇 เดินทาง Disney</button>
-    <button class="toolbar-btn transit-lym-btn" onclick="openLymModal()">🦞 ไปเล่ยหยู่มุน</button>
-  </div>
+  
 </div>
 
 <div class="nav-banner" id="navBanner"></div>
@@ -1418,25 +1137,87 @@
         <div id="npCanvas" class="map-canvas">
           <img src="transit-np.png" alt="Ngong Ping Transit Map" class="map-bg-img" style="width:100%; height:100%; object-fit:cover; display:block;">
 
-          <!-- Pins Layer -->
+          <!-- SVG Animated Overlay Layer (รถไฟ MTR, กระเช้าลอยฟ้า, และแท็กซี่แดง วิ่งตามถนนและรางจริง) -->
+          <svg class="map-svg-overlay" viewBox="0 0 1024 571" preserveAspectRatio="none">
+            <!-- MTR & Cable Car Layer (โหมด MTR) -->
+            <g id="svgNpMtr">
+              <!-- เส้นทาง MTR: Jordan -> Tsing Ma Bridge -> Tung Chung -->
+              <path id="pathNpMtr" d="M 810 510 Q 875 410 860 260 Q 825 170 780 160 Q 670 205 565 260 Q 490 295 420 315 Q 350 315 295 240" 
+                    fill="none" stroke="rgba(249, 115, 22, 0.35)" stroke-width="7" stroke-linecap="round"/>
+              <path d="M 810 510 Q 875 410 860 260 Q 825 170 780 160 Q 670 205 565 260 Q 490 295 420 315 Q 350 315 295 240" 
+                    fill="none" stroke="#f97316" stroke-width="4.5" stroke-dasharray="11,8" stroke-linecap="round"/>
+              <!-- ขบวนรถไฟ MTR วิ่งตามราง -->
+              <g>
+                <rect x="-35" y="-10" width="32" height="20" rx="5" fill="#ffffff" stroke="#ea580c" stroke-width="2.5"/>
+                <rect x="-28" y="-5" width="7" height="10" rx="2" fill="#fb923c"/>
+                <rect x="-17" y="-5" width="7" height="10" rx="2" fill="#fb923c"/>
+                <rect x="2" y="-10" width="36" height="20" rx="8" fill="#f97316" stroke="#c2410c" stroke-width="2.5"/>
+                <rect x="9" y="-5" width="8" height="10" rx="2" fill="#ffffff"/>
+                <rect x="21" y="-5" width="8" height="10" rx="2" fill="#ffffff"/>
+                <circle cx="34" cy="-4" r="2" fill="#fef08a"/>
+                <circle cx="34" cy="4" r="2" fill="#fef08a"/>
+                <animateMotion dur="9s" repeatCount="indefinite" rotate="auto">
+                  <mpath href="#pathNpMtr"/>
+                </animateMotion>
+              </g>
+
+              <!-- เส้นทางกระเช้าลอยฟ้า: สถานี Tung Chung -> พระใหญ่ Big Buddha -->
+              <path id="pathNpCable" d="M 670 480 Q 565 440 440 410 Q 350 380 230 355 Q 170 340 133 330" 
+                    fill="none" stroke="rgba(234, 179, 8, 0.4)" stroke-width="5" stroke-linecap="round"/>
+              <path d="M 670 480 Q 565 440 440 410 Q 350 380 230 355 Q 170 340 133 330" 
+                    fill="none" stroke="#eab308" stroke-width="3" stroke-dasharray="8,6" stroke-linecap="round"/>
+              <!-- ตัวกระเช้าลอยฟ้า Crystal Cabin ไต่ข้ามเขา -->
+              <g>
+                <line x1="0" y1="-14" x2="0" y2="-4" stroke="#475569" stroke-width="2"/>
+                <rect x="-9" y="-4" width="18" height="16" rx="4" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                <rect x="-6" y="-1" width="12" height="10" rx="2" fill="#e0f2fe"/>
+                <animateMotion dur="11s" repeatCount="indefinite" rotate="auto">
+                  <mpath href="#pathNpCable"/>
+                </animateMotion>
+              </g>
+            </g>
+
+            <!-- Car / Taxi Route Layer (โหมด Car/Taxi) -->
+            <g id="svgNpCar" style="display:none;">
+              <!-- เส้นทางรถยนต์: B P Hotel -> Tsing Ma Bridge -> Tung Chung -> Airport -->
+              <path id="pathNpCar" d="M 770 470 Q 835 340 810 210 Q 680 215 570 270 Q 495 305 425 325 Q 380 290 340 220 Q 290 160 241 115" 
+                    fill="none" stroke="rgba(239, 68, 68, 0.35)" stroke-width="7" stroke-linecap="round"/>
+              <path d="M 770 470 Q 835 340 810 210 Q 680 215 570 270 Q 495 305 425 325 Q 380 290 340 220 Q 290 160 241 115" 
+                    fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="10,7" stroke-linecap="round"/>
+              <!-- รถแท็กซี่สีแดง / UberXL วิ่งบนถนน -->
+              <g>
+                <rect x="-18" y="-9" width="36" height="18" rx="5" fill="#ef4444" stroke="#991b1b" stroke-width="2.5"/>
+                <rect x="-6" y="-7" width="16" height="14" rx="3" fill="#ffffff" stroke="#b91c1c" stroke-width="1.5"/>
+                <rect x="-3" y="-5" width="10" height="10" rx="2" fill="#38bdf8"/>
+                <rect x="-1" y="-12" width="7" height="4" rx="1.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+                <circle cx="16" cy="-4" r="2" fill="#fef08a"/>
+                <circle cx="16" cy="4" r="2" fill="#fef08a"/>
+                <animateMotion dur="8.5s" repeatCount="indefinite" rotate="auto">
+                  <mpath href="#pathNpCar"/>
+                </animateMotion>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Pins Layer (พิกัดตรงตามภาพ 3D ใหม่) -->
           <div id="npPinsLayer" class="pins-layer">
-            <div id="np-pin-jordan" class="map-pin" style="top:40%; left:82%;" onclick="selectNpStep(0)">
+            <div id="np-pin-jordan" class="map-pin" style="top:68%; left:74%;" onclick="selectNpStep(0)">
               <div class="pin-badge"><span class="pin-icon">🏨</span><span class="pin-text">B P Hotel / Jordan</span></div>
               <div class="pin-dot"></div>
             </div>
-            <div id="np-pin-bridge" class="map-pin" style="top:35%; left:53%;" onclick="selectNpStep(1)">
+            <div id="np-pin-bridge" class="map-pin" style="top:36%; left:60%;" onclick="selectNpStep(1)">
               <div class="pin-badge"><span class="pin-icon">🌉</span><span class="pin-text">สะพานชิงหม่า</span></div>
               <div class="pin-dot"></div>
             </div>
-            <div id="np-pin-tungchung" class="map-pin" style="top:44%; left:22%;" onclick="selectNpStep(2)">
+            <div id="np-pin-tungchung" class="map-pin" style="top:38%; left:28%;" onclick="selectNpStep(2)">
               <div class="pin-badge" style="background:#0284c7; color:#fff;"><span class="pin-icon">🧳</span><span class="pin-text">Tung Chung / จุดฝากกระเป๋า</span></div>
               <div class="pin-dot" style="background:#0284c7;"></div>
             </div>
-            <div id="np-pin-buddha" class="map-pin" style="top:74%; left:16%;" onclick="selectNpStep(3)">
+            <div id="np-pin-buddha" class="map-pin" style="top:57%; left:13%;" onclick="selectNpStep(3)">
               <div class="pin-badge" style="background:#f59e0b; color:#000;"><span class="pin-icon">🛕</span><span class="pin-text">กระเช้านองปิง & พระใหญ่</span></div>
               <div class="pin-dot" style="background:#f59e0b;"></div>
             </div>
-            <div id="np-pin-airport" class="map-pin" style="top:30%; left:18%;" onclick="selectNpStep(4)">
+            <div id="np-pin-airport" class="map-pin" style="top:19%; left:24%;" onclick="selectNpStep(4)">
               <div class="pin-badge" style="background:#10b981; color:#fff;"><span class="pin-icon">✈️</span><span class="pin-text">สนามบินฮ่องกง (HKG)</span></div>
               <div class="pin-dot" style="background:#10b981;"></div>
             </div>
@@ -1474,78 +1255,73 @@
   </div>
 
   <!-- =====================================================================
-       MODAL: EXPLORE LOCAL MAP (ย่าน JORDAN & TST)
-       ===================================================================== -->
-  <div id="localMapModal" class="gen-modal">
-    <div class="gen-sheet">
-      <div class="gen-header">
-        <h3>🗺️ พิกัดรอบโรงแรม B P International</h3>
-        <button onclick="closeLocalMapModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
-      </div>
-      <div class="gen-body">
-        <h4 style="color:#0284c7; margin:0 0 6px 0; font-size:13px;">🥢 ร้านอาหาร & ติ่มซำเด็ดย่าน Jordan</h4>
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:10px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">1. DimDimSum (點點心) - สาขา Jordan</div>
-          <div style="font-size:11.5px; color:#64748b; margin:2px 0 6px;">ซาลาเปาหมูแดงทอด, ก๋วยเตี๋ยวหลอดกุ้งกรอบ, ฮะเก๋า (เดิน ~7 นาที)</div>
-          <button onclick="window.open('https://maps.google.com/?q=DimDimSum+Jordan+Hong+Kong', '_blank')" style="background:#0284c7; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📍 เปิด Google Maps</button>
-        </div>
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:10px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">2. Australia Dairy Company (澳洲牛奶公司)</div>
-          <div style="font-size:11.5px; color:#64748b; margin:2px 0 6px;">ไข่กวนเนยสด ขนมปังปิ้ง พุดดิ้งนมนึ่งชื่อดัง คิวยาวแต่รันไวมาก (เดิน ~6 นาที)</div>
-          <button onclick="window.open('https://maps.google.com/?q=Australia+Dairy+Company+Hong+Kong', '_blank')" style="background:#0284c7; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📍 เปิด Google Maps</button>
-        </div>
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:14px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">3. Kai Kai Dessert (佳佳甜品) - มิชลินไกด์</div>
-          <div style="font-size:11.5px; color:#64748b; margin:2px 0 6px;">บัวลอยงาดำน้ำขิง ซุปงาดำ ซุปถั่วแดง เปิดถึงดึก เหมาะเป็นของหวานมื้อดึก (เดิน ~8 นาที)</div>
-          <button onclick="window.open('https://maps.google.com/?q=Kai+Kai+Dessert+Hong+Kong', '_blank')" style="background:#0284c7; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">📍 เปิด Google Maps</button>
-        </div>
-
-        <h4 style="color:#059669; margin:10px 0 6px 0; font-size:13px;">🛒 ร้านสะดวกซื้อ & แหล่งช้อปปิ้ง</h4>
-        <p style="font-size:12px; color:#475569; line-height:1.6; margin:0 0 10px;">
-          • <b>7-Eleven:</b> อยู่ด้านหน้าประตูโรงแรมฝั่งถนน Austin Rd. แวะซื้อน้ำดื่ม/ขนมได้ตลอด 24 ชม.<br>
-          • <b>ทางเดินลัดสวน Kowloon Park:</b> สวนอยู่ติดหลังโรงแรม เดินร่มรื่นทะลุออกไปถนน Nathan Rd. และเดินต่ออีก 8 นาทีถึงห้าง <b>Harbour City / ท่าเรือ Star Ferry</b> ได้เลย
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- =====================================================================
        MODAL: CURRENT WEATHER
+       ===================================================================== -->
+    <!-- =====================================================================
+       MODAL: CURRENT WEATHER (REAL-TIME TODAY + 14 DAYS FORECAST + TRIP GUIDE)
        ===================================================================== -->
   <div id="weatherModal" class="gen-modal">
     <div class="gen-sheet">
       <div class="gen-header">
-        <h3>⛅ พยากรณ์อากาศฮ่องกง (1–3 ม.ค. 2027)</h3>
+        <h3>⛅ พยากรณ์อากาศฮ่องกง (Live & 14 วัน)</h3>
         <button onclick="closeWeatherModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
       </div>
       <div class="gen-body">
-        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:12px; margin-bottom:12px;">
-          <div style="font-weight:800; color:#1e40af; font-size:13px;">❄️ ภาพรวมอากาศช่วงฤดูหนาว</div>
-          <div style="font-size:12px; color:#3b82f6; margin-top:2px;">อุณหภูมิเฉลี่ย 14°C – 19°C ลมเย็นสบาย ฟ้าโปร่ง ไม่มีฝนตกหนัก</div>
+        
+        <!-- Live Real-time Card -->
+        <div id="liveWeatherCard" style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:0 4px 15px rgba(2, 132, 199, 0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div style="font-size:11px; text-transform:uppercase; font-weight:700; opacity:0.85; letter-spacing:0.5px;">สภาพอากาศฮ่องกง ณ ขณะนี้ (Real-time)</div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin:4px 0;">
+                <span id="liveTempDisplay" style="font-size:38px; font-weight:900; line-height:1;">--°C</span>
+                <span id="liveConditionText" style="font-size:14px; font-weight:700; opacity:0.95;">กำลังโหลด...</span>
+              </div>
+            </div>
+            <div id="liveWeatherIcon" style="font-size:36px; line-height:1;">⛅</div>
+          </div>
+          <div style="display:flex; gap:12px; margin-top:10px; font-size:11.5px; opacity:0.9; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">
+            <span>💧 ความชื้น: <b id="liveHumidityDisplay">--%</b></span>
+            <span>💨 ลม: <b id="liveWindDisplay">-- km/h</b></span>
+            <span>🌡️ รู้สึกจริง: <b id="liveApparentDisplay">--°C</b></span>
+          </div>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">📅 วันที่ 1 ม.ค. (วันเดินทางถึง & เช็กอิน):</div>
-          <div style="font-size:12px; color:#475569;">16°C – 20°C • อากาศเย็นสบาย เดินเล่นช้อปปิ้งย่านจิมซาจุ่ยสบายมาก</div>
-        </div>
-        <div style="margin-bottom:12px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">📅 วันที่ 2 ม.ค. (วันเที่ยวสวนสนุก Disneyland):</div>
-          <div style="font-size:12px; color:#475569;">14°C – 18°C • ช่วงเช้า 08:30 และค่ำดูพลุจะลมเย็นเป็นพิเศษ แนะนำสวม <b>Heattech ชั้นใน + เสื้อแจ็กเก็ตกันลม</b></div>
-        </div>
-        <div style="margin-bottom:12px;">
-          <div style="font-weight:700; font-size:12.5px; color:#0f172a;">📅 วันที่ 3 ม.ค. (วันขึ้นกระเช้านองปิง & กลับไทย):</div>
-          <div style="font-size:12px; color:#475569;">12°C – 16°C • บนยอดเขานองปิงและลานพระใหญ่ลมแรงและหนาวกว่าพื้นราบ 3–4°C เด็กและผู้ใหญ่ควรพกผ้าพันคอหรือหมวกไหมพรม</div>
+        <!-- 7-14 Day Trend Summary -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-size:12.5px; font-weight:800; color:#0f172a;">📊 แนวโน้มอากาศ 14 วันล่วงหน้า</div>
+            <span id="weatherTrendBadge" style="font-size:10.5px; font-weight:700; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:10px;">กำลังวิเคราะห์...</span>
+          </div>
+          <div id="forecastTrendText" style="font-size:11.5px; color:#475569; line-height:1.45; margin-bottom:10px;">
+            กำลังดึงข้อมูลพยากรณ์อากาศ 14 วันจาก Open-Meteo...
+          </div>
+
+          <!-- 14 Days Horizontal Slider -->
+          <div id="forecastDailyScroll" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px;">
+            <!-- Generated dynamically by JS -->
+          </div>
         </div>
 
-        <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:10px; font-size:11.5px; color:#92400e;">
-          💡 <b>คำแนะนำ:</b> แดดกลางวันอาจแรงแม้อากาศจะเย็น ควรทาครีมกันแดดและเตรียมลิปมัน/โลชั่นทาผิวเพราะอากาศฮ่องกงหน้าหนาวค่อนข้างแห้งครับ
+        <!-- Travel Dates Guide (1-3 Jan 2027) -->
+        <div style="background:#fefce8; border:1px solid #fef08a; border-radius:14px; padding:12px;">
+          <div style="font-weight:800; font-size:12.5px; color:#854d0e; margin-bottom:6px;">🧣 คำแนะนำการแต่งกายช่วงเดินทาง (1–3 ม.ค. 2027)</div>
+          <div style="font-size:11.5px; color:#713f12; line-height:1.5;">
+            <div>• <b>1 ม.ค. (วันเดินทางถึง & เช็กอิน):</b> ~16°C–20°C อากาศสบาย เดินช้อปปิ้งเสื้อยืด + เสื้อคลุมเบาๆ</div>
+            <div>• <b>2 ม.ค. (วัน Disney ตลอดวัน):</b> ~14°C–18°C เช้าตรู่รอเปิดประตูและค่ำดูพลุจะลมเย็น แนะนำ <b>Heattech ชั้นใน + แจ็กเก็ตกันลม</b></div>
+            <div>• <b>3 ม.ค. (วันขึ้นเขานองปิง):</b> ~12°C–16°C บนยอดเขานองปิงและลานพระใหญ่ลมแรงกว่าพื้นราบ 3–4°C ควรมีผ้าพันคอหรือหมวกไหมพรมสำหรับเด็กและผู้ใหญ่</div>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
 
   <!-- =====================================================================
        MODAL: CONVERT CURRENCY
+       ===================================================================== -->
+    <!-- =====================================================================
+       MODAL: CONVERT CURRENCY (REAL-TIME LIVE RATE & QUICK CALCULATOR)
        ===================================================================== -->
   <div id="currencyModal" class="gen-modal">
     <div class="gen-sheet">
@@ -1554,12 +1330,16 @@
         <button onclick="closeCurrencyModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
       </div>
       <div class="gen-body">
+        
         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:14px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="font-size:12px; font-weight:700; color:#475569;">อัตราแลกเปลี่ยน (1 HKD = กี่บาท):</label>
             <input id="calcExchangeRate" type="number" step="0.01" value="4.26" oninput="calcCurrency()" style="width:75px; padding:4px 8px; border-radius:6px; border:1.5px solid #0284c7; font-weight:700; text-align:right; font-size:13px;">
           </div>
-          <small style="color:#64748b; font-size:11px;">*สามารถแตะตัวเลขเพื่อแก้ไขเรตตามบัตรเครดิตหรือร้านแลกเงินจริงได้เลย</small>
+          <div id="liveRateBadge" style="font-size:11px; color:#0284c7; font-weight:600;">
+            🔄 กำลังเชื่อมต่อเรตสดวันนี้...
+          </div>
+          <small style="color:#64748b; font-size:10.5px; display:block; margin-top:4px;">*สามารถแตะตัวเลขเพื่อแก้ไขเรตตามบัตรเครดิตหรือร้านแลกเงินจริงได้เลย</small>
         </div>
 
         <div style="margin-bottom:12px;">
@@ -1622,56 +1402,6 @@
         <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:10px; font-size:11.5px; color:#991b1b; line-height:1.5;">
           ⚠️ <b>กฎแท็กซี่สำหรับ 5 ท่าน:</b> แท็กซี่ฮ่องกงส่วนใหญ่นั่งได้ 4 คน หากมา 5 คน <b>ต้องมองหาป้ายวงกลมสีเขียวหลังรถที่เขียนว่า "5 SEATS" หรือ "5位" เท่านั้น</b> หากขึ้นคัน 4 คนคนขับจะถูกปรับตามกฎหมายครับ
         </div>
-      </div>
-    </div>
-  </div>
-
-    <!-- =====================================================================
-       MODAL: SMART TRIP ASSISTANT (FLOATING CHAT BOT - NO API KEY)
-       ===================================================================== -->
-  <div id="smartChatDrawer" class="smart-chat-modal">
-    <div class="smart-chat-sheet">
-      <div class="gen-header" style="background:#0f172a; color:#fff;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div style="width:32px; height:32px; border-radius:50%; background:#0284c7; display:flex; align-items:center; justify-content:center; font-size:16px;">🤖</div>
-          <div>
-            <h3 style="color:#fff; font-size:13px; margin:0;">ผู้ช่วย MTR & ข้อมูลการเดินทาง</h3>
-            <span style="font-size:10px; color:#94a3b8;">ถามเส้นทางรถไฟใต้ดิน & ทริปฮ่องกงได้ทันที</span>
-          </div>
-        </div>
-        <button onclick="toggleSmartChat()" style="border:none; background:rgba(255,255,255,0.15); color:#fff; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
-      </div>
-
-      <!-- Messages area -->
-      <div id="chatMessagesBox" class="chat-msg-box">
-        <div class="chat-bubble-ai">
-          👋 <b>สวัสดีครับ!</b> ผมคือผู้ช่วยข้อมูลการเดินทางฮ่องกงประจำทริป 5 ท่าน สามารถสอบถามเส้นทางรถไฟใต้ดิน MTR, จุดเปลี่ยนสาย, การฝากกระเป๋า หรือแตะเลือกคำถามด่วนด้านล่างได้ทันทีครับ:
-        </div>
-      </div>
-
-      <!-- ขั้นที่ 1: Quick Prompt Chips (ใช้งานในแอปทันที) -->
-      <div style="padding:6px 10px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; gap:6px; overflow-x:auto; white-space:nowrap;">
-        <button onclick="askBot('disney')" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🏰 ไป Disneyland</button>
-        <button onclick="askBot('lym')" style="background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🦞 ไปเล่ยหยู่มุน</button>
-        <button onclick="askBot('np')" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🚠 ไปนองปิง 360</button>
-        <button onclick="askBot('luggage')" style="background:#fdf4ff; color:#86198f; border:1px solid #f5d0fe; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🧳 จุดฝากกระเป๋า</button>
-        <button onclick="askBot('airport')" style="background:#f0fdfa; color:#0f766e; border:1px solid #99f6e4; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">✈️ ไปสนามบิน</button>
-        <button onclick="askBot('taxi')" style="background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; padding:4px 10px; border-radius:16px; font-size:10.5px; font-weight:700; cursor:pointer;">🚕 แท็กซี่ 5 ท่าน</button>
-      </div>
-
-      <!-- ขั้นที่ 1: ช่องพิมพ์ถาม-ตอบกับ Offline Smart Bot -->
-      <div style="padding:8px 12px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; gap:6px; align-items:center;">
-        <input id="chatTextInput" type="text" placeholder="พิมพ์ถามเส้นทาง เช่น ไปดิสนีย์ยังไง, ฝากกระเป๋า..." onkeydown="if(event.key==='Enter') sendSmartQuery()" style="flex:1; padding:8px 12px; border-radius:10px; border:1.5px solid #cbd5e1; font-size:12px; outline:none;">
-        <button onclick="sendSmartQuery()" style="background:#0284c7; color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:bold; font-size:12px; cursor:pointer;">ส่ง</button>
-      </div>
-
-      <!-- ขั้นที่ 2: ทางเลือกถาม AI ตัวเต็ม (วางใต้ช่องพิมพ์ปุ่มเดียว เรียบง่ายไม่รก) -->
-      <div style="padding:6px 12px 10px; background:#f8fafc; border-top:1px dashed #cbd5e1; display:flex; justify-content:center;">
-        <button onclick="askGeminiTrip()" style="width:100%; background:linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%); border:1.5px solid #06b6d4; color:#0891b2; font-weight:700; font-size:11.5px; padding:7px 12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:0.2s;">
-          <span>✨</span>
-          <span>ถามเรื่องอื่นต่อใน Gem ทริปนี้</span>
-          <span style="font-size:10px; color:#0284c7; background:#e0f2fe; padding:1px 6px; border-radius:6px; font-weight:800;">เปิด Gem</span>
-        </button>
       </div>
     </div>
   </div>
@@ -3058,15 +2788,9 @@ function closeTransitSelectionModal() {
   document.getElementById('transitSelectionModal').classList.remove('active');
 }
 
-function openLocalMapModal() {
-  document.getElementById('localMapModal').classList.add('active');
-}
-function closeLocalMapModal() {
-  document.getElementById('localMapModal').classList.remove('active');
-}
-
 function openWeatherModal() {
   document.getElementById('weatherModal').classList.add('active');
+  fetchLiveWeather();
 }
 function closeWeatherModal() {
   document.getElementById('weatherModal').classList.remove('active');
@@ -3075,6 +2799,7 @@ function closeWeatherModal() {
 function openCurrencyModal() {
   document.getElementById('currencyModal').classList.add('active');
   calcCurrency();
+  fetchLiveExchangeRate();
 }
 function closeCurrencyModal() {
   document.getElementById('currencyModal').classList.remove('active');
@@ -3105,179 +2830,6 @@ function closeEmergencyModal() {
    FLOATING SMART TRIP ASSISTANT (CHAT BOT - NO API KEY)
    ===================================================================== */
 // [ใส่ลิงก์ GEM ของคุณตรงนี้] หากยังไม่ได้ใส่ให้ใช้ "https://gemini.google.com/app"
-const GEM_TRIP_URL = "https://gemini.google.com/app";
-let lastUserQuestion = "";
-
-function toggleSmartChat() {
-  document.getElementById('smartChatDrawer').classList.toggle('active');
-}
-
-function askBot(topic) {
-  const box = document.getElementById('chatMessagesBox');
-  let qText = "";
-  if (topic === 'disney') {
-    qText = "ไป Disneyland ต่อรถไฟ MTR ยังไง?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">🏰 ไป Disneyland ต่อรถไฟ MTR ยังไง?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#0284c7; margin-bottom:4px;">🚇 B P Hotel ➔ HK Disneyland (35 นาที):</div>
-        1. เดิน 6 นาทีไป <b>Jordan (Exit C2)</b><br>
-        2. ขึ้น <span class="mtr-badge badge-red">สายสีแดง</span> ลงสถานี <b>Lai King</b><br>
-        3. ข้ามชานชาลาต่อ <span class="mtr-badge badge-orange">สายสีส้ม</span> ลงสถานี <b>Sunny Bay</b><br>
-        4. เปลี่ยนขึ้น <span class="mtr-badge badge-pink">สายสีชมพู</span> ขบวนดิสนีย์ ถึงหน้าสวนสนุกทันที!<br>
-        <small style="color:#64748b;">*รวม 5 ท่าน ~96-107 HKD หรือเรียก UberXL ~230-270 HKD</small>
-      </div>`;
-  } else if (topic === 'lym') {
-    qText = "ไปเล่ยหยู่มุน นั่ง MTR กี่สถานี?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">🦞 ไปเล่ยหยู่มุน นั่ง MTR กี่สถานี?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#ea580c; margin-bottom:4px;">🚇 Disneyland ➔ Lei Yue Mun Seafood:</div>
-        1. นั่งสายสีชมพู ➔ ต่อสายสีส้มลง <b>Lai King</b><br>
-        2. ข้ามชานชาลาต่อสายสีแดงลง <b>Prince Edward</b><br>
-        3. ต่อ <span class="mtr-badge badge-green">สายสีเขียว</span> 9 สถานี ลง <b>Yau Tong (Exit A2)</b><br>
-        4. เรียกแท็กซี่สีแดง 4 นาที (~27 HKD) ส่งถึงซุ้มประตูอาหารทะเลสด<br>
-        <small style="color:#16a34a;">*แนะนำ: 5 ท่านเรียก UberXL นั่งรวดเดียว 35 นาที ไม่ต้องเปลี่ยนรถไฟครับ</small>
-      </div>`;
-  } else if (topic === 'np') {
-    qText = "ไปนองปิง 360 เดินทางยังไง?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">🚠 ไปนองปิง 360 เดินทางยังไง?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#15803d; margin-bottom:4px;">🚇 B P Hotel ➔ นองปิง 360 (Tung Chung):</div>
-        1. ขึ้น MTR จากสถานี Jordan ลง Lai King<br>
-        2. ข้ามชานชาลาต่อ <span class="mtr-badge badge-orange">สายสีส้ม</span> ปลายทาง <b>Tung Chung (Exit B)</b><br>
-        3. เดิน 3 นาทีถึงสถานีกระเช้าลอยฟ้า นั่งกระเช้า 25 นาทีชมวิวอ่าวสู่ยอดเขานองปิง<br>
-        <small style="color:#64748b;">*ควรซื้อ E-Voucher ล่วงหน้าเพื่อเข้าช่อง Voucher Redemption ไม่ต้องต่อแถวซื้อตั๋วสด</small>
-      </div>`;
-  } else if (topic === 'luggage') {
-    qText = "กระเป๋าเดินทาง 28 นิ้ว ฝากไว้ที่ไหน?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">🧳 จุดฝากกระเป๋าเดินทาง 28 นิ้วที่ Tung Chung?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#7e22ce; margin-bottom:4px;">🧳 จุดฝากกระเป๋าเดินทางที่ Tung Chung:</div>
-        • <b>ห้าง Citygate Outlets (ชั้น B2 และ B3):</b> มีตู้ล็อกเกอร์ขนาดใหญ่พิเศษ (Large Locker) จ่ายด้วยบัตร Octopus คิดค่าบริการราย 2 ชม. (~40-60 HKD)<br>
-        • <b>เคาน์เตอร์สถานีกระเช้า Tung Chung Terminal:</b> ฝากกับเจ้าหน้าที่ได้ทุกขนาดใบละ ~100-120 HKD/วัน สะดวกมากรับกระเป๋าตอนลงกระเช้าได้เลย
-      </div>`;
-  } else if (topic === 'airport') {
-    qText = "จากนองปิง/Tung Chung ไปสนามบินยังไง?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">✈️ จากนองปิง/Tung Chung ไปสนามบินยังไง?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#0f766e; margin-bottom:4px;">✈️ Tung Chung ➔ Hong Kong Airport (10 นาที):</div>
-        • <b>แท็กซี่สีฟ้า (Lantau Taxi) หรือสีแดง 5 ที่นั่ง:</b> นั่งจากหน้าห้าง Citygate เพียง 10 นาที (~55-65 HKD หาร 5 ท่านคุ้มมาก)<br>
-        • <b>รถบัสสาย S1:</b> จอดหน้าสถานี Tung Chung วิ่งตรงถึง Terminal 1 ใน 10 นาที (คนละ 3.7 HKD)
-      </div>`;
-  } else if (topic === 'taxi') {
-    qText = "แท็กซี่ฮ่องกง 5 คนนั่งยังไง?";
-    box.innerHTML += `
-      <div class="chat-bubble-user">🚕 แท็กซี่ฮ่องกง 5 คนนั่งยังไง?</div>
-      <div class="chat-bubble-ai">
-        <div style="font-weight:bold; color:#dc2626; margin-bottom:4px;">🚕 กฎแท็กซี่สำหรับคณะ 5 ท่าน:</div>
-        • ห้ามขึ้นแท็กซี่ 4 ที่นั่งเด็ดขาด (ผิดกฎหมาย)<br>
-        • มองหา <b>ป้ายเขียวท้ายรถ "5 SEATS"</b> หรือบอกเจ้าหน้าที่คิวแท็กซี่ขอรถ 5 ที่นั่ง<br>
-        • สัมภาระท้ายรถมีค่าบริการชิ้นละ 6 HKD<br>
-        • หรือกดเรียก <b>UberXL (6 ที่นั่ง)</b> สะดวกที่สุด นั่งได้ครบ 5 คนพร้อมกระเป๋า
-      </div>`;
-  }
-  if (qText) lastUserQuestion = qText;
-  box.scrollTop = box.scrollHeight;
-}
-
-function sendSmartQuery() {
-  const input = document.getElementById('chatTextInput');
-  const q = input.value.trim();
-  if (!q) return;
-  lastUserQuestion = q;
-  const box = document.getElementById('chatMessagesBox');
-  box.innerHTML += `<div class="chat-bubble-user">${q}</div>`;
-  input.value = '';
-
-  const qLower = q.toLowerCase();
-  let ans = "";
-
-  if (qLower.includes('ดิสนีย์') || qLower.includes('disney')) {
-    ans = `🏰 <b>การเดินทางไป Disneyland:</b> นั่ง MTR Jordan (สายสีแดง) ➔ เปลี่ยน Lai King (สายสีส้ม) ➔ เปลี่ยน Sunny Bay (สายสีชมพูดิสนีย์) ใช้เวลา ~35 นาที หรือเรียก UberXL ~230-270 HKD ครับ`;
-  } else if (qLower.includes('เล่ยหยู่มุน') || qLower.includes('ซีฟู้ด') || qLower.includes('อาหารทะเล') || qLower.includes('lym')) {
-    ans = `🦞 <b>การเดินทางไปเล่ยหยู่มุน:</b> นั่งสายสีชมพู ➔ สายสีส้มลง Lai King ➔ สายสีแดงลง Prince Edward ➔ สายสีเขียวลง Yau Tong (Exit A2) ต่อแท็กซี่ 4 นาที หรือเรียก UberXL 35 นาทีครับ`;
-  } else if (qLower.includes('นองปิง') || qLower.includes('กระเช้า') || qLower.includes('พระใหญ่') || qLower.includes('buddha')) {
-    ans = `🚠 <b>การเดินทางไปนองปิง 360:</b> นั่ง MTR จาก Jordan ต่อสายสีส้มที่ Lai King ไปสุดสาย Tung Chung (Exit B) แล้วเดิน 3 นาทีขึ้นกระเช้าลอยฟ้าครับ`;
-  } else if (qLower.includes('กระเป๋า') || qLower.includes('ฝาก') || qLower.includes('ล็อกเกอร์')) {
-    ans = `🧳 <b>จุดฝากกระเป๋า:</b> อยู่ที่ชั้น B2/B3 ของห้าง Citygate Outlets (ตู้ล็อกเกอร์ใหญ่) และที่เคาน์เตอร์สถานีกระเช้า Tung Chung Terminal ครับ`;
-  } else if (qLower.includes('สนามบิน') || qLower.includes('airport') || qLower.includes('เครื่องบิน')) {
-    ans = `✈️ <b>การเดินทางไปสนามบิน:</b> จาก Tung Chung นั่งแท็กซี่เพียง 10-12 นาที (~55-65 HKD) หรือนั่งรถบัสสาย S1 ค่าโดยสาร 3.7 HKD ถึง Terminal 1 ครับ`;
-  } else if (qLower.includes('ติ่มซำ') || qLower.includes('ของกิน') || qLower.includes('อาหาร') || qLower.includes('โจ๊ก')) {
-    ans = `🥢 <b>ร้านเด็ดรอบโรงแรม B P:</b> แนะนำ DimDimSum สาขา Jordan (เดิน 7 นาที), Australia Dairy Company (ไข่กวนเนยสด เดิน 6 นาที) และบัวลอย Kai Kai Dessert มิชลินไกด์ครับ`;
-  } else if (qLower.includes('เงิน') || qLower.includes('เรต') || qLower.includes('บาท') || qLower.includes('แลก')) {
-    ans = `💱 <b>อัตราแลกเปลี่ยน:</b> ปัจจุบันตั้งค่าเริ่มต้นที่ 1 HKD ≈ 4.26 บาท สามารถเปิดเมนู 'Convert Currency' เพื่อกดเครื่องคิดเลขคำนวณและปรับเรตเองได้ครับ`;
-  } else if (qLower.includes('ฉุกเฉิน') || qLower.includes('ตำรวจ') || qLower.includes('พยาบาล') || qLower.includes('999')) {
-    ans = `🚨 <b>เบอร์ฉุกเฉินฮ่องกง:</b> ตำรวจ/ดับเพลิง/พยาบาล โทร <b>999</b> และสายด่วนนักท่องเที่ยว <b>+852-25081234</b> ครับ`;
-  } else {
-    ans = `💡 สามารถสอบถามเส้นทาง MTR (ดิสนีย์, เล่ยหยู่มุน, นองปิง 360), จุดฝากกระเป๋าเดินทาง, แท็กซี่ 5 ท่าน หรือร้านอาหารรอบโรงแรมได้เลยครับ!`;
-  }
-
-  box.innerHTML += `<div class="chat-bubble-ai">${ans}</div>`;
-  box.scrollTop = box.scrollHeight;
-}
-
-function askGeminiTrip() {
-  const input = document.getElementById('chatTextInput');
-  let currentText = input ? input.value.trim() : '';
-  let question = currentText || lastUserQuestion || 'ขอคำแนะนำการท่องเที่ยวฮ่องกง';
-
-  const promptWithContext = `[ทริปฮ่องกง 1-3 ม.ค. 2027 | พัก B P International (Jordan) | ครอบครัว 5 ท่าน] คำถาม: ${question}`;
-
-  // Copy prompt to clipboard
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(promptWithContext).catch(() => {
-      fallbackCopyText(promptWithContext);
-    });
-  } else {
-    fallbackCopyText(promptWithContext);
-  }
-
-  // Show Toast
-  showChatToast("📋 คัดลอกคำถามแล้ว! กำลังเปิด Gem — กด 'วาง (Paste)' ในช่องแชทได้เลย");
-
-  // Open window with target name 'geminiTripTab'
-  setTimeout(() => {
-    window.open(GEM_TRIP_URL, 'geminiTripTab', 'noopener');
-  }, 400);
-}
-
-function fallbackCopyText(textToCopy) {
-  const ta = document.createElement('textarea');
-  ta.value = textToCopy;
-  ta.style.position = 'fixed';
-  ta.style.top = '0';
-  ta.style.left = '0';
-  ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.focus();
-  ta.select();
-  try {
-    document.execCommand('copy');
-  } catch (err) {
-    console.error('Fallback copy error:', err);
-  }
-  document.body.removeChild(ta);
-}
-
-function showChatToast(msg) {
-  let toast = document.getElementById('chatToast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'chatToast';
-    toast.className = 'chat-toast';
-    document.body.appendChild(toast);
-  }
-  toast.innerText = msg;
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3200);
-}
-
 /* =====================================================================
    DATA & CONTROLLER FOR NGONG PING 360 TRANSIT (DAY 3)
    ===================================================================== */
@@ -3423,8 +2975,17 @@ function setNpDepartureTime(timeStr) {
 
 function setNpMode(mode) {
   npMode = mode;
-  document.getElementById('npModeMtrBtn').classList.toggle('active', mode === 'mtr');
-  document.getElementById('npModeCarBtn').classList.toggle('active', mode === 'car');
+  const mtrBtn = document.getElementById('npModeMtrBtn');
+  const carBtn = document.getElementById('npModeCarBtn');
+  if (mtrBtn) mtrBtn.classList.toggle('active', mode === 'mtr');
+  if (carBtn) carBtn.classList.toggle('active', mode === 'car');
+  
+  // Toggle SVG animation layers
+  const svgMtr = document.getElementById('svgNpMtr');
+  const svgCar = document.getElementById('svgNpCar');
+  if (svgMtr) svgMtr.style.display = (mode === 'mtr') ? 'block' : 'none';
+  if (svgCar) svgCar.style.display = (mode === 'car') ? 'block' : 'none';
+
   npActiveStepIdx = null;
   renderNpContent();
   resetNpCamera();
