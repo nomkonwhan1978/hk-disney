@@ -1718,11 +1718,243 @@
       </button>
     </div>
 
-    <div id="npStepsContainer" class="steps-container"></div>
+    <div id="npStepsContainer" class="steps-container">
+
+    <div class="step-card" id="npStepCard-0" onclick="selectNpStep(0)">
+      <div class="step-header">
+        <div class="step-badge">1</div>
+        <div style="flex:1;">
+          <div class="step-title">เดินจาก B P International ไปสถานี Jordan</div>
+          <div class="step-sub">ระยะทาง 450 ม. (~6 นาที) | เช็กเอาต์ฝากกระเป๋าลงลิฟต์ Exit C2</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>จุดสังเกตทางเดิน:</b> เช็กเอาต์และคืนคีย์การ์ดที่ล็อบบี้โรงแรม B P International แล้วเดินเลี้ยวขวาไปตามถนน Austin Rd. ตรงไป 450 ม. สู่สถานี Jordan<br>• <b>ทางลงแนะนำ:</b> ใช้ทางออก <b>Exit C2</b> (มีลิฟต์โดยสารขนาดใหญ่ สะดวกมากสำหรับการเข็นกระเป๋าเดินทาง 28 นิ้วลงสู่ชั้นจำหน่ายตั๋ว)<br>• <b>วิธีแตะบัตร:</b> ผู้ใหญ่ใช้บัตรเครดิต/เดบิต Visa หรือ Mastercard (Contactless) แตะผ่านประตูสีฟ้าได้คนละ 1 ใบ ส่วนเด็กใช้บัตร Child Octopus</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="window.open('https://maps.google.com/?q=Jordan+Station+Exit+C2+Hong+Kong', '_blank')">📍 เปิดพิกัดทางลงสถานี Jordan (Exit C2)</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-1" onclick="selectNpStep(1)">
+      <div class="step-header">
+        <div class="step-badge">2</div>
+        <div style="flex:1;">
+          <div class="step-title">ขึ้นสายสีแดง ลง Lai King ➔ เปลี่ยนเป็นสายสีส้ม</div>
+          <div class="step-sub">นั่ง 6 สถานี (~12 นาที) | เดินข้ามชานชาลาฝั่งตรงข้าม ไม่ต้องยกกระเป๋า</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>ขึ้นสายสีแดง:</b> ชานชาลาปลายทาง <b>Tsuen Wan</b> นั่งผ่าน 6 สถานี (Yau Ma Tei ➔ Mong Kok ➔ Prince Edward ➔ Sham Shui Po ➔ Cheung Sha Wan ➔ Lai Chi Kok ➔ Mei Foo ➔ Lai King)<br>• <b>เปลี่ยนสายสะดวกสุด:</b> เมื่อถึงสถานี <b>Lai King</b> ประตูจะเปิดฝั่งขวา ให้เดินข้ามชานชาลาตรงหน้าไปเพียง 10 ก้าว เพื่อขึ้น <b>สายสีส้ม (Tung Chung Line)</b> ได้ทันที ไม่ต้องขึ้น-ลงบันไดเลื่อน สบายมากสำหรับครอบครัวที่มีกระเป๋าใบใหญ่</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="showSubInfo('npFareMtr')">💰 เช็กค่าโดยสาร MTR รวม 5 ท่าน (~95 HKD)</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-2" onclick="selectNpStep(2)">
+      <div class="step-header">
+        <div class="step-badge">3</div>
+        <div style="flex:1;">
+          <div class="step-title">ขึ้นสายสีส้มข้ามสะพานชิงหม่า สู่สถานีปลายทาง Tung Chung</div>
+          <div class="step-sub">นั่ง 3 สถานี (~20 นาที) | ชมวิวทะเลและสะพานแขวนยักษ์ ออก Exit B</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>วิวไฮไลท์บนรถไฟ:</b> รถไฟจะวิ่งข้ามสะพานแขวนชิงหม่า (Tsing Ma Bridge) มองเห็นวิวอ่าววิกตอเรียและภูเขาเกาะลันเตาสวยงามมาก<br>• <b>ทางออกสถานี:</b> นั่งไปจนสุดสายลงที่สถานี <b>Tung Chung</b> มองหาป้ายทางออก <b>Exit B</b> เพื่อเดินเชื่อมต่อเข้าสู่ห้าง Citygate Outlets และลานสถานีกระเช้า</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="selectNpStep(1)">🌉 จุดชมวิวสะพานชิงหม่า & แผนที่ Tung Chung</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-3" onclick="selectNpStep(3)">
+      <div class="step-header">
+        <div class="step-badge">4</div>
+        <div style="flex:1;">
+          <div class="step-title">ฝากกระเป๋าเดินทาง 28 นิ้ว ที่ Citygate Outlets</div>
+          <div class="step-sub">ชั้น B2 และ B3 ตู้ล็อกเกอร์อิเล็กทรอนิกส์ | ปลอดภัย เดินตัวเบา</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>จุดฝากกระเป๋าแนะนำ (ชั้น B2 และ B3):</b> เดินออกจาก Exit B เข้าห้าง Citygate Outlets ลงลิฟต์ไปชั้น B2/B3 จะเจอตู้ Locker ขนาดใหญ่ (Locker L/XL) ใส่กระเป๋า 28–30 นิ้วได้หลายใบ ชำระเงินด้วยบัตร Octopus Card หรือบัตรเครดิต<br>• <b>จุดสำรอง:</b> หากตู้ล็อกเกอร์เต็ม สามารถนำกระเป๋าไปฝากที่ <b>เคาน์เตอร์รับฝากสัมภาระของสถานีกระเช้า Tung Chung Cable Car Terminal</b> ได้ (คิดค่าบริการใบละ ~100 HKD ต่อวัน)<br>• <b>คำแนะนำ:</b> แยกของมีค่า, พาสปอร์ต, และเสื้อกันหนาว/แจ็กเก็ตพกติดตัวขึ้นกระเช้า ส่วนกระเป๋าเดินทางใบใหญ่ฝากไว้ที่นี่แล้วมารับก่อนไปสนามบิน</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="showSubInfo('npLuggage')">🧳 รายละเอียดจุดฝากกระเป๋า & ตู้ล็อกเกอร์ Citygate</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-4" onclick="selectNpStep(4)">
+      <div class="step-header">
+        <div class="step-badge">5</div>
+        <div style="flex:1;">
+          <div class="step-title">เดินขึ้นสถานีกระเช้า Ngong Ping 360 & แลก Voucher</div>
+          <div class="step-sub">เดิน 3 นาทีจาก Exit B | เข้าช่องทางด่วน Pre-booked E-Voucher</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>ทางเดินขึ้นสถานีกระเช้า:</b> ออกจาก Exit B เดินข้ามลานน้ำพุไปทางซ้ายมือ จะเจอบันไดเลื่อนและทางลาดสำหรับขึ้นสู่ชั้นจำหน่ายตั๋วสถานีกระเช้า Tung Chung Terminal<br>• <b>ช่องทางด่วน (Pre-booked Line):</b> สำหรับผู้ที่ซื้อบัตรล่วงหน้า (Klook / Traveloka / Official) ให้เดินเข้าช่อง <b>'Pre-booked Ticket Holders'</b> เพื่อสแกน QR Code รับสายรัดข้อมือหรือตั๋วได้เร็วกว่าช่องซื้อตั๋วสดหน้างาน 30–50 นาที<br>• <b>ประเภทกระเช้าแนะนำ:</b> ขาขึ้นแนะนำ <b>Crystal Cabin (พื้นกระจกแก้วใส)</b> ชมวิวพื้นน้ำและป่าเขาเกาะลันเตาแบบพาโนรามา</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="showSubInfo('npTickets')">🎟️ ขั้นตอนแลกบัตร E-Voucher & ทางด่วนลัดคิว</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-5" onclick="selectNpStep(5)">
+      <div class="step-header">
+        <div class="step-badge">6</div>
+        <div style="flex:1;">
+          <div class="step-title">ขึ้นกระเช้าลอยฟ้า 5.7 กม. สู่หมู่บ้านนองปิง & พระใหญ่</div>
+          <div class="step-sub">ลอยฟ้าข้ามเขา ~25 นาที | ขึ้นบันได 268 ขั้นสักการะองค์พระใหญ่</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>การนั่งกระเช้า:</b> กระเช้า 1 คัน นั่งได้ 8–10 ท่าน ครอบครัว 5 ท่านสามารถนั่งคันเดียวกันได้อย่างสบาย ถ่ายรูปวิวอ่าวและสะพานฮ่องกง-จูไห่-มาเก๊า (HZMB) ได้รอบทิศ<br>• <b>การเตรียมตัวบนยอดเขา:</b> ลานพระใหญ่มีความสูง ~520 ม. ลมพัดแรงและอุณหภูมิต่ำกว่าพื้นราบ 3–4°C ควรเตรียมเสื้อคลุมหรือผ้าพันคอ<br>• <b>ไฮไลท์ท่องเที่ยว:</b> เดินเที่ยวหมู่บ้านวัฒนธรรมนองปิง (Ngong Ping Village), ชิมบัวลอยน้ำขิงและติ่มซำเจ, ขึ้นบันได 268 ขั้นสักการะองค์พระใหญ่เทียนถาน และเดินชมวัดโป่หลิน</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="selectNpStep(3)">🛕 จุดไฮไลท์บนยอดเขานองปิง & พระใหญ่</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" id="npStepCard-6" onclick="selectNpStep(6)">
+      <div class="step-header">
+        <div class="step-badge">7</div>
+        <div style="flex:1;">
+          <div class="step-title">นั่งกระเช้าลงมารับกระเป๋า ➔ ต่อรถไปสนามบิน (HKG)</div>
+          <div class="step-sub">รับกระเป๋าที่ Citygate | ต่อ Taxi หรือ Bus S1 เพียง 10 นาทีถึงสนามบิน</div>
+        </div>
+        <span class="step-arrow">▼</span>
+      </div>
+      <div class="step-details" onclick="event.stopPropagation()">
+        <div>• <b>เวลานั่งกระเช้าลง:</b> แนะนำเริ่มต่อคิวกระเช้าขากลับช่วง 14:00–14:30 น. (ใช้เวลานั่งลง ~25 นาที) ลงมาถึงพื้นราบประมาณ 15:00 น.<br>• <b>รับกระเป๋า & ช้อปปิ้ง:</b> รับกระเป๋าที่ตู้ล็อกเกอร์ Citygate Outlets สามารถแวะทานอาหารหรือซื้อของฝากก่อนเดินทางไปสนามบิน<br>• <b>การเดินทางไปสนามบิน (HKG):</b><br>- ตัวเลือก 1 (สะดวกสุด 5 คน): เรียก <b>Red Taxi</b> จากหน้าห้าง Citygate ไปยัง Terminal 1 ใช้เวลาเพียง <b>10 นาที</b> (ค่าโดยสาร ~50–65 HKD)<br>- ตัวเลือก 2 (ประหยัด): ขึ้น <b>รถบัสสาย S1</b> จากสถานีขนส่งใต้ห้าง Citygate วิ่งตรงถึงอาคารผู้โดยสารสนามบิน ทุก 7–10 นาที (ค่าโดยสารคนละ ~3.7 HKD)</div>
+        <div class="step-btn-group" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+          
+            <button class="action-shortcut-btn " onclick="showSubInfo('airportChineseSign')">✈️ นามบัตรจีนยื่นให้แท็กซี่ไปสนามบินฮ่องกง</button>
+          
+        </div>
+      </div>
+    </div>
+
+    </div>
       </div>
 
       <!-- PANE 5: Ngong Ping to Airport -->
-      <div id="routePane-airport_out" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
+      <div id="routePane-airport_out" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
+      
+      <!-- Interactive 3D Map Viewport for Route 5 -->
+      <div id="airoutViewport" class="map-viewport">
+        <button class="fs-close-btn" onclick="toggleAirOutFullscreen()">✕</button>
+
+        <div class="map-zoom-controls">
+          <button class="zoom-mini-btn" onclick="manualAirOutZoom(0.25)">+</button>
+          <button class="zoom-mini-btn" onclick="manualAirOutZoom(-0.25)">−</button>
+        </div>
+
+        <div id="airoutCanvas" class="map-canvas">
+          <img src="transit-airport-out.png" alt="Ngong Ping to HKG Airport Map" class="map-bg-img" style="width:100%; height:100%; object-fit:cover; display:block;">
+
+          <!-- SVG Animated Overlay Layer (รถแท็กซี่, รถบัส S1 และกระเช้าลอยฟ้า) -->
+          <svg class="map-svg-overlay" viewBox="0 0 1024 571" preserveAspectRatio="none">
+            
+            <!-- 1. Cable Car descent: Big Buddha summit -> Tung Chung Terminal -->
+            <path id="pathAiroutCable" d="M 160 380 Q 240 430 330 460 Q 400 480 470 430" 
+                  fill="none" stroke="rgba(234, 179, 8, 0.4)" stroke-width="4" stroke-dasharray="8,6" stroke-linecap="round"/>
+            <g>
+              <line x1="0" y1="-12" x2="0" y2="-3" stroke="#475569" stroke-width="2"/>
+              <rect x="-8" y="-3" width="16" height="14" rx="3.5" fill="#38bdf8" stroke="#0284c7" stroke-width="1.8"/>
+              <rect x="-5" y="0" width="10" height="8" rx="2" fill="#e0f2fe"/>
+              <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#pathAiroutCable"/>
+              </animateMotion>
+            </g>
+
+            <!-- 2. Car / Taxi Route Layer: Citygate Outlets -> Sea Bridge -> Airport T1 -->
+            <g id="svgAiroutCar">
+              <path id="pathAiroutCar" d="M 460 380 Q 520 400 580 340 Q 660 270 740 230 Q 770 215 800 210 Q 840 210 860 220" 
+                    fill="none" stroke="rgba(239, 68, 68, 0.35)" stroke-width="7" stroke-linecap="round"/>
+              <path d="M 460 380 Q 520 400 580 340 Q 660 270 740 230 Q 770 215 800 210 Q 840 210 860 220" 
+                    fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="10,7" stroke-linecap="round"/>
+              <!-- แท็กซี่สีแดง วิ่งข้ามสะพาน -->
+              <g>
+                <rect x="-16" y="-8" width="32" height="16" rx="4.5" fill="#ef4444" stroke="#991b1b" stroke-width="2.2"/>
+                <rect x="-5" y="-6" width="14" height="12" rx="2.5" fill="#ffffff" stroke="#b91c1c" stroke-width="1.2"/>
+                <rect x="-2" y="-4" width="8" height="8" rx="1.5" fill="#38bdf8"/>
+                <rect x="-1" y="-10" width="6" height="3" rx="1" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                <circle cx="14" cy="-3" r="1.8" fill="#fef08a"/>
+                <circle cx="14" cy="3" r="1.8" fill="#fef08a"/>
+                <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+                  <mpath href="#pathAiroutCar"/>
+                </animateMotion>
+              </g>
+            </g>
+
+            <!-- 3. Bus S1 Route Layer: Tung Chung Bus Interchange -> Sea Bridge -> Airport Terminal 1 -->
+            <g id="svgAiroutBus" style="display:none;">
+              <path id="pathAiroutBus" d="M 430 380 Q 500 410 570 350 Q 660 280 735 240 Q 770 225 810 220" 
+                    fill="none" stroke="rgba(234, 179, 8, 0.45)" stroke-width="7" stroke-linecap="round"/>
+              <path d="M 430 380 Q 500 410 570 350 Q 660 280 735 240 Q 770 225 810 220" 
+                    fill="none" stroke="#eab308" stroke-width="4.5" stroke-dasharray="10,7" stroke-linecap="round"/>
+              <!-- รถบัส 2 ชั้น Citybus S1 (สีเหลืองคาดน้ำเงิน) -->
+              <g>
+                <rect x="-20" y="-9" width="40" height="18" rx="4" fill="#facc15" stroke="#a16207" stroke-width="2.2"/>
+                <rect x="-12" y="-7" width="28" height="6" rx="1.5" fill="#38bdf8"/>
+                <rect x="-12" y="1" width="28" height="6" rx="1.5" fill="#38bdf8"/>
+                <rect x="-20" y="-3" width="40" height="3" fill="#1d4ed8"/>
+                <circle cx="18" cy="-4" r="2" fill="#ffffff"/>
+                <circle cx="18" cy="4" r="2" fill="#ffffff"/>
+                <animateMotion dur="8.5s" repeatCount="indefinite" rotate="auto">
+                  <mpath href="#pathAiroutBus"/>
+                </animateMotion>
+              </g>
+            </g>
+
+          </svg>
+
+          <!-- Pins Layer -->
+          <div id="airoutPinsLayer" class="map-pins-layer">
+            <div id="airout-pin-buddha" class="map-pin" style="top:66%; left:16%;">
+              <span class="pin-icon">🛕</span><span class="pin-text">พระใหญ่นองปิง & หมู่บ้านวัฒนธรรม</span>
+            </div>
+            <div id="airout-pin-tungchung" class="map-pin" style="top:42%; left:42%;">
+              <span class="pin-icon">🧳</span><span class="pin-text">Citygate Outlets / จุดรับกระเป๋าคืน</span>
+            </div>
+            <div id="airout-pin-bridge" class="map-pin" style="top:52%; left:62%;">
+              <span class="pin-icon">🌉</span><span class="pin-text">สะพานข้ามทะเล (~10 นาที)</span>
+            </div>
+            <div id="airout-pin-airport" class="map-pin" style="top:25%; left:82%;">
+              <span class="pin-icon">🛫</span><span class="pin-text">สนามบินฮ่องกง T1 (Emirates EK 385)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="map-control-overlay">
+          <button class="map-zoom-btn" onclick="manualAirOutZoom(0.25)">＋</button>
+          <button class="map-zoom-btn" onclick="manualAirOutZoom(-0.25)">－</button>
+          <button class="map-zoom-btn" onclick="resetAirOutCamera()">⟲</button>
+        </div>
+      </div>
+
+      <!-- Scrollable body for flight banner and steps below map -->
+      <div class="steps-container" style="padding:10px 14px 28px; overflow-y:auto; flex:1;">
         <!-- Flight Departure Banner -->
       <div style="background:linear-gradient(135deg, #4338ca 0%, #312e81 100%); color:#ffffff; border-radius:14px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 12px rgba(67, 56, 202, 0.25);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
@@ -1825,6 +2057,7 @@
           &nbsp;&nbsp;🍜 <b>Ho Hung Kee:</b> โจ๊กฮ่องกงเนื้อเนียน บะหมี่เกี๊ยวกุ้งสดระดับมิชลิน 1 ดาว<br>
           • <b>จุดฝากกระเป๋า:</b> แนะนำฝากที่ Locker Citygate Outlets ชั้น B2/B3 ตั้งแต่เช้าวันกลับ จะได้เที่ยวและขึ้นกระเช้าตัวเปล่า ไม่ต้องแบกกระเป๋าขึ้นเขา!
         </div>
+      </div>
       </div>
       </div>
 
@@ -4121,9 +4354,13 @@ function switchAirportOutMode(mode) {
 // ==========================================
 // UNIFIED TRANSIT ROUTING ENGINE (IN-PLACE SWITCHING)
 // ==========================================
-let transitMode = 'mtr';
-// lymMode initialized at top
-// npMode initialized at top
+var transitMode = 'mtr';
+var lymMode = 'mtr';
+var npMode = 'mtr';
+var airoutMode = 'car';
+var npActiveStepIdx = null;
+var npCamState = { scale: 1, x: 0, y: 0 };
+var airoutCamState = { scale: 1, x: 0, y: 0 };
 
 const TRANSIT_ROUTES_CONFIG = {
   'airport_in': {
@@ -4213,6 +4450,9 @@ function switchTransitRoute(route) {
     } else if (route === 'np') {
       pinBtn.style.display = 'inline-flex';
       pinBtn.onclick = toggleNpPins;
+    } else if (route === 'airport_out') {
+      pinBtn.style.display = 'inline-flex';
+      pinBtn.onclick = toggleAirOutPins;
     } else {
       pinBtn.style.display = 'none';
     }
@@ -4227,6 +4467,9 @@ function switchTransitRoute(route) {
     } else if (route === 'np') {
       fsBtn.style.display = 'inline-flex';
       fsBtn.onclick = toggleNpFullscreen;
+    } else if (route === 'airport_out') {
+      fsBtn.style.display = 'inline-flex';
+      fsBtn.onclick = toggleAirOutFullscreen;
     } else {
       fsBtn.style.display = 'none';
     }
@@ -4239,6 +4482,8 @@ function switchTransitRoute(route) {
     if (typeof setLymMode === 'function') setLymMode(lymMode || 'mtr');
   } else if (route === 'np') {
     if (typeof setNpMode === 'function') setNpMode(npMode || 'mtr');
+  } else if (route === 'airport_out') {
+    if (typeof switchAirportOutMode === 'function') switchAirportOutMode(airoutMode || 'car');
   }
 }
 
@@ -4480,7 +4725,7 @@ const lymTransitData = {
   ]
 };
 
-let lymMode = 'mtr';
+// lymMode declared at top
 let lymActiveStepIdx = null;
 let lymPinsVisible = true;
 let lymCamState = { scale: 1, x: 0, y: 0 };
@@ -5262,9 +5507,9 @@ function closeCurrencyModal() {
 }
 
 
-let npMode = 'mtr';
-let npActiveStepIdx = null;
-let npCamState = { scale: 1, x: 0, y: 0 };
+// npMode declared at top
+// npActiveStepIdx declared at top
+// npCamState declared at top
 
 function openNpModal() { openTransitModal('np'); }
 function closeNpModal() { closeTransitModal(); }
@@ -5395,6 +5640,73 @@ function toggleNpFullscreen() {
   if (vp) vp.classList.toggle('fullscreen');
 }
 
+
+
+// -------------------------------------------------------------
+// Route 5: Ngong Ping to Airport Camera & Mode Helpers
+// -------------------------------------------------------------
+function switchAirportOutMode(mode) {
+  airoutMode = mode;
+  const tabCar = document.getElementById('tabAirOutCar');
+  const tabMtr = document.getElementById('tabAirOutMtr');
+  const contentCar = document.getElementById('airOutModeCar');
+  const contentMtr = document.getElementById('airOutModeMtr');
+  const svgCar = document.getElementById('svgAiroutCar');
+  const svgBus = document.getElementById('svgAiroutBus');
+
+  if (mode === 'car') {
+    if (tabCar) { tabCar.classList.add('active'); tabCar.classList.add('car'); }
+    if (tabMtr) { tabMtr.classList.remove('active'); tabMtr.classList.remove('mtr'); }
+    if (contentCar) contentCar.style.display = 'block';
+    if (contentMtr) contentMtr.style.display = 'none';
+    if (svgCar) svgCar.style.display = 'block';
+    if (svgBus) svgBus.style.display = 'none';
+  } else {
+    if (tabMtr) { tabMtr.classList.add('active'); tabMtr.classList.add('mtr'); }
+    if (tabCar) { tabCar.classList.remove('active'); tabCar.classList.remove('car'); }
+    if (contentMtr) contentMtr.style.display = 'block';
+    if (contentCar) contentCar.style.display = 'none';
+    if (svgBus) svgBus.style.display = 'block';
+    if (svgCar) svgCar.style.display = 'none';
+  }
+}
+
+function applyAirOutCamera() {
+  const canvas = document.getElementById('airoutCanvas');
+  if (!canvas) return;
+  canvas.style.transform = `translate(${airoutCamState.x}%, ${airoutCamState.y}%) scale(${airoutCamState.scale})`;
+}
+
+function manualAirOutZoom(delta) {
+  airoutCamState.scale = Math.min(2.2, Math.max(1, airoutCamState.scale + delta));
+  if (airoutCamState.scale === 1) {
+    airoutCamState.x = 0;
+    airoutCamState.y = 0;
+  }
+  applyAirOutCamera();
+}
+
+function resetAirOutCamera() {
+  airoutCamState = { scale: 1, x: 0, y: 0 };
+  applyAirOutCamera();
+}
+
+function toggleAirOutFullscreen() {
+  const vp = document.getElementById('airoutViewport');
+  const btn = document.getElementById('fullscreenMapBtn');
+  if (!vp) return;
+  const isFs = vp.classList.toggle('fullscreen');
+  if (btn) btn.classList.toggle('active', isFs);
+  if (!isFs) resetAirOutCamera();
+}
+
+function toggleAirOutPins() {
+  const layer = document.getElementById('airoutPinsLayer');
+  const btn = document.getElementById('togglePinsBtn');
+  if (!layer) return;
+  const isHidden = layer.classList.toggle('hidden');
+  if (btn) btn.classList.toggle('active', !isHidden);
+}
 
 function showSubInfo(type) {
   const box = document.getElementById('subInfoContent');
