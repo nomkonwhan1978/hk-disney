@@ -1335,7 +1335,7 @@
             <div class="step-details">
               <div style="margin-bottom:6px;">• ยื่นป้ายภาษาจีนให้คนขับดู: <code>尖沙咀 龍堡國際賓館 (柯士甸道 Austin Rd.)</code></div>
               <div style="margin-bottom:8px;">• คำอ่านออกเสียง: <b>หล่ง-โป๋ว-กวอก-ไจ๋</b> (จิ๊ม-ซ้า-โจ๋ย)</div>
-              <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center;" onclick="showSubInfo('airportToBPSign')">
+              <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center;" onclick="event.stopPropagation(); showSubInfo('airportToBPSign')">
                 🔍 ขยายป้ายภาษาจีนโรงแรม B P เต็มจอ
               </button>
               <div style="font-size:11px; color:#64748b; margin-top:6px;">• คนขับจะกดมิเตอร์บวกค่าสัมภาระกระเป๋าใบใหญ่ท้ายรถ ใบละ 6 HKD ตามกฎหมาย</div>
@@ -1988,7 +1988,7 @@
                 <div style="margin-bottom:6px;">• <b>จุดขึ้นแท็กซี่:</b> เดินออกมาหน้าห้าง Citygate Outlets ฝั่งติดถนน Tat Tung Road มีคิวแท็กซี่จอดรอตลอดเวลา</div>
                 <div style="margin-bottom:6px;">• ขึ้นได้ทั้งแท็กซี่สีฟ้า (Lantau) และสีแดง มองหาป้ายวงกลมเขียวท้ายรถ <b>"5 SEATS" หรือ "5位"</b> สำหรับ 5 ท่าน</div>
                 <div style="margin-bottom:8px;">• ยื่นป้ายให้คนขับ: <code>香港國際機場 一號客運大樓 (Terminal 1)</code></div>
-                <button class="action-shortcut-btn" style="background:#4338ca; width:100%; justify-content:center;" onclick="showSubInfo('npToAirportSign')">
+                <button class="action-shortcut-btn" style="background:#4338ca; width:100%; justify-content:center;" onclick="event.stopPropagation(); showSubInfo('npToAirportSign')">
                   🔍 ขยายป้ายภาษาจีนไปสนามบิน Terminal 1
                 </button>
                 <div style="font-size:11px; color:#64748b; margin-top:6px;">• หรือกดเรียก <b>UberXL</b> ปักหมุดรับที่ Citygate Taxi Drop-off นั่งสบายทั้ง 5 คน</div>
@@ -4564,23 +4564,7 @@ function switchAirportInMode(mode) {
 
 function openAirportOutModal() { openTransitModal('airport_out'); }
 function closeAirportOutModal() { closeTransitModal(); }
-function switchAirportOutMode(mode) {
-  const tabCar = document.getElementById('tabAirOutCar');
-  const tabMtr = document.getElementById('tabAirOutMtr');
-  const paneCar = document.getElementById('airOutModeCar');
-  const paneMtr = document.getElementById('airOutModeMtr');
-  if (mode === 'car') {
-    tabCar.className = 'mode-tab active car';
-    tabMtr.className = 'mode-tab';
-    paneCar.style.display = 'block';
-    paneMtr.style.display = 'none';
-  } else {
-    tabMtr.className = 'mode-tab active mtr';
-    tabCar.className = 'mode-tab';
-    paneMtr.style.display = 'block';
-    paneCar.style.display = 'none';
-  }
-}
+
 
 // ==========================================
 // UNIFIED TRANSIT ROUTING ENGINE (IN-PLACE SWITCHING)
@@ -5811,7 +5795,9 @@ function renderNpContent() {
 }
 
 function selectNpStep(idx) {
-  if (npActiveStepIdx === idx) {
+  const cardsNp = document.querySelectorAll('#npStepsContainer .step-card');
+  const targetNp = cardsNp[idx] || document.getElementById(`npStepCard-${idx}`);
+  if (npActiveStepIdx === idx || (targetNp && targetNp.classList.contains('active') && npActiveStepIdx === null)) {
     resetNpCamera();
     return;
   }
@@ -6528,23 +6514,58 @@ function switchPaymentTab(tab) {
   });
 }
 
-var airinActiveStep = { car: 0, mtr: 0 };
+var airinActiveStep = { car: null, mtr: null };
+
 function selectAirInStep(idx, mode) {
-  airinActiveStep[mode] = idx;
   const containerId = (mode === 'car') ? '#airInModeCar' : '#airInModeMtr';
-  document.querySelectorAll(containerId + ' .step-card').forEach((c, i) => {
+  const cards = document.querySelectorAll(containerId + ' .step-card');
+  const targetCard = cards[idx];
+  if (!targetCard) return;
+
+  const isAlreadyActive = targetCard.classList.contains('active');
+  if (isAlreadyActive) {
+    targetCard.classList.remove('active');
+    airinActiveStep[mode] = null;
+    return;
+  }
+
+  cards.forEach((c, i) => {
     c.classList.toggle('active', i === idx);
   });
+  airinActiveStep[mode] = idx;
 }
 
-var airoutActiveStepIdx = 0;
+var airoutActiveStepIdx = null;
+
+function resetAirOutCamera() {
+  airoutActiveStepIdx = null;
+  airoutCamState = { scale: 1, x: 0, y: 0 };
+  applyAirOutCamera();
+  document.querySelectorAll('#airoutPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+}
+
 function selectAirOutStep(idx) {
-  airoutActiveStepIdx = idx;
   const containerId = (airoutMode === 'car') ? '#airOutModeCar' : '#airOutModeMtr';
-  document.querySelectorAll(containerId + ' .step-card').forEach((c, i) => {
+  const cards = document.querySelectorAll(containerId + ' .step-card');
+  const targetCard = cards[idx];
+  if (!targetCard) return;
+
+  const isAlreadyActive = targetCard.classList.contains('active');
+
+  // If already active, toggle collapse
+  if (isAlreadyActive) {
+    targetCard.classList.remove('active');
+    airoutActiveStepIdx = null;
+    resetAirOutCamera();
+    return;
+  }
+
+  // Otherwise, activate this card and collapse all other cards
+  cards.forEach((c, i) => {
     c.classList.toggle('active', i === idx);
   });
-  
+  airoutActiveStepIdx = idx;
+
   // Animate map pin & camera
   const pinMap = ['airout-pin-buddha', 'airout-pin-tungchung', 'airout-pin-bridge', 'airout-pin-airport'];
   const camMap = [
