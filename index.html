@@ -936,13 +936,18 @@
   /* แถบสลับเส้นทางระหว่าง 3 เส้นทางด้านบนของแผนที่ */
   .transit-route-tabs {
     display: flex;
-    gap: 6px;
-    padding: 8px 12px;
-    background: #f1f5f9;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #f8fafc;
     border-bottom: 1px solid #e2e8f0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     flex-shrink: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .transit-route-tabs::-webkit-scrollbar {
+    display: none;
   }
   .route-tab-pill {
     flex-shrink: 0;
@@ -1259,6 +1264,13 @@
   </div>
 
   <!-- Route Switcher Bar (Top Horizontal Pills) -->
+  <div class="transit-route-tabs">
+    <button id="pill-route-airport_in" class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
+    <button id="pill-route-disney" class="route-tab-pill active" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
+    <button id="pill-route-lym" class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
+    <button id="pill-route-np" class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
+    <button id="pill-route-airport_out" class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
+  </div>
   
 
   <!-- Panes Container -->
