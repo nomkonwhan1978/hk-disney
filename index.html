@@ -797,25 +797,28 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid #e2e8f0;
-    padding: 12px 16px;
+    padding: 8px 14px;
+    min-height: 44px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
   }
   .fullscreen-back-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     background: #f1f5f9;
     border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    padding: 7px 14px;
+    border-radius: 18px;
+    padding: 5px 12px;
     font-weight: 700;
-    font-size: 13px;
-    color: #0f172a;
+    font-size: 12px;
+    color: #1e293b;
     cursor: pointer;
-    transition: 0.15s;
+    transition: all 0.15s ease;
+    height: 32px;
+    line-height: 1;
   }
   .fullscreen-back-btn:hover {
     background: #e2e8f0;
@@ -826,16 +829,18 @@
     color: #0f172a;
   }
   .fullscreen-refresh-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 4px;
-    border-radius: 10px;
-    padding: 7px 12px;
+    border-radius: 18px;
+    padding: 5px 12px;
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
-    transition: 0.15s;
-    border: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    height: 32px;
+    line-height: 1;
   }
 
   .fullscreen-container {
@@ -1230,28 +1235,162 @@
   <!-- =====================================================================
      MODAL 1: แผนที่เดินทาง 3D จากโรงแรม B P International -> HK Disneyland
      ===================================================================== -->
+<!-- =====================================================================
+     UNIFIED TRANSIT MODAL (Stable Single Bottom Sheet - No Flickering/Sliding)
+     ===================================================================== -->
 <div id="transitModal" class="transit-modal" onclick="closeTransitModal()">
   <div class="transit-sheet" onclick="event.stopPropagation()">
+    <!-- Unified Transit Header -->
     <div class="transit-header">
-      <h3>🗺️ เส้นทางไป Disneyland (5 ท่าน)</h3>
+      <h3 id="transitModalTitle">🗺️ เส้นทางไป Disneyland (5 ท่าน)</h3>
       <div class="header-icon-group">
-        <button class="header-driver-btn" title="ยื่นให้คนขับดู" onclick="showSubInfo('chineseSign')">🀄 ป้ายคนขับ</button>
+        <button id="transitDriverBtn" class="header-driver-btn" title="ยื่นให้คนขับดู" onclick="showSubInfo('chineseSign')">🀄 ป้ายคนขับ</button>
         <button id="togglePinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleMapPins()">🏷️</button>
-        <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleMapFullscreen()">⛶</button>
+        <button id="fullscreenMapBtn" class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleMapFullscreen()">⛶</button>
         <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeTransitModal()">✕</button>
       </div>
     </div>
 
-    <!-- แถบสลับ 3 เส้นทาง (Default: B P -> Disney) -->
-    <div class="transit-route-tabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;">
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-      <button class="route-tab-pill active" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
+    <!-- แถบสลับ 5 เส้นทาง (คงที่บนสุดของแผ่น sheet สลับได้ทันที ไม่เลื่อนขึ้นเลื่อนลง) -->
+    <div class="transit-route-tabs">
+      <button id="pill-route-airport_in" class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
+      <button id="pill-route-disney" class="route-tab-pill active" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
+      <button id="pill-route-lym" class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
+      <button id="pill-route-np" class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
+      <button id="pill-route-airport_out" class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
     </div>
 
-    <div id="mapViewport" class="map-viewport">
+    <!-- Unified Panes Container -->
+    <div id="transitPanesContainer" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden; position:relative;">
+      
+      <!-- PANE 1: Airport to BP Hotel -->
+      <div id="routePane-airport_in" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
+        <!-- Flight Arrival Banner -->
+      <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:14px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <div style="font-size:12.5px; font-weight:900;">🛬 เที่ยวบินขาเข้า: Emirates EK 384 (BKK ➔ HKG T1)</div>
+          <span style="background:#38bdf8; color:#0c4a6e; font-size:10px; font-weight:800; padding:2px 7px; border-radius:8px;">1 ม.ค. 2027</span>
+        </div>
+        <div style="font-size:11.5px; opacity:0.95; line-height:1.5;">
+          • <b>เวลาลงจอด:</b> <b>17:40 น.</b> อาคารผู้โดยสาร Terminal 1 (สัมภาระโหลดใต้ท้องเครื่อง 30 กก.)<br>
+          • <b>เวลาคาดการณ์:</b> ผ่าน ตม. & รับกระเป๋า ~18:30–18:45 น. ➔ เดินทางเข้า รร. B P ถึงประมาณ 19:15–19:30 น. ทันออกไปหาของกินมื้อดึกย่าน Jordan & จิมซาจุ่ย สบายๆ!
+        </div>
+      </div>
+
+      <!-- Mode Selector Tabs -->
+      <div class="mode-tabs">
+        <button id="tabAirInCar" class="mode-tab active car" onclick="switchAirportInMode('car')">
+          🚕 แท็กซี่แดง / UberXL<br><small style="font-weight:500;">~25–30 นาที | แนะนำที่สุดสำหรับ 5 ท่าน</small>
+        </button>
+        <button id="tabAirInMtr" class="mode-tab" onclick="switchAirportInMode('mtr')">
+          🚇 Airport Express / บัส A21<br><small style="font-weight:500;">~22–45 นาที | รถไฟด่วนหรือรถบัส</small>
+        </button>
+      </div>
+
+      <!-- Content Mode: CAR / TAXI (Active default) -->
+      <div id="airInModeCar" class="steps-container" style="display:block;">
+        <div class="transit-step-card active">
+          <div class="step-card-header">
+            <div class="step-num-badge">1</div>
+            <div class="step-header-text">
+              <div class="step-title">ออกจากโถงผู้โดยสารขาเข้า (Arrivals Hall A หรือ B)</div>
+              <div class="step-subtitle">มองหาป้าย Taxis 🚕 หรือไปยังจุดรับ Uber Car Park 1</div>
+            </div>
+          </div>
+          <div class="step-detail-body" style="display:block;">
+            <p>• <b>จุดขึ้นแท็กซี่ปกติ:</b> เดินตามป้ายสีเหลือง <b>"Taxis 🚕"</b> ไปทางซ้ายสุดของอาคารผู้โดยสารขาเข้า สู่ลาน Taxi Station<br>
+            • <b>เลือกช่องแท็กซี่สีแดง (Urban Taxis):</b> สำหรับเดินทางเข้าฝั่งเกาลูน (Jordan / Tsim Sha Tsui)<br>
+            • ⚠️ <b>สำคัญมากสำหรับ 5 ท่าน:</b> ให้เลือกคันที่มีป้ายวงกลมสีเขียวท้ายรถเขียนว่า <b>"5 SEATS" หรือ "5位"</b><br>
+            • <b>หากเรียก UberXL:</b> เดินออกไปยังอาคารจอดรถ <b>Car Park 1 (Pick-up Area)</b> สะดวกสบาย ไม่ต้องต่อคิว</p>
+          </div>
+        </div>
+
+        <div class="transit-step-card active">
+          <div class="step-card-header">
+            <div class="step-num-badge">2</div>
+            <div class="step-header-text">
+              <div class="step-title">ยื่นป้ายชื่อโรงแรมให้คนขับแท็กซี่</div>
+              <div class="step-subtitle">B P International Hotel, 8 Austin Road, Tsim Sha Tsui</div>
+            </div>
+          </div>
+          <div class="step-detail-body" style="display:block;">
+            <div style="background:#eff6ff; border:1.5px solid #3b82f6; border-radius:10px; padding:10px; margin:6px 0;">
+              <div style="font-size:11px; color:#1d4ed8; font-weight:700;">ยื่นข้อความนี้ให้คนขับ:</div>
+              <div style="font-size:22px; font-weight:900; color:#0f172a;">司機師傅，請帶我們5位去：<br><span style="color:#2563eb;">尖沙咀 柯士甸道8號 龍堡國際賓館</span></div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">(B P International Hotel, 8 Austin Road, Tsim Sha Tsui)</div>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:6px;">
+              <button class="action-shortcut-btn" style="background:#2563eb;" onclick="showSubInfo('airportToBPSign')">🔍 ขยายป้ายเต็มจอ</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="transit-step-card active">
+          <div class="step-card-header">
+            <div class="step-num-badge">3</div>
+            <div class="step-header-text">
+              <div class="step-title">นั่งทางด่วนสายตรง ถึงหน้าล็อบบี้โรงแรม B P (~25–30 นาที)</div>
+              <div class="step-subtitle">ค่าโดยสารประมาณ ~260–310 HKD (รวม 5 ท่านและกระเป๋า)</div>
+            </div>
+          </div>
+          <div class="step-detail-body" style="display:block;">
+            <p>• <b>เส้นทางวิ่ง:</b> วิ่งทางด่วนสายตรง West Kowloon Highway ข้ามสะพาน Tsing Ma และลอดอุโมงค์เข้าสู่ถนน Austin Road รวดเดียว<br>
+            • <b>ค่าใช้จ่ายเฉลี่ย:</b> สำหรับ 5 ท่าน ตกคนละเพียง <b>~55–60 HKD</b> เท่านั้น ถูกและสบายกว่า Airport Express สำหรับครอบครัวที่มีสัมภาระ 30 กก. ไม่ต้องลากกระเป๋าเปลี่ยนรถ!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Mode: MTR & BUS (Hidden by default) -->
+      <div id="airInModeMtr" class="steps-container" style="display:none;">
+        <div class="transit-step-card active">
+          <div class="step-card-header">
+            <div class="step-num-badge">A</div>
+            <div class="step-header-text">
+              <div class="step-title">ทางเลือกที่ 1: รถไฟด่วน Airport Express ➔ ต่อแท็กซี่ 5 นาที</div>
+              <div class="step-subtitle">เร็วที่สุด ~22 นาที | ตั๋วกลุ่ม 5 ท่านคนละ ~70 HKD</div>
+            </div>
+          </div>
+          <div class="step-detail-body" style="display:block;">
+            <p>1. เดินตรงออกจาก Hall เข้าชานชาลา <b>Airport Express</b> ได้ทันที (ไม่ต้องแตะบัตรตอนขึ้นรถไฟ)<br>
+            2. นั่งรถไฟด่วน 2 สถานีลงที่ <b>สถานี Kowloon (เกาลูน)</b> ใช้เวลาเพียง 22 นาที<br>
+            3. แตะบัตรหรือตั๋วออกที่สถานี Kowloon ➔ เดินลงชั้น G ไปยัง Taxi Stand ขึ้นแท็กซี่ต่อสั้นๆ เพียง 5 นาที (~30-35 HKD) ข้ามถนนมาส่งถึงหน้าโรงแรม B P International</p>
+          </div>
+        </div>
+
+        <div class="transit-step-card active">
+          <div class="step-card-header">
+            <div class="step-num-badge">B</div>
+            <div class="step-header-text">
+              <div class="step-title">ทางเลือกที่ 2: รถบัสสายตรง Cityflyer A21 (ไม่ต้องเปลี่ยนสาย)</div>
+              <div class="step-subtitle">ประหยัดสุดคนละ 34.6 HKD | นั่งชมวิวสะพาน Tsing Ma (~45 นาที)</div>
+            </div>
+          </div>
+          <div class="step-detail-body" style="display:block;">
+            <p>1. เดินตามป้าย Bus ไปยัง <b>Airport Ground Transportation Centre</b> ชานชาลา <b>A21</b><br>
+            2. แตะบัตร Octopus หรือบัตร Visa/Mastercard Contactless ขึ้นรถบัส 2 ชั้น (มีที่วางกระเป๋าเดินทางขนาดใหญ่ชั้นล่างและกล้องวงจรปิดจอทีวี)<br>
+            3. นั่งยาวชมวิวสะพานแขวน Tsing Ma ข้ามเกาะ ➔ ลงป้ายที่ 11: <b>Prudential Centre / Jordan Road</b><br>
+            4. เดินข้ามถนนเข้าสู่ถนน Austin Road เพียง 350 เมตร (~4 นาที) ถึงโรงแรม B P International</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 1 Evening Food & Activity Tips -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-top:12px;">
+        <div style="font-weight:800; font-size:12.5px; color:#0f172a; margin-bottom:6px;">
+          🍲 แนะนำร้านอร่อย & กิจกรรมค่ำวันแรก (รอบ รร. B P หลังเช็กอิน 19:30 น.):
+        </div>
+        <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+          • <b>Mak Man Kee Noodle (麦文记):</b> บะหมี่เกี๊ยวกุ้งยักษ์ในตำนานระดับมิชลิน ห่าง รร. 400 ม. (เดิน 5 นาที ถนน Parkes St)<br>
+          • <b>Australia Dairy Company (澳洲牛奶公司):</b> พุดดิ้งนมตุ๋น ขนมปังไข่คนโทสต์ชื่อดัง (ติดกับร้าน Mak Man Kee)<br>
+          • <b>Kai Kai Dessert (佳佳甜品):</b> บัวลอยงาดำต้มขิงและขนมหวานมิชลินชื่อดัง เปิดถึงดึก (เดิน 6 นาที ถนน Ning Po St)<br>
+          • <b>เดินเล่นตลาดกลางคืน Temple Street:</b> สตรีทฟู้ดและของที่ระลึกยามค่ำคืน เดินต่อจากร้านขนมได้เลย
+        </div>
+      </div>
+      </div>
+
+      <!-- PANE 2: BP Hotel to Disneyland -->
+      <div id="routePane-disney" class="transit-route-pane" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
+        <div id="mapViewport" class="map-viewport">
       <button class="fs-close-btn" onclick="toggleMapFullscreen()">✕</button>
 
       <div class="map-zoom-controls">
@@ -1330,34 +1469,11 @@
     </div>
 
     <div id="stepsContainer" class="steps-container"></div>
-  </div>
-</div>
-
-<!-- =====================================================================
-     MODAL 2: แผนที่เดินทาง 3D จาก HK Disneyland -> เล่ยหยู่มุน (Lei Yue Mun)
-     ===================================================================== -->
-<div id="lymModal" class="transit-modal" onclick="closeLymModal()">
-  <div class="transit-sheet" onclick="event.stopPropagation()">
-    <div class="transit-header">
-      <h3>🦞 เส้นทางไปเล่ยหยู่มุน (5 ท่าน)</h3>
-      <div class="header-icon-group">
-        <button class="header-driver-btn" title="ป้ายคนขับขาไปและขากลับ" onclick="showSubInfo('lymChineseSign')">🀄 ป้ายคนขับ</button>
-        <button id="toggleLymPinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleLymPins()">🏷️</button>
-        <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleLymFullscreen()">⛶</button>
-        <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeLymModal()">✕</button>
       </div>
-    </div>
 
-    <!-- แถบสลับ 3 เส้นทาง -->
-    <div class="transit-route-tabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;">
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-      <button class="route-tab-pill active" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
-    </div>
-
-    <div id="lymViewport" class="map-viewport">
+      <!-- PANE 3: Disneyland to Lei Yue Mun -->
+      <div id="routePane-lym" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
+        <div id="lymViewport" class="map-viewport">
       <button class="fs-close-btn" onclick="toggleLymFullscreen()">✕</button>
 
       <div class="map-zoom-controls">
@@ -1483,34 +1599,11 @@
           <span style="color:#10b981; font-weight:bold;">➔</span>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- =====================================================================
-       MODAL 3: แผนที่เดินทาง นองปิง 360 + จุดฝากกระเป๋า + สนามบิน (DAY 3)
-       ===================================================================== -->
-  <div id="npModal" class="transit-modal" onclick="closeNpModal()">
-    <div class="transit-sheet" onclick="event.stopPropagation()">
-      <div class="transit-header">
-        <span style="font-size:18px;">🚠</span>
-        <h3>B P Hotel ➔ นองปิง 360 & Tung Chung</h3>
-        <div class="header-icon-group">
-          <button id="npPinsBtn" class="header-circle-btn active" title="ซ่อน/แสดงหมุด" onclick="toggleNpPins()">🏷️</button>
-          <button class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleNpFullscreen()">⛶</button>
-          <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeNpModal()">✕</button>
-        </div>
       </div>
 
-    <!-- แถบสลับ 3 เส้นทาง -->
-    <div class="transit-route-tabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;">
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-      <button class="route-tab-pill active" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-      <button class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
-    </div>
-
-      <div id="npViewport" class="map-viewport">
+      <!-- PANE 4: BP Hotel to Ngong Ping -->
+      <div id="routePane-np" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
+        <div id="npViewport" class="map-viewport">
         <div id="npCanvas" class="map-canvas">
           <img src="transit-np.png" alt="Ngong Ping Transit Map" class="map-bg-img" style="width:100%; height:100%; object-fit:cover; display:block;">
 
@@ -1625,191 +1718,11 @@
     </div>
 
     <div id="npStepsContainer" class="steps-container"></div>
-    </div>
-  </div>
-
-  <!-- =====================================================================
-       MODAL: CURRENT WEATHER
-       ===================================================================== -->
-    <!-- =====================================================================
-       MODAL: CURRENT WEATHER (REAL-TIME TODAY + 14 DAYS FORECAST + TRIP GUIDE)
-       ===================================================================== -->
-    <!-- =====================================================================
-       FULLSCREEN SCREEN: CURRENT WEATHER & 14-DAY FORECAST BY LOCATION
-       ===================================================================== -->
-  
-  <!-- =====================================================================
-       TRANSIT MODAL: DAY 1 AIRPORT HKG T1 ➔ B P INTERNATIONAL HOTEL
-       ===================================================================== -->
-  <div id="airportInModal" class="transit-modal" onclick="closeAirportInModal()">
-    <div class="transit-sheet" onclick="event.stopPropagation()">
-      <div class="transit-header">
-        <span style="font-size:20px;">✈️</span>
-        <h3>Day 1: สนามบินฮ่องกง ➔ โรงแรม B P (5 ท่าน)</h3>
-        <div class="header-icon-group">
-          <button class="header-driver-btn" title="ยื่นให้คนขับแท็กซี่" onclick="showSubInfo('airportToBPSign')">🀄 ป้ายคนขับ</button>
-          <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeAirportInModal()">✕</button>
-        </div>
       </div>
 
-      <!-- แถบสลับ 5 เส้นทาง -->
-      <div class="transit-route-tabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;">
-        <button class="route-tab-pill active" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
-      </div>
-
-      <!-- Flight Arrival Banner -->
-      <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:14px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.2);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <div style="font-size:12.5px; font-weight:900;">🛬 เที่ยวบินขาเข้า: Emirates EK 384 (BKK ➔ HKG T1)</div>
-          <span style="background:#38bdf8; color:#0c4a6e; font-size:10px; font-weight:800; padding:2px 7px; border-radius:8px;">1 ม.ค. 2027</span>
-        </div>
-        <div style="font-size:11.5px; opacity:0.95; line-height:1.5;">
-          • <b>เวลาลงจอด:</b> <b>17:40 น.</b> อาคารผู้โดยสาร Terminal 1 (สัมภาระโหลดใต้ท้องเครื่อง 30 กก.)<br>
-          • <b>เวลาคาดการณ์:</b> ผ่าน ตม. & รับกระเป๋า ~18:30–18:45 น. ➔ เดินทางเข้า รร. B P ถึงประมาณ 19:15–19:30 น. ทันออกไปหาของกินมื้อดึกย่าน Jordan & จิมซาจุ่ย สบายๆ!
-        </div>
-      </div>
-
-      <!-- Mode Selector Tabs -->
-      <div class="mode-tabs">
-        <button id="tabAirInCar" class="mode-tab active car" onclick="switchAirportInMode('car')">
-          🚕 แท็กซี่แดง / UberXL<br><small style="font-weight:500;">~25–30 นาที | แนะนำที่สุดสำหรับ 5 ท่าน</small>
-        </button>
-        <button id="tabAirInMtr" class="mode-tab" onclick="switchAirportInMode('mtr')">
-          🚇 Airport Express / บัส A21<br><small style="font-weight:500;">~22–45 นาที | รถไฟด่วนหรือรถบัส</small>
-        </button>
-      </div>
-
-      <!-- Content Mode: CAR / TAXI (Active default) -->
-      <div id="airInModeCar" class="steps-container" style="display:block;">
-        <div class="transit-step-card active">
-          <div class="step-card-header">
-            <div class="step-num-badge">1</div>
-            <div class="step-header-text">
-              <div class="step-title">ออกจากโถงผู้โดยสารขาเข้า (Arrivals Hall A หรือ B)</div>
-              <div class="step-subtitle">มองหาป้าย Taxis 🚕 หรือไปยังจุดรับ Uber Car Park 1</div>
-            </div>
-          </div>
-          <div class="step-detail-body" style="display:block;">
-            <p>• <b>จุดขึ้นแท็กซี่ปกติ:</b> เดินตามป้ายสีเหลือง <b>"Taxis 🚕"</b> ไปทางซ้ายสุดของอาคารผู้โดยสารขาเข้า สู่ลาน Taxi Station<br>
-            • <b>เลือกช่องแท็กซี่สีแดง (Urban Taxis):</b> สำหรับเดินทางเข้าฝั่งเกาลูน (Jordan / Tsim Sha Tsui)<br>
-            • ⚠️ <b>สำคัญมากสำหรับ 5 ท่าน:</b> ให้เลือกคันที่มีป้ายวงกลมสีเขียวท้ายรถเขียนว่า <b>"5 SEATS" หรือ "5位"</b><br>
-            • <b>หากเรียก UberXL:</b> เดินออกไปยังอาคารจอดรถ <b>Car Park 1 (Pick-up Area)</b> สะดวกสบาย ไม่ต้องต่อคิว</p>
-          </div>
-        </div>
-
-        <div class="transit-step-card active">
-          <div class="step-card-header">
-            <div class="step-num-badge">2</div>
-            <div class="step-header-text">
-              <div class="step-title">ยื่นป้ายชื่อโรงแรมให้คนขับแท็กซี่</div>
-              <div class="step-subtitle">B P International Hotel, 8 Austin Road, Tsim Sha Tsui</div>
-            </div>
-          </div>
-          <div class="step-detail-body" style="display:block;">
-            <div style="background:#eff6ff; border:1.5px solid #3b82f6; border-radius:10px; padding:10px; margin:6px 0;">
-              <div style="font-size:11px; color:#1d4ed8; font-weight:700;">ยื่นข้อความนี้ให้คนขับ:</div>
-              <div style="font-size:22px; font-weight:900; color:#0f172a;">司機師傅，請帶我們5位去：<br><span style="color:#2563eb;">尖沙咀 柯士甸道8號 龍堡國際賓館</span></div>
-              <div style="font-size:11px; color:#64748b; margin-top:2px;">(B P International Hotel, 8 Austin Road, Tsim Sha Tsui)</div>
-            </div>
-            <div style="display:flex; gap:8px; margin-top:6px;">
-              <button class="action-shortcut-btn" style="background:#2563eb;" onclick="showSubInfo('airportToBPSign')">🔍 ขยายป้ายเต็มจอ</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="transit-step-card active">
-          <div class="step-card-header">
-            <div class="step-num-badge">3</div>
-            <div class="step-header-text">
-              <div class="step-title">นั่งทางด่วนสายตรง ถึงหน้าล็อบบี้โรงแรม B P (~25–30 นาที)</div>
-              <div class="step-subtitle">ค่าโดยสารประมาณ ~260–310 HKD (รวม 5 ท่านและกระเป๋า)</div>
-            </div>
-          </div>
-          <div class="step-detail-body" style="display:block;">
-            <p>• <b>เส้นทางวิ่ง:</b> วิ่งทางด่วนสายตรง West Kowloon Highway ข้ามสะพาน Tsing Ma และลอดอุโมงค์เข้าสู่ถนน Austin Road รวดเดียว<br>
-            • <b>ค่าใช้จ่ายเฉลี่ย:</b> สำหรับ 5 ท่าน ตกคนละเพียง <b>~55–60 HKD</b> เท่านั้น ถูกและสบายกว่า Airport Express สำหรับครอบครัวที่มีสัมภาระ 30 กก. ไม่ต้องลากกระเป๋าเปลี่ยนรถ!</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Content Mode: MTR & BUS (Hidden by default) -->
-      <div id="airInModeMtr" class="steps-container" style="display:none;">
-        <div class="transit-step-card active">
-          <div class="step-card-header">
-            <div class="step-num-badge">A</div>
-            <div class="step-header-text">
-              <div class="step-title">ทางเลือกที่ 1: รถไฟด่วน Airport Express ➔ ต่อแท็กซี่ 5 นาที</div>
-              <div class="step-subtitle">เร็วที่สุด ~22 นาที | ตั๋วกลุ่ม 5 ท่านคนละ ~70 HKD</div>
-            </div>
-          </div>
-          <div class="step-detail-body" style="display:block;">
-            <p>1. เดินตรงออกจาก Hall เข้าชานชาลา <b>Airport Express</b> ได้ทันที (ไม่ต้องแตะบัตรตอนขึ้นรถไฟ)<br>
-            2. นั่งรถไฟด่วน 2 สถานีลงที่ <b>สถานี Kowloon (เกาลูน)</b> ใช้เวลาเพียง 22 นาที<br>
-            3. แตะบัตรหรือตั๋วออกที่สถานี Kowloon ➔ เดินลงชั้น G ไปยัง Taxi Stand ขึ้นแท็กซี่ต่อสั้นๆ เพียง 5 นาที (~30-35 HKD) ข้ามถนนมาส่งถึงหน้าโรงแรม B P International</p>
-          </div>
-        </div>
-
-        <div class="transit-step-card active">
-          <div class="step-card-header">
-            <div class="step-num-badge">B</div>
-            <div class="step-header-text">
-              <div class="step-title">ทางเลือกที่ 2: รถบัสสายตรง Cityflyer A21 (ไม่ต้องเปลี่ยนสาย)</div>
-              <div class="step-subtitle">ประหยัดสุดคนละ 34.6 HKD | นั่งชมวิวสะพาน Tsing Ma (~45 นาที)</div>
-            </div>
-          </div>
-          <div class="step-detail-body" style="display:block;">
-            <p>1. เดินตามป้าย Bus ไปยัง <b>Airport Ground Transportation Centre</b> ชานชาลา <b>A21</b><br>
-            2. แตะบัตร Octopus หรือบัตร Visa/Mastercard Contactless ขึ้นรถบัส 2 ชั้น (มีที่วางกระเป๋าเดินทางขนาดใหญ่ชั้นล่างและกล้องวงจรปิดจอทีวี)<br>
-            3. นั่งยาวชมวิวสะพานแขวน Tsing Ma ข้ามเกาะ ➔ ลงป้ายที่ 11: <b>Prudential Centre / Jordan Road</b><br>
-            4. เดินข้ามถนนเข้าสู่ถนน Austin Road เพียง 350 เมตร (~4 นาที) ถึงโรงแรม B P International</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Day 1 Evening Food & Activity Tips -->
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-top:12px;">
-        <div style="font-weight:800; font-size:12.5px; color:#0f172a; margin-bottom:6px;">
-          🍲 แนะนำร้านอร่อย & กิจกรรมค่ำวันแรก (รอบ รร. B P หลังเช็กอิน 19:30 น.):
-        </div>
-        <div style="font-size:11.5px; color:#475569; line-height:1.6;">
-          • <b>Mak Man Kee Noodle (麦文记):</b> บะหมี่เกี๊ยวกุ้งยักษ์ในตำนานระดับมิชลิน ห่าง รร. 400 ม. (เดิน 5 นาที ถนน Parkes St)<br>
-          • <b>Australia Dairy Company (澳洲牛奶公司):</b> พุดดิ้งนมตุ๋น ขนมปังไข่คนโทสต์ชื่อดัง (ติดกับร้าน Mak Man Kee)<br>
-          • <b>Kai Kai Dessert (佳佳甜品):</b> บัวลอยงาดำต้มขิงและขนมหวานมิชลินชื่อดัง เปิดถึงดึก (เดิน 6 นาที ถนน Ning Po St)<br>
-          • <b>เดินเล่นตลาดกลางคืน Temple Street:</b> สตรีทฟู้ดและของที่ระลึกยามค่ำคืน เดินต่อจากร้านขนมได้เลย
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- =====================================================================
-       TRANSIT MODAL: DAY 3 NGONG PING / CITYGATE ➔ AIRPORT HKG T1
-       ===================================================================== -->
-  <div id="airportOutModal" class="transit-modal" onclick="closeAirportOutModal()">
-    <div class="transit-sheet" onclick="event.stopPropagation()">
-      <div class="transit-header">
-        <span style="font-size:20px;">🛫</span>
-        <h3>Day 3: นองปิง / Tung Chung ➔ สนามบินฮ่องกง</h3>
-        <div class="header-icon-group">
-          <button class="header-driver-btn" title="ยื่นให้คนขับแท็กซี่" onclick="showSubInfo('npToAirportSign')">🀄 ป้ายคนขับ</button>
-          <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeAirportOutModal()">✕</button>
-        </div>
-      </div>
-
-      <!-- แถบสลับ 5 เส้นทาง -->
-      <div class="transit-route-tabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;">
-        <button class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-        <button class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-        <button class="route-tab-pill active" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
-      </div>
-
-      <!-- Flight Departure Banner -->
+      <!-- PANE 5: Ngong Ping to Airport -->
+      <div id="routePane-airport_out" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
+        <!-- Flight Departure Banner -->
       <div style="background:linear-gradient(135deg, #4338ca 0%, #312e81 100%); color:#ffffff; border-radius:14px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 12px rgba(67, 56, 202, 0.25);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
           <div style="font-size:12.5px; font-weight:900;">🛫 เที่ยวบินขากลับ: Emirates EK 385 (HKG T1 ➔ BKK)</div>
@@ -1912,22 +1825,29 @@
           • <b>จุดฝากกระเป๋า:</b> แนะนำฝากที่ Locker Citygate Outlets ชั้น B2/B3 ตั้งแต่เช้าวันกลับ จะได้เที่ยวและขึ้นกระเช้าตัวเปล่า ไม่ต้องแบกกระเป๋าขึ้นเขา!
         </div>
       </div>
+      </div>
+
     </div>
   </div>
+</div>
 
-  <div id="weatherModal" class="fullscreen-view">
-    <!-- Sticky App Bar -->
+
+<div id="weatherModal" class="fullscreen-view">
+    <!-- Sticky App Bar (Slim & Clean) -->
     <div class="fullscreen-header">
       <button class="fullscreen-back-btn" onclick="closeWeatherModal()">
         <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <div class="fullscreen-title">⛅ พยากรณ์อากาศ & 14 วัน</div>
       <button class="fullscreen-refresh-btn" style="background:#e0f2fe; color:#0284c7;" onclick="refreshCurrentLocationWeather()">
         <span id="weatherRefreshSpin">🔄</span> <span>รีเฟรช</span>
       </button>
     </div>
 
     <div class="fullscreen-container">
+      <!-- Title in Body -->
+      <div style="margin-bottom:12px;">
+        <h2 style="margin:0; font-size:18px; font-weight:800; color:#0f172a;">⛅ สภาพอากาศฮ่องกง & พยากรณ์ 14 วัน</h2>
+      </div>
       
       <!-- Location Selector Chips -->
       <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
@@ -2033,18 +1953,21 @@
        FULLSCREEN SCREEN: CONVERT CURRENCY & HISTORICAL TRENDS (1, 3, 6, 12 MONTHS)
        ===================================================================== -->
   <div id="currencyModal" class="fullscreen-view">
-    <!-- Sticky App Bar -->
+    <!-- Sticky App Bar (Slim & Clean) -->
     <div class="fullscreen-header">
       <button class="fullscreen-back-btn" onclick="closeCurrencyModal()">
         <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <div class="fullscreen-title">💱 อัตราแลกเปลี่ยน & แนวโน้ม</div>
       <button class="fullscreen-refresh-btn" style="background:#ecfdf5; color:#059669;" onclick="fetchLiveExchangeRate(true)">
-        <span id="rateRefreshSpin">🔄</span> <span>อัปเดตเรต</span>
+        <span id="rateRefreshSpin">🔄</span> <span>รีเฟรช</span>
       </button>
     </div>
 
     <div class="fullscreen-container">
+      <!-- Title in Body -->
+      <div style="margin-bottom:12px;">
+        <h2 style="margin:0; font-size:18px; font-weight:800; color:#0f172a;">💱 คำนวณอัตราแลกเปลี่ยน HKD / THB</h2>
+      </div>
       
       <!-- Live Current Rate Hero Card -->
       <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:18px; margin-bottom:14px; box-shadow:0 8px 24px rgba(5, 150, 105, 0.25);">
@@ -2170,18 +2093,20 @@
        FULLSCREEN SCREEN: 5 POPULAR HONG KONG TEMPLES (REAL PHOTOS & MAPS)
        ===================================================================== -->
   <div id="templeModal" class="fullscreen-view">
-    <!-- Sticky App Bar -->
+    <!-- Sticky App Bar (Slim & Clean) -->
     <div class="fullscreen-header">
       <button class="fullscreen-back-btn" onclick="closeTempleModal()">
         <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <div class="fullscreen-title">🛕 8 สุดยอดวัดดัง & ไหว้พระมูเตลูฮ่องกง</div>
-      <div style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:12px;">
-        🧧 ทริปปีใหม่ 2027
-      </div>
+      <div></div>
     </div>
 
     <div class="fullscreen-container">
+      <!-- Title & Trip Badge in Body -->
+      <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="margin:0; font-size:18px; font-weight:800; color:#0f172a;">🛕 8 สุดยอดวัดดัง & ไหว้พระมูเตลู</h2>
+        <span style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:3px 9px; border-radius:10px;">🧧 ทริปปีใหม่ 2027</span>
+      </div>
       
       <!-- Itinerary Suggestion Banner -->
       <div style="background:linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:14px; box-shadow:0 8px 20px rgba(194, 65, 12, 0.25);">
@@ -4152,15 +4077,8 @@ let camState = { scale: 1, x: 0, y: 0 };
 
 
 
-function openAirportInModal() {
-  document.getElementById('airportInModal').classList.add('active');
-  pushModalHistory('airportInModal');
-}
-function closeAirportInModal() {
-  dismissModal('airportInModal', () => {
-    document.getElementById('airportInModal').classList.remove('active');
-  });
-}
+function openAirportInModal() { openTransitModal('airport_in'); }
+function closeAirportInModal() { closeTransitModal(); }
 function switchAirportInMode(mode) {
   const tabCar = document.getElementById('tabAirInCar');
   const tabMtr = document.getElementById('tabAirInMtr');
@@ -4179,15 +4097,8 @@ function switchAirportInMode(mode) {
   }
 }
 
-function openAirportOutModal() {
-  document.getElementById('airportOutModal').classList.add('active');
-  pushModalHistory('airportOutModal');
-}
-function closeAirportOutModal() {
-  dismissModal('airportOutModal', () => {
-    document.getElementById('airportOutModal').classList.remove('active');
-  });
-}
+function openAirportOutModal() { openTransitModal('airport_out'); }
+function closeAirportOutModal() { closeTransitModal(); }
 function switchAirportOutMode(mode) {
   const tabCar = document.getElementById('tabAirOutCar');
   const tabMtr = document.getElementById('tabAirOutMtr');
@@ -4206,38 +4117,135 @@ function switchAirportOutMode(mode) {
   }
 }
 
-function switchTransitRoute(route) {
-  // Close all transit modals
-  ['transitModal', 'lymModal', 'npModal', 'airportInModal', 'airportOutModal'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('active');
-  });
-  resetCamera();
-  resetLymCamera();
-  resetNpCamera();
+// ==========================================
+// UNIFIED TRANSIT ROUTING ENGINE (IN-PLACE SWITCHING)
+// ==========================================
+const TRANSIT_ROUTES_CONFIG = {
+  'airport_in': {
+    title: '✈️ Day 1: สนามบิน ➔ โรงแรม B P (5 ท่าน)',
+    driverSign: 'airportToBPSign',
+    hasMap: false
+  },
+  'disney': {
+    title: '🗺️ เส้นทางไป Disneyland (5 ท่าน)',
+    driverSign: 'chineseSign',
+    hasMap: true,
+    mapType: 'disney'
+  },
+  'lym': {
+    title: '🦞 เส้นทางไปเล่ยหยู่มุน (5 ท่าน)',
+    driverSign: 'lymChineseSign',
+    hasMap: true,
+    mapType: 'lym'
+  },
+  'np': {
+    title: '🚠 B P Hotel ➔ นองปิง 360 & Tung Chung',
+    driverSign: 'npChineseSign',
+    hasMap: true,
+    mapType: 'np'
+  },
+  'airport_out': {
+    title: '🛫 Day 3: นองปิง / Tung Chung ➔ สนามบิน',
+    driverSign: 'npToAirportSign',
+    hasMap: false
+  }
+};
 
-  if (route === 'airport_in') {
-    openAirportInModal();
-  } else if (route === 'disney') {
-    openTransitModal();
+let currentTransitRoute = 'disney';
+
+function switchTransitRoute(route) {
+  if (!TRANSIT_ROUTES_CONFIG[route]) route = 'disney';
+  currentTransitRoute = route;
+
+  // 1. Update tab pills active class
+  const pills = document.querySelectorAll('.transit-route-tabs .route-tab-pill');
+  pills.forEach(p => p.classList.remove('active'));
+  const activePill = document.getElementById('pill-route-' + route);
+  if (activePill) {
+    activePill.classList.add('active');
+    if (typeof activePill.scrollIntoView === 'function') {
+      activePill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }
+
+  // 2. Toggle route panes in-place (no sliding animation)
+  const allRoutes = ['airport_in', 'disney', 'lym', 'np', 'airport_out'];
+  allRoutes.forEach(key => {
+    const pane = document.getElementById('routePane-' + key);
+    if (pane) {
+      if (key === route) {
+        pane.style.display = 'flex';
+        pane.scrollTop = 0;
+        const innerSteps = pane.querySelector('.steps-container');
+        if (innerSteps) innerSteps.scrollTop = 0;
+      } else {
+        pane.style.display = 'none';
+      }
+    }
+  });
+
+  // 3. Update header title & driver button
+  const cfg = TRANSIT_ROUTES_CONFIG[route];
+  const titleEl = document.getElementById('transitModalTitle');
+  if (titleEl) titleEl.innerText = cfg.title;
+
+  const driverBtn = document.getElementById('transitDriverBtn');
+  if (driverBtn) {
+    driverBtn.onclick = function() { showSubInfo(cfg.driverSign); };
+    driverBtn.style.display = 'inline-flex';
+  }
+
+  // 4. Update map controls in header
+  const pinBtn = document.getElementById('togglePinsBtn');
+  const fsBtn = document.getElementById('fullscreenMapBtn');
+  if (pinBtn) {
+    if (route === 'disney') {
+      pinBtn.style.display = 'inline-flex';
+      pinBtn.onclick = toggleMapPins;
+    } else if (route === 'lym') {
+      pinBtn.style.display = 'inline-flex';
+      pinBtn.onclick = toggleLymPins;
+    } else {
+      pinBtn.style.display = 'none';
+    }
+  }
+  if (fsBtn) {
+    if (route === 'disney') {
+      fsBtn.style.display = 'inline-flex';
+      fsBtn.onclick = toggleMapFullscreen;
+    } else if (route === 'lym') {
+      fsBtn.style.display = 'inline-flex';
+      fsBtn.onclick = toggleLymFullscreen;
+    } else {
+      fsBtn.style.display = 'none';
+    }
+  }
+
+  // 5. Initialize active sub-mode
+  if (route === 'disney') {
+    if (typeof setTransitMode === 'function') setTransitMode(typeof transitMode !== 'undefined' ? transitMode : 'mtr');
   } else if (route === 'lym') {
-    openLymModal();
+    if (typeof setLymMode === 'function') setLymMode(typeof lymMode !== 'undefined' ? lymMode : 'mtr');
   } else if (route === 'np') {
-    openNpModal();
-  } else if (route === 'airport_out') {
-    openAirportOutModal();
+    if (typeof setNpMode === 'function') setNpMode(typeof npMode !== 'undefined' ? npMode : 'mtr');
   }
 }
 
-function openTransitModal() {
-  document.getElementById('transitModal').classList.add('active');
-  setTransitMode('mtr');
+function openTransitModal(route) {
+  const chosen = route || 'disney';
+  const modal = document.getElementById('transitModal');
+  if (modal) modal.classList.add('active');
+  pushModalHistory('transitModal');
+  switchTransitRoute(chosen);
 }
 
 function closeTransitModal() {
   dismissModal('transitModal', () => {
-    document.getElementById('transitModal').classList.remove('active');
-    resetCamera();
+    const modal = document.getElementById('transitModal');
+    if (modal) modal.classList.remove('active');
+    if (typeof resetCamera === 'function') resetCamera();
+    if (typeof resetLymCamera === 'function') resetLymCamera();
+    if (typeof resetNpCamera === 'function') resetNpCamera();
   });
 }
 
@@ -4466,17 +4474,8 @@ let lymActiveStepIdx = null;
 let lymPinsVisible = true;
 let lymCamState = { scale: 1, x: 0, y: 0 };
 
-function openLymModal() {
-  document.getElementById('lymModal').classList.add('active');
-  setLymMode('mtr');
-}
-
-function closeLymModal() {
-  dismissModal('lymModal', () => {
-    document.getElementById('lymModal').classList.remove('active');
-    resetLymCamera();
-  });
-}
+function openLymModal() { openTransitModal('lym'); }
+function closeLymModal() { closeTransitModal(); }
 
 function toggleLymMode(mode) {
   if (lymMode === mode) {
@@ -5256,18 +5255,8 @@ let npMode = 'mtr';
 let npActiveStepIdx = null;
 let npCamState = { scale: 1, x: 0, y: 0 };
 
-function openNpModal() {
-  document.getElementById('npModal').classList.add('active');
-  pushModalHistory('npModal');
-  setNpMode(npMode || 'mtr');
-}
-
-function closeNpModal() {
-  dismissModal('npModal', () => {
-    document.getElementById('npModal').classList.remove('active');
-    resetNpCamera();
-  });
-}
+function openNpModal() { openTransitModal('np'); }
+function closeNpModal() { closeTransitModal(); }
 
 function toggleNpMode(mode) {
   if (npMode === mode) return;
@@ -5399,6 +5388,49 @@ function toggleNpFullscreen() {
 function showSubInfo(type) {
   const box = document.getElementById('subInfoContent');
   const contents = {
+    airportToBPSign: `
+      <div style="padding:12px 0; text-align:center;">
+        <div style="display:inline-block; background:#dbeafe; color:#1e40af; font-size:13px; font-weight:700; padding:4px 12px; border-radius:16px; margin-bottom:12px;">
+          👨‍👩‍👧‍👦 5 ท่าน (5位乘客)
+        </div>
+        <div style="font-size:32px; font-weight:900; color:#0f172a; letter-spacing:2px; margin:8px 0; line-height:1.3;">
+          龍堡國際<br>
+          <span style="font-size:22px; color:#475569;">B P International</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin:12px 0; text-align:left;">
+          <div style="font-size:12px; color:#64748b; margin-bottom:4px;">ที่อยู่ภาษาจีน (Address):</div>
+          <div style="font-size:17px; font-weight:700; color:#1e293b; line-height:1.4;">
+            香港九龍尖沙咀柯士甸道8號
+          </div>
+          <div style="font-size:13px; color:#64748b; margin-top:4px;">
+            (8 Austin Road, Tsim Sha Tsui, Kowloon)
+          </div>
+        </div>
+        <div style="background:#eff6ff; border-radius:8px; padding:8px 12px; font-size:13px; color:#1e40af; font-weight:600; text-align:left;">
+          🗣️ คำอ่าน: <b>หล่ง-โป๋ว-กวอก-ไจ๋</b> (จิ๊ม-ซ้า-โจ๋ย)
+        </div>
+      </div>
+    `,
+    npToAirportSign: `
+      <div style="padding:4px 0;">
+        <div style="display:inline-block; background:#fef3c7; color:#92400e; font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+          👨‍👩‍👧‍👦 5 ท่าน + กระเป๋าเดินทาง (5位乘客 + 行李)
+        </div>
+        <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="font-size:11px; color:#15803d; font-weight:700; margin-bottom:4px;">ยื่นข้อความนี้ให้คนขับแท็กซี่ (Tung Chung ➔ สนามบิน HKG):</div>
+          <div style="font-size:22px; font-weight:900; color:#0f172a; line-height:1.35; letter-spacing:0.5px;">
+            司機師傅，請帶我們去：<br>
+            <span style="color:#0284c7; font-size:24px;">香港國際機場 一號客運大樓</span><br>
+            <span style="font-size:15px; color:#475569;">(離港大堂 / 5位乘客 + 行李)</span>
+          </div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          • <b>คำอ่าน:</b> ซี้เก๊ย์ ซี้ฟู, เช้ง ไต๋ หงอ เต่ย์ เฮย: แฮ้งก๋อง กวอกไจ๋ เก๊ย์เฉ่อง ยัดโหว ฮักยวิ่น ไต่หล่อ<br>
+          • <b>ความหมาย:</b> คนขับครับ กรุณาพาพวกเราไปที่: สนามบินนานาชาติฮ่องกง อาคารผู้โดยสาร 1 (ผู้โดยสารขาออก 5 ท่าน พร้อมสัมภาระ)<br>
+          • <b>เวลา & ค่าโดยสาร:</b> นั่งจาก Citygate Outlets เพียง ~10 นาที ค่ารถประมาณ 55–65 HKD
+        </div>
+      </div>
+    `,
     /* ข้อมูลป้ายภาษาจีนและขั้นตอนไหว้ของ 5 วัดดัง */
     templeHunghomSign: `
       <div style="padding:4px 0;">
