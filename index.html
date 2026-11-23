@@ -782,7 +782,12 @@
   }
   .fullscreen-view.active {
     display: block;
-    animation: fadeInScreen 0.22s ease-out;
+    animation: fadeInScreen 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #transitModal.fullscreen-view.active {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
   }
   @keyframes fadeInScreen {
     from { opacity: 0; transform: translateY(16px); }
@@ -1094,12 +1099,15 @@
 <!-- =====================================================================
        2. DISNEYLAND GUIDE SCREEN (WRAPPER FOR ORIGINAL PARK APP)
        ===================================================================== -->
-  <div id="parkGuideScreen" style="display: none;">
-    <div style="background:#1e1b4b; padding:8px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.15);">
-      <button onclick="closeParkGuide()" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:6px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
-        <span>⮌</span> <span>หน้าหลัก Dashboard</span>
+  <div id="parkGuideScreen" class="fullscreen-view">
+    <!-- Sticky App Bar (Slim & Clean) -->
+    <div class="fullscreen-header">
+      <button class="fullscreen-back-btn" onclick="closeParkGuide()">
+        <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <span style="font-size:11px; color:#fde68a; font-weight:700;">🏰 สวนสนุก & DPA Tracker</span>
+      <div style="font-size:13.5px; font-weight:800; color:#854d0e; display:flex; align-items:center; gap:6px;">
+        <span>🏰</span> <span>Disneyland Guide & VIP DPA</span>
+      </div>
     </div>
 <header>
   <div class="header-top">
@@ -1239,30 +1247,22 @@
 <!-- =====================================================================
      UNIFIED TRANSIT MODAL (Stable Single Bottom Sheet - No Flickering/Sliding)
      ===================================================================== -->
-<div id="transitModal" class="transit-modal" onclick="closeTransitModal()">
-  <div class="transit-sheet" onclick="event.stopPropagation()">
-    <!-- Unified Transit Header -->
-    <div class="transit-header">
-      <h3 id="transitModalTitle">🗺️ เส้นทางไป Disneyland (5 ท่าน)</h3>
-      <div class="header-icon-group">
-        <button id="transitDriverBtn" class="header-driver-btn" title="ยื่นให้คนขับดู" onclick="showSubInfo('chineseSign')">🀄 ป้ายคนขับ</button>
-        <button id="togglePinsBtn" class="header-circle-btn active" title="แสดง/ซ่อนชื่อสถานที่" onclick="toggleMapPins()">🏷️</button>
-        <button id="fullscreenMapBtn" class="header-circle-btn" title="ขยายเต็มจอ" onclick="toggleMapFullscreen()">⛶</button>
-        <button class="header-circle-btn" title="ปิดหน้าต่าง" onclick="closeTransitModal()">✕</button>
-      </div>
+<div id="transitModal" class="fullscreen-view" style="overflow:hidden;">
+  <!-- Sticky App Bar (Slim & Clean) -->
+  <div class="fullscreen-header" style="flex-shrink:0;">
+    <button class="fullscreen-back-btn" onclick="closeTransitModal()">
+      <span>←</span> <span>กลับหน้าหลัก</span>
+    </button>
+    <div style="font-size:13.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+      <span>🚇</span> <span>แผนที่ & การเดินทางฮ่องกง</span>
     </div>
+  </div>
 
-    <!-- แถบสลับ 5 เส้นทาง (คงที่บนสุดของแผ่น sheet สลับได้ทันที ไม่เลื่อนขึ้นเลื่อนลง) -->
-    <div class="transit-route-tabs">
-      <button id="pill-route-airport_in" class="route-tab-pill" onclick="switchTransitRoute('airport_in')">✈️ 1) สนามบิน ➔ B P</button>
-      <button id="pill-route-disney" class="route-tab-pill active" onclick="switchTransitRoute('disney')">🏰 2) B P ➔ Disney</button>
-      <button id="pill-route-lym" class="route-tab-pill" onclick="switchTransitRoute('lym')">🦞 3) Disney ➔ เล่ยหยู่มุน</button>
-      <button id="pill-route-np" class="route-tab-pill" onclick="switchTransitRoute('np')">🚠 4) B P ➔ นองปิง</button>
-      <button id="pill-route-airport_out" class="route-tab-pill" onclick="switchTransitRoute('airport_out')">🛫 5) นองปิง ➔ สนามบิน</button>
-    </div>
+  <!-- Route Switcher Bar (Top Horizontal Pills) -->
+  
 
-    <!-- Unified Panes Container -->
-    <div id="transitPanesContainer" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden; position:relative;">
+  <!-- Panes Container -->
+  <div id="transitPanesContainer" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden; position:relative;">
       
       <!-- PANE 1: Airport to BP Hotel -->
       <div id="routePane-airport_in" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
@@ -1300,7 +1300,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details" style="display:block;">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• รับกระเป๋าเดินทางที่สายพาน (~18:30–18:45 น.) ตรวจเช็คกระเป๋าและพาสปอร์ตให้เรียบร้อย</div>
               <div style="margin-bottom:6px;">• แวะเคาน์เตอร์ <b>MTR Customer Service</b> ตรงกลางโถงผู้โดยสาร เพื่อซื้อบัตร Octopus หรือเปิด Mobile Octopus บน iPhone</div>
               <div>• มีห้องน้ำและร้านสะดวกซื้อ 7-Eleven ให้แวะซื้อน้ำดื่มก่อนเดินทาง</div>
@@ -1316,7 +1316,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• <b>แท็กซี่สีแดง (Urban Taxi):</b> เดินตามป้ายเหลือง <b>"Taxis 🚕"</b> ออกไปทางซ้ายมือ ต่อคิวในช่องแท็กซี่สีแดง (สำหรับมุ่งหน้าเข้าเกาลูน)</div>
               <div style="margin-bottom:6px;">• ⚠️ <b>สำคัญมากสำหรับ 5 ท่าน:</b> แจ้งเจ้าหน้าที่จัดคิว หรือมองหารถคันที่มีป้ายวงกลมสีเขียวท้ายรถเขียนว่า <b>"5 SEATS" หรือ "5位"</b> เพื่อให้นั่งได้ครบ 5 คนอย่างถูกกฎหมาย</div>
               <div>• <b>หรือเรียก UberXL:</b> เดินไปยังอาคารจอดรถ <b>Car Park 1 (Pick-up Area)</b> สะดวกสบาย นั่งได้ 5 คนพร้อมกระเป๋า ไม่ต้องเข้าคิว</div>
@@ -1332,7 +1332,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• ยื่นป้ายภาษาจีนให้คนขับดู: <code>尖沙咀 龍堡國際賓館 (柯士甸道 Austin Rd.)</code></div>
               <div style="margin-bottom:8px;">• คำอ่านออกเสียง: <b>หล่ง-โป๋ว-กวอก-ไจ๋</b> (จิ๊ม-ซ้า-โจ๋ย)</div>
               <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center;" onclick="event.stopPropagation(); showSubInfo('airportToBPSign')">
@@ -1351,7 +1351,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• วิ่งเส้นทางด่วน Route 8 ข้ามสะพานชิงหม่า (Tsing Ma Bridge) มุ่งหน้าสู่เกาลูน</div>
               <div style="margin-bottom:6px;">• รถจอดส่งเทียบหน้าล็อบบี้โรงแรม B P International ทันที สะดวก ไม่ต้องยกกระเป๋าขึ้นลงบันได</div>
               <div>• <b>เช็คอิน & พักผ่อน:</b> เช็คอินรับกุญแจห้อง แล้วเดินออกไปทานมื้อค่ำติ่มซำ บะหมี่เกี๊ยว หรืออาหารทะเลแถบ Jordan & Nathan Road ได้ทันที!</div>
@@ -1372,7 +1372,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details" style="display:block;">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• เดินตรงออกจากโถง Arrivals Hall ก้าวขึ้นรถไฟ Airport Express ได้ทันที ไม่ต้องแตะบัตรที่สถานีต้นทาง (ไปแตะบัตร Octopus หรือสแกน QR Code ตั๋วที่สถานีปลายทาง)</div>
               <div style="margin-bottom:6px;">• รถไฟออกทุก 10 นาที วิ่งเงียบ มีที่วางกระเป๋าและช่องชาร์จไฟ</div>
               <div>• ถึง <b>สถานี Kowloon</b> ใน 22 นาที จากนั้นต่อแท็กซี่ 5 นาที (~30 HKD) หรือมินิบัสไปยังโรงแรม B P International</div>
@@ -1388,7 +1388,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• เดินตามป้าย <b>"Bus / 巴士"</b> ไปยัง Ground Transportation Centre ชานชาลารถบัสสาย <b>A21 (ไป Hung Hom Station)</b></div>
               <div style="margin-bottom:6px;">• แตะบัตร Octopus หรือบัตรเครดิต Contactless ตอนขึ้นรถ (34.6 HKD) รถออกทุก 10–15 นาที</div>
               <div>• รถบัสสองชั้น ปรับอากาศ มีที่วางกระเป๋าเดินทางขนาดใหญ่ชั้นล่าง พร้อมกล้องวงจรปิดให้ดูสัมภาระจากชั้นบน นั่งชมวิวข้ามสะพานชิงหม่าเพลินๆ</div>
@@ -1404,7 +1404,7 @@
               </div>
               <span class="step-arrow">▼</span>
             </div>
-            <div class="step-details">
+            <div class="step-details" onclick="event.stopPropagation()">
               <div style="margin-bottom:6px;">• กดกริ่งลงที่ <b>ป้ายที่ 11: Prudential Centre, Nathan Road (恒豐中心)</b> สังเกตป้ายประกาศบนรถบัส</div>
               <div style="margin-bottom:6px;">• ลงรถแล้วเดินตรงไปไม่กี่เมตร เลี้ยวซ้ายเข้าสู่ถนน <b>Austin Road (柯士甸道)</b></div>
               <div>• เดินตรงไปตามทาง 250 เมตร จะเห็นตึกโรงแรม B P International อยู่ทางซ้ายมือ ติดสวนเกาลูน (Kowloon Park) เดินง่ายและปลอดภัยมาก</div>
@@ -1968,7 +1968,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details" style="display:block;">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• นั่งกระเช้า Ngong Ping 360 ลงมาถึงสถานีปลายทาง Tung Chung (~25 นาที แนะนำลงไม่เกิน 17:30–17:45 น.)</div>
                 <div style="margin-bottom:6px;">• เดินไปรับกระเป๋าเดินทางที่ฝากไว้ที่ชั้นใต้ดิน B2/B3 ห้าง Citygate Outlets หรือที่เคาน์เตอร์ฝากกระเป๋านองปิง 360</div>
                 <div>• ตรวจเช็คสัมภาระ พาสปอร์ต และของฝากให้เรียบร้อยก่อนเดินทางไปสนามบิน</div>
@@ -1984,7 +1984,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• <b>จุดขึ้นแท็กซี่:</b> เดินออกมาหน้าห้าง Citygate Outlets ฝั่งติดถนน Tat Tung Road มีคิวแท็กซี่จอดรอตลอดเวลา</div>
                 <div style="margin-bottom:6px;">• ขึ้นได้ทั้งแท็กซี่สีฟ้า (Lantau) และสีแดง มองหาป้ายวงกลมเขียวท้ายรถ <b>"5 SEATS" หรือ "5位"</b> สำหรับ 5 ท่าน</div>
                 <div style="margin-bottom:8px;">• ยื่นป้ายให้คนขับ: <code>香港國際機場 一號客運大樓 (Terminal 1)</code></div>
@@ -2004,7 +2004,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• รถวิ่งข้ามสะพานเชื่อมเกาะ Lantau สู่เกาะสนามบิน Chek Lap Kok รวดเร็วมากเพียง 10–12 นาที</div>
                 <div style="margin-bottom:6px;">• รถส่งเทียบที่ <b>ชานชาลาผู้โดยสารขาออก ชั้น 7 (Departures Hall)</b> หน้าประตูทางเข้าเคาน์เตอร์เช็คอินทันที</div>
                 <div>• ไม่ต้องเดินไกล เข็นรถกระเป๋าเข้าสู่โซนเช็คอินได้ทันที</div>
@@ -2020,7 +2020,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• ถึงสนามบินช่วง ~18:45 น. มีเวลาล่วงหน้าถึง 2 ชม. 15 นาที สบายๆ</div>
                 <div style="margin-bottom:6px;">• เช็คอินโหลดกระเป๋าที่เคาน์เตอร์สายการบิน Emirates (จำกัด 25 กก. ตามตั๋วเดินทาง)</div>
                 <div>• ผ่าน ตม. และจุดตรวจค้น แล้วมีเวลาเพลิดเพลินกับมื้อเย็นและช้อปปิ้งสินค้า Duty Free ก่อนขึ้นเครื่องกลับกรุงเทพฯ (BKK)</div>
@@ -2041,7 +2041,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details" style="display:block;">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• นั่งกระเช้า Ngong Ping 360 ลงมาถึงสถานีปลายทาง Tung Chung (~25 นาที)</div>
                 <div style="margin-bottom:6px;">• รับกระเป๋าเดินทางที่ฝากไว้ที่ชั้นใต้ดิน B2/B3 ห้าง Citygate Outlets</div>
                 <div>• ตรวจเช็คสิ่งของและสัมภาระให้ครบถ้วน</div>
@@ -2057,7 +2057,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• จากสถานีกระเช้า เดินข้ามลานน้ำพุเข้าไปยังอาคารสถานีรถบัสใต้ห้าง Citygate Outlets (Tung Chung Bus Terminus)</div>
                 <div style="margin-bottom:6px;">• มองหาชานชาลา <b>สาย S1 (Airport Passenger Terminal Building)</b></div>
                 <div>• รถบัสออกถี่มาก ทุกๆ <b>7–10 นาที</b> ไม่ต้องกลัวตกรถ</div>
@@ -2073,7 +2073,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• รถบัสปรับอากาศสองชั้น มีช่องวางกระเป๋าเดินทางขนาดใหญ่ที่ชั้นล่าง</div>
                 <div style="margin-bottom:6px;">• ค่าโดยสารประหยัดที่สุด เพียง <b>3.7 HKD ต่อคน</b> (แตะบัตร Octopus หรือบัตรเครดิต Contactless)</div>
                 <div>• รถวิ่งข้ามสะพานเชื่อมเกาะ Lantau สู่สนามบิน ใช้เวลาเพียง 12–15 นาที</div>
@@ -2089,7 +2089,7 @@
                 </div>
                 <span class="step-arrow">▼</span>
               </div>
-              <div class="step-details">
+              <div class="step-details" onclick="event.stopPropagation()">
                 <div style="margin-bottom:6px;">• กดกริ่งลงที่ป้ายแรก <b>Passenger Terminal Building (อาคารผู้โดยสาร Terminal 1)</b></div>
                 <div style="margin-bottom:6px;">• เดินเข้าอาคารแล้วขึ้นลิฟต์หรือบันไดเลื่อนไปยัง <b>ชั้น 7 (Departures Hall)</b></div>
                 <div>• เข้าแถวเช็คอินเคาน์เตอร์ Emirates EK 385 โหลดกระเป๋า และผ่าน ตม. เดินทางกลับอย่างราบรื่น</div>
@@ -2103,7 +2103,6 @@
       </div>
 
     </div>
-  </div>
 </div>
 
 
@@ -3347,7 +3346,7 @@
       <button class="fullscreen-back-btn" onclick="closePaymentModal()">
         <span>←</span> <span>กลับหน้าหลัก</span>
       </button>
-      <div style="font-size:13.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+      <div style="font-size:13.5px; font-weight:800; color:#0284c7; display:flex; align-items:center; gap:6px;">
         <span>💳</span> <span>Octopus & วิธีชำระเงิน</span>
       </div>
     </div>
@@ -3356,61 +3355,61 @@
       
       <!-- Title & Subtitle Banner -->
       <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:14px; padding:14px 16px; margin-bottom:14px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.2);">
-        <div style="font-size:16px; font-weight:900; margin-bottom:4px;">💳 คู่มือบัตร Octopus & การชำระเงินในฮ่องกง</div>
+        <div style="font-size:16px; font-weight:900; margin-bottom:4px;">💳 คู่มือบัตร Octopus & วิธีชำระเงินในฮ่องกง</div>
         <div style="font-size:12px; opacity:0.95; line-height:1.5;">
-          คู่มือการซื้อบัตรเดินทาง Octopus ที่สนามบิน, การผูกบน Apple Wallet, การแตะบัตรเครดิตเข้า MTR, การใช้ TrueMoney (Alipay+) และข้อควรรู้เรื่องเงินสดสำหรับแท็กซี่
+          เปรียบเทียบบัตร Octopus, ตั๋ววัน MTR Tourist Pass, บัตร Travel Card ไทย, Apple Wallet, แตะบัตรเครดิตเข้า MTR, TrueMoney (Alipay+) และ PromptPay x FPS
         </div>
       </div>
 
-      <!-- Tab Buttons -->
+      <!-- Tab Buttons (4 Focused Tabs - Emergency removed!) -->
       <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:14px; -webkit-overflow-scrolling:touch;">
         <button id="tabBtnPay-oct" class="weather-chip active" onclick="switchPaymentTab('oct')" style="white-space:nowrap;">💳 บัตร Octopus</button>
+        <button id="tabBtnPay-pass" class="weather-chip" onclick="switchPaymentTab('pass')" style="white-space:nowrap;">🎫 ตั๋ววัน MTR & Travel Pass</button>
         <button id="tabBtnPay-mob" class="weather-chip" onclick="switchPaymentTab('mob')" style="white-space:nowrap;">📱 Apple Wallet & บัตรเครดิต</button>
-        <button id="tabBtnPay-alt" class="weather-chip" onclick="switchPaymentTab('alt')" style="white-space:nowrap;">📲 TrueMoney & เงินสด</button>
-        <button id="tabBtnPay-sos" class="weather-chip" onclick="switchPaymentTab('sos')" style="white-space:nowrap;">🚨 ฉุกเฉิน & ป้ายจีน</button>
+        <button id="tabBtnPay-alt" class="weather-chip" onclick="switchPaymentTab('alt')" style="white-space:nowrap;">📲 TrueMoney, FPS & เงินสด</button>
       </div>
 
       <!-- TAB 1: OCTOPUS CARD -->
       <div id="tabContentPay-oct" style="display:block;">
         
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-            <span style="font-size:20px;">🐙</span>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <span style="font-size:22px;">🐙</span>
             <div style="font-size:14px; font-weight:800; color:#0f172a;">บัตร Octopus คืออะไร? ทำไมต้องมี?</div>
           </div>
           <div style="font-size:12.5px; color:#475569; line-height:1.6;">
-            บัตร Octopus คือบัตรสมาร์ทการ์ดสารพัดประโยชน์อันดับ 1 ของฮ่องกง แตะผ่านประตูด่วนได้ทันที ใช้ขึ้นรถไฟฟ้า <b>MTR</b>, รถบัสทุกสาย (KMB / Citybus), รถราง Ding Ding, เรือเฟอร์รี่ข้ามฟาก Star Ferry, ร้านสะดวกซื้อ <b>7-Eleven / Circle K</b>, ซูเปอร์มาร์เก็ต, ร้านอาหารฟาสต์ฟู้ด (Café de Coral, Fairwood, McDonald's) และร้านค้าทั่วไป 95% ในฮ่องกง
+            บัตร Octopus คือบัตรสมาร์ทการ์ดสารพัดประโยชน์อันดับ 1 ของฮ่องกง แตะผ่านประตูด่วนได้ทันที ใช้ขึ้นรถไฟฟ้า <b>MTR</b>, รถบัสทุกสาย (KMB / Citybus), รถราง Ding Ding, เรือเฟอร์รี่ Star Ferry, ร้านสะดวกซื้อ <b>7-Eleven / Circle K</b>, ซูเปอร์มาร์เก็ต, ร้านอาหารฟาสต์ฟู้ด (Café de Coral, Fairwood, McDonald's) และร้านค้าทั่วไปกว่า 95% ทั่วฮ่องกง
           </div>
         </div>
 
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:12px;">
-          <div style="font-size:13.5px; font-weight:800; color:#0284c7; margin-bottom:8px;">
-            📍 เลือกประเภทบัตรสำหรับนักท่องเที่ยว
+          <div style="font-size:13.5px; font-weight:800; color:#0284c7; margin-bottom:10px;">
+            📍 เลือกประเภทบัตร Octopus สำหรับนักท่องเที่ยว
           </div>
           
           <!-- Option A -->
-          <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px; margin-bottom:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <div style="font-size:13px; font-weight:800; color:#0369a1;">1. On-Loan Octopus (บัตรมาตรฐาน มีมัดจำ - แนะนำ)</div>
+              <div style="font-size:13px; font-weight:800; color:#0369a1;">1. On-Loan Octopus (บัตรมาตรฐาน มีมัดจำ - แนะนำที่สุด)</div>
               <span style="font-size:10px; font-weight:700; background:#0284c7; color:#fff; padding:2px 8px; border-radius:10px;">คืนเงินได้</span>
             </div>
-            <div style="font-size:12px; color:#334155; line-height:1.5;">
-              • <b>ราคา:</b> 200 HKD (แบ่งเป็นมัดจำ 50 HKD + มูลค่าใช้งานเริ่มต้น 150 HKD)<br>
+            <div style="font-size:12px; color:#334155; line-height:1.6;">
+              • <b>ราคา:</b> 200 HKD (แบ่งเป็นเงินมัดจำ 50 HKD + ยอดเงินใช้ได้ทันที 150 HKD)<br>
               • <b>จุดซื้อที่สนามบิน HKG T1:</b> เดินออกจากโถง Arrivals Hall A หรือ B มองหาเคาน์เตอร์ <b>MTR Customer Service Centre</b> ตั้งอยู่กึ่งกลางโถง ซื้อด้วยเงินสดได้ทันที<br>
               • <b>การคืนบัตร:</b> ก่อนบินกลับ นำบัตรไปคืนที่เคาน์เตอร์ MTR สนามบิน ได้รับเงินมัดจำ 50 HKD และเงินคงเหลือในบัตรคืนทั้งหมด (หักค่าธรรมเนียมคืนบัตร 11 HKD หากใช้งานน้อยกว่า 90 วัน)
             </div>
           </div>
 
           <!-- Option B -->
-          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px;">
+          <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
               <div style="font-size:13px; font-weight:800; color:#334155;">2. Sold Tourist Octopus Card (บัตรซื้อขาด ไม่มีมัดจำ)</div>
-              <span style="font-size:10px; font-weight:700; background:#64748b; color:#fff; padding:2px 8px; border-radius:10px;">เก็บเป็นของที่ระลึก</span>
+              <span style="font-size:10px; font-weight:700; background:#64748b; color:#fff; padding:2px 8px; border-radius:10px;">เก็บเป็นของสะสม</span>
             </div>
-            <div style="font-size:12px; color:#334155; line-height:1.5;">
+            <div style="font-size:12px; color:#334155; line-height:1.6;">
               • <b>ราคา:</b> 39 HKD (เป็นบัตรเปล่า ไม่มีเงิน ต้องเติมเงินก่อนใช้งาน)<br>
-              • <b>จุดซื้อ:</b> ซื้อได้ที่ร้าน <b>7-Eleven / Relay</b> ในสนามบินฮ่องกง<br>
-              • <b>จุดเด่น:</b> ลายพิเศษฮ่องกง ซื้อขาดได้เลย ไม่ต้องเสียเวลานำไปคืนตอนจบทริป นำกลับไทยเป็นของสะสมได้
+              • <b>จุดซื้อ:</b> ซื้อได้ที่ร้าน <b>7-Eleven / Relay</b> ในสนามบินฮ่องกง หรือจองผ่าน Klook / KKday ล่วงหน้า<br>
+              • <b>จุดเด่น:</b> ลวดลายสวยงาม ซื้อขาดเป็นของที่ระลึก นำกลับไทยได้ ไม่ต้องเสียเวลาต่อคิวคืนบัตร
             </div>
           </div>
 
@@ -3421,7 +3420,7 @@
             🔄 วิธีเติมเงินในบัตร (Top-Up)
           </div>
           <div style="font-size:12px; color:#475569; line-height:1.6;">
-            • <b>ตู้เติมเงิน Add Value Machine (สถานี MTR ทุกแห่ง):</b> สอดบัตรเข้าตู้ และสอดธนบัตร 50 หรือ 100 HKD (ตู้ไม่รับเหรียญและไม่รับแบงก์ 20)<br>
+            • <b>ตู้ Add Value Machine (สถานี MTR ทุกแห่ง):</b> สอดบัตรเข้าตู้ และสอดธนบัตร 50 หรือ 100 HKD (ตู้ไม่รับเหรียญและไม่รับแบงก์ 20)<br>
             • <b>เคาน์เตอร์ 7-Eleven และ Circle K:</b> ยื่นบัตรให้แคชเชียร์และบอก "Top-up 100" ใช้เงินสดเติมได้ทุกสาขาทั่วฮ่องกง<br>
             • <b>วงเงินติดลบฉุกเฉิน:</b> บัตร Octopus อนุญาตให้แตะติดลบได้ 1 ครั้ง (สูงสุด -35 ถึง -50 HKD) เพื่อให้ออกจากสถานีได้โดยไม่ติดค้าง
           </div>
@@ -3429,10 +3428,55 @@
 
       </div>
 
-      <!-- TAB 2: MOBILE WALLET & CONTACTLESS -->
+      <!-- TAB 2: OTHER TOURIST PASSES & CARDS (NEW TAB!) -->
+      <div id="tabContentPay-pass" style="display:none;">
+        
+        <!-- Pass 1: MTR Tourist Day Pass -->
+        <div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:14px; font-weight:900; color:#c2410c;">🎫 1. MTR Adult Tourist Day Pass (ตั๋ววัน MTR สุดคุ้ม)</div>
+            <span style="font-size:10px; font-weight:800; background:#ea580c; color:#fff; padding:2px 8px; border-radius:10px;">นั่งไม่อั้น 24 ชม.</span>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.6;">
+            • <b>ราคา:</b> ผู้ใหญ่ <b>65 HKD</b> (เด็กอายุ 3–11 ปี 30 HKD)<br>
+            • <b>สิทธิประโยชน์:</b> <b>นั่งรถไฟฟ้า MTR ทุกสาย และ Light Rail ได้ไม่จำกัดเที่ยวตลอด 24 ชั่วโมงเต็ม!</b> (เริ่มนับ 24 ชม. จากเวลาที่แตะผ่านประตูเกตครั้งแรก)<br>
+            • 💡 <b>คุ้มค่าเมื่อไหร่?:</b> เหมาะมากสำหรับวันที่มีโปรแกรมตะลุยเที่ยวหลายจุด เช่น <b>Day 3 ไหว้พระ 5–8 วัด</b> หรือวันที่มีการเดินทางข้ามเกาะฮ่องกง-เกาลูนหลายเที่ยว (ปกติค่า MTR ข้ามเกาะเที่ยวละ 12–15 HKD นั่งเพียง 4–5 เที่ยวก็คุ้มเกินค่าตั๋วแล้วครับ!)<br>
+            • <b>จุดซื้อ:</b> เคาน์เตอร์ MTR Customer Service ทุกสถานี หรือซื้อเวาเชอร์ล่วงหน้าผ่าน Klook / KKday<br>
+            • <i>ข้อยกเว้น:</i> ไม่รวมสาย Airport Express, East Rail Line First Class และ MTR Bus
+          </div>
+        </div>
+
+        <!-- Pass 2: Airport Express Travel Pass -->
+        <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:13.5px; font-weight:800; color:#0f172a;">🚄 2. Airport Express Travel Pass</div>
+            <span style="font-size:10px; font-weight:700; background:#0284c7; color:#fff; padding:2px 8px; border-radius:10px;">รถไฟด่วน + MTR 3 วัน</span>
+          </div>
+          <div style="font-size:12px; color:#475569; line-height:1.6;">
+            • <b>ราคา:</b> 250 HKD (รวม Airport Express 1 เที่ยว) หรือ 350 HKD (รวม Airport Express ไป-กลับ 2 เที่ยว)<br>
+            • <b>สิทธิประโยชน์:</b> รวมตั๋วรถไฟด่วน Airport Express เข้าเมือง + <b>นั่งรถไฟฟ้า MTR ฟรีไม่จำกัด 3 วันเต็ม (72 ชั่วโมง)</b><br>
+            • มีเงินมัดจำ 50 HKD รวมอยู่ในราคาตั๋ว นำบัตรไปคืนที่เคาน์เตอร์ MTR สนามบินขากลับเพื่อรับเงินคืน 50 HKD ได้เต็มจำนวน
+          </div>
+        </div>
+
+        <!-- Pass 3: Thai Travel Cards -->
+        <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:14px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:13.5px; font-weight:800; color:#15803d;">💳 3. บัตร Travel Card จากไทย (YouTrip, Planet SCB, Journey)</div>
+            <span style="font-size:10px; font-weight:700; background:#16a34a; color:#fff; padding:2px 8px; border-radius:10px;">เรตแลกเงินดี</span>
+          </div>
+          <div style="font-size:12px; color:#166534; line-height:1.6;">
+            • คนไทยนิยมพกบัตร Travel Card (เช่น <b>YouTrip, Planet SCB, Krungthai Travel Card, KBank Journey</b>) แลกเงิน HKD เก็บไว้ในแอปตั้งแต่ก่อนบิน<br>
+            • <b>แตะจ่ายได้ทันที:</b> นำบัตรไปแตะที่ประตู MTR เกตสีฟ้า (Light Blue Gate) หรือแตะขึ้นรถบัส KMB / Citybus ได้โดยตรง เรตแลกเงินเทียบเท่า SuperRich และไม่มีค่าความเสี่ยงอัตราแลกเปลี่ยน FX 2.5%
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 3: MOBILE WALLET & CONTACTLESS -->
       <div id="tabContentPay-mob" style="display:none;">
         
-        <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:14px; padding:14px; margin-bottom:12px;">
+        <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:14px; padding:14px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="font-size:14px; font-weight:800; color:#15803d;">📱 Mobile Octopus on iPhone (สะดวกที่สุด ไม่ต้องซื้อบัตรจริง!)</div>
             <span style="font-size:10px; font-weight:700; background:#16a34a; color:#fff; padding:2px 8px; border-radius:10px;">ยอดฮิต</span>
@@ -3442,12 +3486,12 @@
             &nbsp;&nbsp;1. เปิดแอป <b>Apple Wallet</b> ➔ กดเครื่องหมาย <b>+</b> มุมบนขวา<br>
             &nbsp;&nbsp;2. เลือกเมนู <b>"Transit Cards" (บัตรโดยสาร)</b> ➔ ค้นหา <b>"Hong Kong" (Octopus)</b><br>
             &nbsp;&nbsp;3. กด Continue และเลือกเติมเงินครั้งแรก (มัดจำ 50 HKD + เติมเงินเริ่มต้น 100 HKD)<br>
-            &nbsp;&nbsp;4. ชำระเงินผ่านบัตรเครดิตไทย หรือ Travel Card (YouTrip, Planet SCB, Journey) ได้ทันที!<br>
+            &nbsp;&nbsp;4. ชำระเงินผ่านบัตรเครดิตไทย หรือ Travel Card (YouTrip, Planet SCB) ได้ทันที!<br>
             • ⚡ <b>ฟังก์ชัน Express Mode:</b> แตะโทรศัพท์ผ่านเกต MTR และร้าน 7-Eleven ได้ทันที <b>โดยไม่ต้องปลดล็อก Face ID หรือเปิดหน้าจอ</b> แม้แบตเตอรี่โทรศัพท์จะหมดก็ยังแตะได้อีก 5 ชั่วโมง!
           </div>
         </div>
 
-        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:12px;">
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
             <span style="font-size:20px;">💳</span>
             <div style="font-size:13.5px; font-weight:800; color:#0f172a;">บัตรเครดิตแตะ Contactless (Visa / Mastercard)</div>
@@ -3463,10 +3507,10 @@
 
       </div>
 
-      <!-- TAB 3: TRUEMONEY & CASH TIPS -->
+      <!-- TAB 4: TRUEMONEY, PROMPTPAY-FPS & CASH TIPS -->
       <div id="tabContentPay-alt" style="display:none;">
         
-        <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:14px; padding:14px; margin-bottom:12px;">
+        <div style="background:#fff7ed; border:1.5px solid #fed7aa; border-radius:14px; padding:14px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="font-size:14px; font-weight:800; color:#c2410c;">📲 TrueMoney Wallet (สแกนผ่าน Alipay+)</div>
             <span style="font-size:10px; font-weight:700; background:#ea580c; color:#fff; padding:2px 8px; border-radius:10px;">ใช้เงินบาท</span>
@@ -3479,7 +3523,19 @@
           </div>
         </div>
 
-        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:14px; padding:14px;">
+        <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:14px; padding:14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:14px; font-weight:800; color:#0369a1;">🏦 PromptPay ข้ามแดน (PromptPay x FPS)</div>
+            <span style="font-size:10px; font-weight:700; background:#0284c7; color:#fff; padding:2px 8px; border-radius:10px;">สแกนแอปธนาคารไทย</span>
+          </div>
+          <div style="font-size:12px; color:#075985; line-height:1.6;">
+            • ระบบความร่วมมือใหม่ล่าสุดระหว่างธนาคารแห่งประเทศไทยและฮ่องกง!<br>
+            • นักท่องเที่ยวไทยสามารถใช้แอปธนาคารไทย (เช่น <b>K PLUS, SCB EASY, Krungthai NEXT, Bangkok Bank</b>) สแกนจ่ายร้านค้าในฮ่องกงที่มีสัญลักษณ์ <b>FPS (Faster Payment System)</b> ได้โดยตรง<br>
+            • ระบบจะแปลงค่าเงิน HKD เป็นเงินบาทให้เห็นก่อนกดยืนยัน หักจากบัญชีเงินฝากไทยได้ทันที สะดวกมากไม่ต้องพกเงินสดเยอะ
+          </div>
+        </div>
+
+        <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:14px; padding:14px;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
             <span style="font-size:20px;">💵</span>
             <div style="font-size:13.5px; font-weight:800; color:#b91c1c;">เงินสด (HKD Cash) — ทำไมยังจำเป็นมาก?</div>
@@ -3494,73 +3550,111 @@
 
       </div>
 
-      <!-- TAB 4: EMERGENCY & CHINESE SIGNS -->
-      <div id="tabContentPay-sos" style="display:none;">
-        
-        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:14px; padding:14px; margin-bottom:12px;">
-          <div style="font-size:14px; font-weight:800; color:#b91c1c; margin-bottom:8px;">
-            🚨 เบอร์โทรฉุกเฉินในฮ่องกง (Emergency Contacts)
-          </div>
-          <div style="font-size:12.5px; color:#7f1d1d; line-height:1.6;">
-            • <b>เหตุด่วนเหตุร้าย / ตำรวจ / รถพยาบาล / ดับเพลิง:</b> โทร <b>999</b> (โทรฟรีจากทุกเบอร์และตู้สาธารณะ)<br>
-            • <b>สถานกงสุลใหญ่ ณ เมืองฮ่องกง:</b> โทร <b>+852 6821 4445</b> (สายด่วนคุ้มครองคนไทย 24 ชม.) / สำนักงาน +852 2521 6481
-          </div>
-        </div>
-
-        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:12px; text-align:center;">
-          <div style="font-size:11.5px; font-weight:700; color:#64748b; margin-bottom:4px;">นามบัตรภาษาจีนโรงแรม B P International (ยื่นให้คนขับแท็กซี่)</div>
-          <div style="font-size:24px; font-weight:900; color:#0f172a; margin:6px 0;">尖沙咀 龍堡國際賓館</div>
-          <div style="font-size:13px; font-weight:700; color:#dc2626;">(柯士甸道 / ถนน Austin Rd.)</div>
-          <div style="font-size:11.5px; color:#2563eb; margin:4px 0 10px;">B P International Hotel, 8 Austin Road, Tsim Sha Tsui</div>
-          <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center;" onclick="showSubInfo('chineseSignBPFull')">
-            🔍 ขยายป้ายโรงแรม B P เต็มจอ
-          </button>
-        </div>
-
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; font-size:11.5px; color:#475569; line-height:1.5;">
-          ⚠️ <b>กฎแท็กซี่สำหรับ 5 ท่าน:</b> รถแท็กซี่ฮ่องกงปกติจะนั่งได้ 4 ท่าน หากมาเป็นกลุ่มหรือครอบครัว 5 ท่าน <b>ต้องมองหาป้ายวงกลมสีเขียวหลังรถที่เขียนว่า "5 SEATS" หรือ "5位" เท่านั้น</b> หากขึ้นรถ 4 ที่นั่ง คนขับจะถูกปรับตามกฎหมาย
-        </div>
-
-      </div>
-
     </div>
   </div>
 
 
-<div id="emergencyModal" class="gen-modal" onclick="closeEmergencyModal()">
-    <div class="gen-sheet" onclick="event.stopPropagation()">
-      <div class="gen-header">
-        <h3>🚨 ข้อมูลฉุกเฉิน & ป้ายจีนแท็กซี่</h3>
-        <button onclick="closeEmergencyModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
+<div id="emergencyModal" class="fullscreen-view">
+    <!-- Sticky App Bar (Slim & Clean) -->
+    <div class="fullscreen-header">
+      <button class="fullscreen-back-btn" onclick="closeEmergencyModal()">
+        <span>←</span> <span>กลับหน้าหลัก</span>
+      </button>
+      <div style="font-size:13.5px; font-weight:800; color:#b91c1c; display:flex; align-items:center; gap:6px;">
+        <span>🚨</span> <span>ข้อมูลฉุกเฉิน & ช่วยเหลือ</span>
       </div>
-      <div class="gen-body">
-        <!-- Emergency phone buttons -->
-        <div style="display:flex; gap:8px; margin-bottom:14px;">
-          <button onclick="window.open('tel:999')" style="flex:1; background:#ef4444; color:#fff; border:none; padding:12px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-            <span>📞</span> <span>ตำรวจ/ฉุกเฉิน 999</span>
-          </button>
-          <button onclick="window.open('tel:+85225081234')" style="flex:1; background:#0284c7; color:#fff; border:none; padding:12px; border-radius:12px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-            <span>ℹ️</span> <span>สายด่วนท่องเที่ยว</span>
-          </button>
-        </div>
+    </div>
 
-        <!-- Chinese Taxi Card -->
-        <div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:14px; padding:14px; text-align:center; margin-bottom:12px;">
-          <div style="display:inline-block; background:#dbeafe; color:#1e40af; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; margin-bottom:6px;">
-            🀄 ป้ายชื่อโรงแรมยื่นให้คนขับแท็กซี่ (5 ท่าน)
-          </div>
-          <div style="font-size:26px; font-weight:900; color:#0f172a; letter-spacing:1px; margin:4px 0;">尖沙咀 龍堡國際賓館</div>
-          <div style="font-size:13px; font-weight:700; color:#dc2626;">(柯士甸道 / ถนน Austin Rd.)</div>
-          <div style="font-size:11.5px; color:#2563eb; margin-top:4px;">B P International Hotel, Tsim Sha Tsui</div>
-          <button onclick="showSubInfo('chineseSignBPFull')" style="margin-top:10px; background:#2563eb; color:#fff; border:none; padding:6px 14px; border-radius:8px; font-size:11.5px; font-weight:700; cursor:pointer;">
-            🔍 ขยายป้ายเต็มจอ
-          </button>
-        </div>
-
-        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:10px; font-size:11.5px; color:#991b1b; line-height:1.5;">
-          ⚠️ <b>กฎแท็กซี่สำหรับ 5 ท่าน:</b> แท็กซี่ฮ่องกงส่วนใหญ่นั่งได้ 4 คน หากมา 5 คน <b>ต้องมองหาป้ายวงกลมสีเขียวหลังรถที่เขียนว่า "5 SEATS" หรือ "5位" เท่านั้น</b> หากขึ้นคัน 4 คนคนขับจะถูกปรับตามกฎหมายครับ
+    <div class="fullscreen-container" style="padding:14px; max-width:680px; margin:0 auto;">
+      
+      <!-- Banner -->
+      <div style="background:linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color:#ffffff; border-radius:14px; padding:14px 16px; margin-bottom:14px; box-shadow:0 4px 12px rgba(239, 68, 68, 0.25);">
+        <div style="font-size:16px; font-weight:900; margin-bottom:4px;">🚨 ศูนย์รวมข้อมูลช่วยเหลือ & ติดต่อฉุกเฉิน</div>
+        <div style="font-size:12px; opacity:0.95; line-height:1.5;">
+          เบอร์โทรฉุกเฉิน 999, สถานกงสุลใหญ่ไทย, นามบัตรจีนโรงแรม B P, กฎแท็กซี่ 5 ที่นั่ง, โรงพยาบาลใกล้เคียง และขั้นตอนกรณีพาสปอร์ตหรือบัตรสูญหาย
         </div>
       </div>
+
+      <!-- Emergency Hotline Buttons -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+        <a href="tel:999" style="background:#fee2e2; border:1.5px solid #fca5a5; border-radius:12px; padding:12px; text-decoration:none; display:flex; flex-direction:column; align-items:center; text-align:center;">
+          <div style="font-size:24px; margin-bottom:4px;">🚨</div>
+          <div style="font-size:14px; font-weight:900; color:#b91c1c;">โทร 999 (ฟรี)</div>
+          <div style="font-size:11px; color:#7f1d1d; margin-top:2px;">ตำรวจ / ดับเพลิง / กู้ชีพ</div>
+        </a>
+        <a href="tel:+85268214445" style="background:#dbeafe; border:1.5px solid #93c5fd; border-radius:12px; padding:12px; text-decoration:none; display:flex; flex-direction:column; align-items:center; text-align:center;">
+          <div style="font-size:24px; margin-bottom:4px;">🇹🇭</div>
+          <div style="font-size:13px; font-weight:900; color:#1e40af;">+852 6821 4445</div>
+          <div style="font-size:11px; color:#1e3a8a; margin-top:2px;">สถานกงสุลใหญ่ไทย (24 ชม.)</div>
+        </a>
+      </div>
+
+      <!-- Section 1: Chinese Taxi Card for BP Hotel -->
+      <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+        <div style="font-size:12px; font-weight:700; color:#64748b; margin-bottom:4px;">นามบัตรภาษาจีนโรงแรม B P International (ยื่นให้คนขับแท็กซี่)</div>
+        <div style="font-size:26px; font-weight:900; color:#0f172a; margin:6px 0; letter-spacing:1px;">尖沙咀 龍堡國際賓館</div>
+        <div style="font-size:14px; font-weight:700; color:#dc2626; margin-bottom:4px;">(柯士甸道 / ถนน Austin Rd.)</div>
+        <div style="font-size:12px; color:#2563eb; margin-bottom:12px;">8 Austin Road, Tsim Sha Tsui, Kowloon</div>
+        <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center; padding:10px;" onclick="showSubInfo('chineseSignBPFull')">
+          🔍 ขยายป้ายโรงแรม B P เต็มจอ (ยื่นให้คนขับ)
+        </button>
+        <div style="background:#eff6ff; border-radius:8px; padding:8px 12px; font-size:12px; color:#1e40af; margin-top:10px; text-align:left;">
+          🗣️ <b>คำอ่านกวางตุ้ง:</b> หล่ง-โป๋ว-กวอก-ไจ๋ (จิ๊ม-ซ้า-โจ๋ย โอ๊ว-ซี-ติ๊น-โต่ว)
+        </div>
+      </div>
+
+      <!-- Section 2: Taxi Rules & Baggage -->
+      <div style="background:#fff7ed; border:1.5px solid #fed7aa; border-radius:14px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:20px;">🚕</span>
+          <div style="font-size:13.5px; font-weight:800; color:#c2410c;">กฎระเบียบแท็กซี่ฮ่องกง & สิทธิผู้โดยสาร</div>
+        </div>
+        <div style="font-size:12px; color:#9a3412; line-height:1.6;">
+          • ⚠️ <b>สำหรับคณะ 5 ท่าน:</b> รถแท็กซี่ฮ่องกงปกติจะนั่งได้ 4 ท่าน หากต้องการนั่ง 5 ท่าน <b>ต้องมองหาป้ายวงกลมสีเขียวหลังรถที่เขียนว่า "5 SEATS" หรือ "5位" เท่านั้น</b> (หากขึ้นรถ 4 ที่นั่ง คนขับจะถูกปรับตามกฎหมาย)<br>
+          • <b>ค่ากระเป๋าสัมภาระ:</b> กระเป๋าเดินทางขนาดใหญ่วางกระโปรงท้ายรถ มีค่าธรรมเนียมใบละ <b>6 HKD</b> บวกเพิ่มในมิเตอร์อย่างถูกต้องตามกฎหมาย<br>
+          • <b>ขอใบเสร็จทุกครั้ง:</b> กดขอใบเสร็จ (Receipt / 收據) จากคนขับทุกครั้ง บนใบเสร็จจะมีเลขทะเบียนรถและเวลากำกับ ใช้ติดตามของหายหรือร้องเรียนได้
+        </div>
+      </div>
+
+      <!-- Section 3: Hospital & Emergency Medical -->
+      <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:20px;">🏥</span>
+          <div style="font-size:13.5px; font-weight:800; color:#0f172a;">โรงพยาบาล & แผนกฉุกเฉิน 24 ชม. ใกล้โรงแรม B P</div>
+        </div>
+        <div style="font-size:12px; color:#475569; line-height:1.6;">
+          • <b>Queen Elizabeth Hospital (โรงพยาบาลควีนอลิซาเบธ):</b><br>
+          &nbsp;&nbsp;- โรงพยาบาลรัฐขนาดใหญ่ที่มีแผนกฉุกเฉิน A&E (Accident & Emergency) ตลอด 24 ชั่วโมง<br>
+          &nbsp;&nbsp;- <b>ระยะทาง:</b> ห่างจากโรงแรม B P เพียง 1.2 กม. (นั่งแท็กซี่ประมาณ 5 นาที ค่ารถ ~30 HKD)<br>
+          &nbsp;&nbsp;- <b>ภาษาจีน:</b> <code>伊利沙伯醫院 (加士居道30號)</code><br>
+          • <b>Tsim Sha Tsui Police Station (สถานีตำรวจจิมซาจุ่ย):</b><br>
+          &nbsp;&nbsp;- ตั้งอยู่ที่หัวมุมถนน Nathan Road ตัดกับ Austin Road <b>ห่างจากโรงแรม B P เพียง 300 เมตร (เดิน 4 นาที)</b>
+        </div>
+      </div>
+
+      <!-- Section 4: Lost Passport & Cards Checklist -->
+      <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:20px;">🛂</span>
+          <div style="font-size:13.5px; font-weight:800; color:#0f172a;">ข้อปฏิบัติกรณีพาสปอร์ต หรือ บัตรสูญหาย</div>
+        </div>
+        <div style="font-size:12px; color:#475569; line-height:1.6;">
+          • <b>กรณีพาสปอร์ตหาย:</b><br>
+          &nbsp;&nbsp;1. ไปแจ้งความที่สถานีตำรวจจิมซาจุ่ย (ใกล้โรงแรม B P) เพื่อขอรับ <b>ใบแจ้งความ (Police Report)</b><br>
+          &nbsp;&nbsp;2. ติดต่อสถานกงสุลใหญ่ไทย (สายด่วน +852 6821 4445) เพื่อออกเอกสารเดินทางฉุกเฉิน (Emergency Certificate - CI)<br>
+          &nbsp;&nbsp;3. สถานที่ตั้งกงสุล: 8th Floor, Fairmont House, 8 Cotton Tree Drive, Central (สถานี MTR Central ทางออก J2)<br>
+          • <b>กรณีบัตรเครดิตหาย:</b> ให้เปิดแอปธนาคารไทย (เช่น YouTrip, KBank, SCB) แล้วกด <b>"ระงับบัตรชั่วคราว (Lock Card)"</b> ในแอปได้ทันทีตลอด 24 ชม.
+        </div>
+      </div>
+
+      <!-- Section 5: Other Essential Contacts -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; font-size:11.5px; color:#64748b; line-height:1.5;">
+        📞 <b>เบอร์ติดต่อจำเป็นอื่นๆ:</b><br>
+        • ตำรวจท่องเที่ยวฮ่องกง (Tourist Police Hotline): +852 2527 7177<br>
+        • ศูนย์ข้อมูลการท่องเที่ยวฮ่องกง (HKTB Visitor Hotline): +852 2508 1234<br>
+        • ท่าอากาศยานนานาชาติฮ่องกง (HKG Airport Enquiries): +852 2181 8888
+      </div>
+
     </div>
   </div>
 
@@ -5091,17 +5185,18 @@ function toggleLymFullscreen() {
    HOME SCREEN NAVIGATION & SCREEN TOGGLE LOGIC
    ===================================================================== */
 function openParkGuide() {
-  document.getElementById('homeScreen').style.display = 'none';
-  document.getElementById('parkGuideScreen').style.display = 'block';
+  const park = document.getElementById('parkGuideScreen');
+  if (park) {
+    park.classList.add('active');
+    park.scrollTo(0, 0);
+  }
   pushModalHistory('parkGuideScreen');
-  window.scrollTo(0, 0);
 }
 
 function closeParkGuide() {
   dismissModal('parkGuideScreen', () => {
-    document.getElementById('parkGuideScreen').style.display = 'none';
-    document.getElementById('homeScreen').style.display = 'block';
-    window.scrollTo(0, 0);
+    const park = document.getElementById('parkGuideScreen');
+    if (park) park.classList.remove('active');
   });
 }
 
@@ -6477,13 +6572,10 @@ window.addEventListener('popstate', (e) => {
     em.classList.remove('active');
   }
 
-  // 4. Close Park Guide Screen and return to Home Screen
+  // 4. Close Park Guide Screen
   const park = document.getElementById('parkGuideScreen');
-  const home = document.getElementById('homeScreen');
-  if (park && park.style.display !== 'none') {
-    park.style.display = 'none';
-    if (home) home.style.display = 'block';
-    window.scrollTo(0, 0);
+  if (park && park.classList.contains('active')) {
+    park.classList.remove('active');
   }
 
   isNavigatingBack = false;
@@ -6505,7 +6597,7 @@ function closePaymentModal() {
 }
 
 function switchPaymentTab(tab) {
-  const tabs = ['oct', 'mob', 'alt', 'sos'];
+  const tabs = ['oct', 'pass', 'mob', 'alt'];
   tabs.forEach(t => {
     const btn = document.getElementById('tabBtnPay-' + t);
     const content = document.getElementById('tabContentPay-' + t);
