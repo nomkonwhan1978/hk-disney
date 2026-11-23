@@ -1604,6 +1604,7 @@
       <!-- PANE 4: BP Hotel to Ngong Ping -->
       <div id="routePane-np" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
         <div id="npViewport" class="map-viewport">
+        <button class="fs-close-btn" onclick="toggleNpFullscreen()">✕</button>
         <div id="npCanvas" class="map-canvas">
           <img src="transit-np.png" alt="Ngong Ping Transit Map" class="map-bg-img" style="width:100%; height:100%; object-fit:cover; display:block;">
 
@@ -1670,7 +1671,7 @@
           </svg>
 
           <!-- Pins Layer (พิกัดตรงตามภาพ 3D ใหม่) -->
-          <div id="npPinsLayer" class="pins-layer">
+          <div id="npPinsLayer" class="map-pins-layer">
             <div id="np-pin-jordan" class="map-pin" style="top:68%; left:74%;" onclick="selectNpStep(0)">
               <div class="pin-badge"><span class="pin-icon">🏨</span><span class="pin-text">B P Hotel / Jordan</span></div>
               <div class="pin-dot"></div>
@@ -4120,6 +4121,10 @@ function switchAirportOutMode(mode) {
 // ==========================================
 // UNIFIED TRANSIT ROUTING ENGINE (IN-PLACE SWITCHING)
 // ==========================================
+let transitMode = 'mtr';
+// lymMode initialized at top
+// npMode initialized at top
+
 const TRANSIT_ROUTES_CONFIG = {
   'airport_in': {
     title: '✈️ Day 1: สนามบิน ➔ โรงแรม B P (5 ท่าน)',
@@ -4205,6 +4210,9 @@ function switchTransitRoute(route) {
     } else if (route === 'lym') {
       pinBtn.style.display = 'inline-flex';
       pinBtn.onclick = toggleLymPins;
+    } else if (route === 'np') {
+      pinBtn.style.display = 'inline-flex';
+      pinBtn.onclick = toggleNpPins;
     } else {
       pinBtn.style.display = 'none';
     }
@@ -4216,6 +4224,9 @@ function switchTransitRoute(route) {
     } else if (route === 'lym') {
       fsBtn.style.display = 'inline-flex';
       fsBtn.onclick = toggleLymFullscreen;
+    } else if (route === 'np') {
+      fsBtn.style.display = 'inline-flex';
+      fsBtn.onclick = toggleNpFullscreen;
     } else {
       fsBtn.style.display = 'none';
     }
@@ -4223,11 +4234,11 @@ function switchTransitRoute(route) {
 
   // 5. Initialize active sub-mode
   if (route === 'disney') {
-    if (typeof setTransitMode === 'function') setTransitMode(typeof transitMode !== 'undefined' ? transitMode : 'mtr');
+    if (typeof setTransitMode === 'function') setTransitMode(transitMode || 'mtr');
   } else if (route === 'lym') {
-    if (typeof setLymMode === 'function') setLymMode(typeof lymMode !== 'undefined' ? lymMode : 'mtr');
+    if (typeof setLymMode === 'function') setLymMode(lymMode || 'mtr');
   } else if (route === 'np') {
-    if (typeof setNpMode === 'function') setNpMode(typeof npMode !== 'undefined' ? npMode : 'mtr');
+    if (typeof setNpMode === 'function') setNpMode(npMode || 'mtr');
   }
 }
 
@@ -5372,11 +5383,11 @@ function resetNpCamera() {
 
 function toggleNpPins() {
   const layer = document.getElementById('npPinsLayer');
-  const btn = document.getElementById('npPinsBtn');
-  if (!layer || !btn) return;
+  const btn = document.getElementById('togglePinsBtn') || document.getElementById('npPinsBtn');
+  if (!layer) return;
   const isShown = layer.style.display !== 'none';
   layer.style.display = isShown ? 'none' : 'block';
-  btn.classList.toggle('active', !isShown);
+  if (btn) btn.classList.toggle('active', !isShown);
 }
 
 function toggleNpFullscreen() {
