@@ -1552,54 +1552,7 @@
     </div>
 
     <div id="lymStepsContainer" class="steps-container"></div>
-  </div>
-</div>
-
-<!-- ป๊อปอัปย่อยสำหรับปุ่มลัดทั้ง 2 หน้าต่าง -->
-
-  <!-- =====================================================================
-       MODAL: เมนูเลือกเส้นทาง (TRANSIT SELECTION MODAL)
-       ===================================================================== -->
-  <div id="transitSelectionModal" class="gen-modal" onclick="closeTransitSelectionModal()">
-    <div class="gen-sheet" onclick="event.stopPropagation()">
-      <div class="gen-header">
-        <h3>🗺️ เลือกเส้นทางเดินทาง (Transit Routes)</h3>
-        <button onclick="closeTransitSelectionModal()" style="border:none; background:#f1f5f9; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer;">✕</button>
-      </div>
-      <div class="gen-body">
-        <p style="font-size:12px; color:#64748b; margin-bottom:12px;">เลือกจุดหมายปลายทางที่ต้องการดูแผนผังและการเดินทาง:</p>
-        
-        <!-- Option 1: To Disney -->
-        <div class="route-option-card" onclick="closeTransitSelectionModal(); openTransitModal();">
-          <div class="route-opt-icon">🏰</div>
-          <div style="flex:1;">
-            <div class="route-opt-title">1. B P Hotel ➔ HK Disneyland</div>
-            <div class="route-opt-sub">MTR สายสีแดง/ส้ม/ชมพู หรือ UberXL ข้ามสะพานชิงหม่า (~35 นาที)</div>
-          </div>
-          <span style="color:#0284c7; font-weight:bold;">➔</span>
-        </div>
-
-        <!-- Option 2: To Lei Yue Mun -->
-        <div class="route-option-card" onclick="closeTransitSelectionModal(); openLymModal();">
-          <div class="route-opt-icon">🦞</div>
-          <div style="flex:1;">
-            <div class="route-opt-title">2. HK Disneyland ➔ เล่ยหยู่มุน (Lei Yue Mun)</div>
-            <div class="route-opt-sub">มื้อค่ำอาหารทะเลสดริมอ่าววิคตอเรีย + คู่มือสั่งของสดหน้าร้าน</div>
-          </div>
-          <span style="color:#ea580c; font-weight:bold;">➔</span>
-        </div>
-
-        <!-- Option 3: To Ngong Ping 360 -->
-        <div class="route-option-card" onclick="closeTransitSelectionModal(); openNpModal();" style="border-color:#10b981; background:#f0fdf4;">
-          <div class="route-opt-icon" style="background:#dcfce7; color:#15803d;">🚠</div>
-          <div style="flex:1;">
-            <div class="route-opt-title" style="color:#15803d;">3. B P Hotel ➔ นองปิง 360 & จุดฝากกระเป๋า (วันกลับ)</div>
-            <div class="route-opt-sub">MTR ลง Tung Chung • ฝากกระเป๋า 28" Citygate • กระเช้าลอยฟ้า • ไหว้พระใหญ่ • ต่อรถไปสนามบิน</div>
-          </div>
-          <span style="color:#10b981; font-weight:bold;">➔</span>
-        </div>
-      </div>
-      </div>
+    </div>
 
       <!-- PANE 4: BP Hotel to Ngong Ping -->
       <div id="routePane-np" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
