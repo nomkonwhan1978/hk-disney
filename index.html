@@ -1046,7 +1046,7 @@
       <div class="dashboard-card" onclick="openWeatherModal()">
         <div class="card-icon">⛅🧣</div>
         <div class="card-title">Current Weather</div>
-        <div class="card-desc">อากาศสด 5 พิกัด + พยากรณ์ 14 วันล่วงหน้า & ไกด์แต่งกาย</div>
+        <div class="card-desc">อากาศสด 6 พิกัด (รวมสนามบิน) + พยากรณ์ 14 วัน & ไกด์แต่งกาย</div>
         <div class="card-action-link">[เช็กอากาศ & แนวโน้ม]</div>
       </div>
 
@@ -1937,6 +1937,9 @@
       <div class="weather-chip-row">
         <button id="wchip-hk" class="weather-chip active" onclick="selectWeatherLocation('hk')">
           <span>🇭🇰</span> <span>ภาพรวมฮ่องกง</span>
+        </button>
+        <button id="wchip-airport" class="weather-chip" onclick="selectWeatherLocation('airport')">
+          <span>✈️</span> <span>สนามบินฮ่องกง (HKG)</span>
         </button>
         <button id="wchip-disney" class="weather-chip" onclick="selectWeatherLocation('disney')">
           <span>🏰</span> <span>Disneyland</span>
@@ -4821,6 +4824,14 @@ const WEATHER_LOCATIONS = {
     lon: 114.1694,
     advice: "สภาพอากาศในฮ่องกงช่วงนี้กำลังเย็นสบาย เหมาะสำหรับการเดินเล่นกลางแจ้ง แนะนำสวมเสื้อยืดพร้อมเสื้อคลุมหรือคาร์ดิแกนบางๆ"
   },
+  airport: {
+    name: "สนามบินนานาชาติฮ่องกง (HKG Terminal 1)",
+    subtitle: "เกาะเช็คแลปก๊ก (Chek Lap Kok) • อาคารผู้โดยสารติดทะเลเปิดโล่ง",
+    elevation: "ระดับพื้นราบติดทะเล",
+    lat: 22.3080,
+    lon: 113.9185,
+    advice: "✈️ สนามบินตั้งอยู่บนเกาะริมทะเล ลมค่อนข้างโปร่งและเย็นสบาย ภายในอาคาร Terminal 1 แอร์เย็นฉ่ำ แนะนำเตรียมเสื้อคลุมหรือคาร์ดิแกนสวมทับขณะเช็กอิน รอกระเป๋า หรือไฟลท์บินรอบค่ำ"
+  },
   disney: {
     name: "Hong Kong Disneyland (เกาะลันเตา)",
     subtitle: "หุบเขาเพนนีส์เบย์ (Penny's Bay) • สวนสนุกกลางแจ้งริมอ่าว",
@@ -4994,7 +5005,7 @@ function renderWeatherToUI(data) {
 
 function renderFallbackWeather(key) {
   const loc = WEATHER_LOCATIONS[key] || WEATHER_LOCATIONS['hk'];
-  const baseTemp = (key === 'np') ? 17 : (key === 'disney' ? 20 : 21);
+  const baseTemp = (key === 'np') ? 17 : ((key === 'disney' || key === 'airport') ? 20 : 21);
   const data = {
     current: {
       temperature_2m: baseTemp,
