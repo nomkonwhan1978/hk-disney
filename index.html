@@ -1277,7 +1277,89 @@
   <div id="transitPanesContainer" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden; position:relative;">
       
       <!-- PANE 1: Airport to BP Hotel -->
-      <div id="routePane-airport_in" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
+      <div id="routePane-airport_in" class="transit-route-pane" style="display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
+        
+        <!-- Interactive 3D Map Viewport for Route 1 -->
+        <div id="airinViewport" class="map-viewport">
+          <button class="fs-close-btn" onclick="toggleAirInFullscreen()">✕</button>
+
+          <div class="map-zoom-controls">
+            <button class="zoom-mini-btn" onclick="manualAirInZoom(0.25)">+</button>
+            <button class="zoom-mini-btn" onclick="manualAirInZoom(-0.25)">−</button>
+          </div>
+
+          <div id="airinCanvas" class="map-canvas">
+            <img src="transit-airport-in.png" alt="HKG Airport to BP Hotel Map" class="map-bg-img" style="width:100%; height:100%; object-fit:cover; display:block;">
+
+            <!-- SVG Animated Overlay Layer -->
+            <svg class="map-svg-overlay" viewBox="0 0 1024 571" preserveAspectRatio="none">
+              
+              <!-- 1. Car / Taxi Route Layer -->
+              <g id="svgAirinCar">
+                <path id="pathAirinCar" d="M 140 320 Q 70 370 40 500 Q 110 590 230 525 Q 425 420 535 360 Q 645 260 740 205 Q 850 125 900 170 Q 860 380 820 500 Q 755 670 775 790" 
+                      fill="none" stroke="rgba(239, 68, 68, 0.35)" stroke-width="7" stroke-linecap="round"/>
+                <path d="M 140 320 Q 70 370 40 500 Q 110 590 230 525 Q 425 420 535 360 Q 645 260 740 205 Q 850 125 900 170 Q 860 380 820 500 Q 755 670 775 790" 
+                      fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="10,7" stroke-linecap="round"/>
+                <g>
+                  <rect x="-14" y="-7" width="28" height="14" rx="4" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+                  <rect x="-4" y="-5" width="12" height="10" rx="2" fill="#ffffff" stroke="#991b1b" stroke-width="1"/>
+                  <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
+                    <mpath href="#pathAirinCar"/>
+                  </animateMotion>
+                </g>
+              </g>
+
+              <!-- 2. Airport Express (MTR) / Bus Route Layer -->
+              <g id="svgAirinMtr" style="display:none;">
+                <path id="pathAirinMtr" d="M 95 235 Q 40 320 30 460 Q 100 570 230 525 Q 425 420 535 360 Q 645 260 760 210 Q 860 250 890 450 Q 920 680 910 840" 
+                      fill="none" stroke="rgba(2, 132, 199, 0.4)" stroke-width="7" stroke-linecap="round"/>
+                <path d="M 95 235 Q 40 320 30 460 Q 100 570 230 525 Q 425 420 535 360 Q 645 260 760 210 Q 860 250 890 450 Q 920 680 910 840" 
+                      fill="none" stroke="#0284c7" stroke-width="4.5" stroke-dasharray="10,6" stroke-linecap="round"/>
+                <g>
+                  <rect x="-18" y="-7" width="36" height="14" rx="4" fill="#0369a1" stroke="#0284c7" stroke-width="1.8"/>
+                  <rect x="-12" y="-4" width="8" height="8" rx="2" fill="#38bdf8"/>
+                  <rect x="0" y="-4" width="8" height="8" rx="2" fill="#38bdf8"/>
+                  <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+                    <mpath href="#pathAirinMtr"/>
+                  </animateMotion>
+                </g>
+              </g>
+
+            </svg>
+
+            <!-- Interactive Map Pins Layer -->
+            <div id="airinPinsLayer">
+              <!-- Pin 1: Airport -->
+              <div id="airin-pin-airport" class="map-pin" style="left: 24%; top: 32%;" onclick="focusAirInPin('airport')">
+                <div class="pin-badge" style="background:#ef4444;">🛫 1</div>
+                <div class="pin-title">สนามบินฮ่องกง T1</div>
+              </div>
+
+              <!-- Pin 2: Tsing Ma Bridge -->
+              <div id="airin-pin-tsingma" class="map-pin" style="left: 53%; top: 62%;" onclick="focusAirInPin('tsingma')">
+                <div class="pin-badge" style="background:#f59e0b;">🌉 2</div>
+                <div class="pin-title">สะพานชิงหม่า (Tsing Ma)</div>
+              </div>
+
+              <!-- Pin 3: BP International Hotel -->
+              <div id="airin-pin-hotel" class="map-pin" style="left: 77%; top: 76%;" onclick="focusAirInPin('hotel')">
+                <div class="pin-badge" style="background:#10b981;">🏨 3</div>
+                <div class="pin-title">รร. B P International</div>
+              </div>
+
+              <!-- Pin 4: Jordan / Austin MTR -->
+              <div id="airin-pin-mtr" class="map-pin" style="left: 89%; top: 88%;" onclick="focusAirInPin('mtr')">
+                <div class="pin-badge" style="background:#0284c7;">🚇</div>
+                <div class="pin-title">สถานี Jordan / Austin</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Scrollable Steps Container for Route 1 -->
+        <div class="steps-container" style="flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px 40px;">
+
         <!-- Flight Arrival Banner -->
         <div style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; border-radius:14px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.2);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
@@ -1303,7 +1385,7 @@
         <!-- Mode CAR / TAXI Steps -->
         <div id="airInModeCar" class="steps-container" style="display:block;">
           
-          <div class="step-card active" id="airinCarStep-0" onclick="selectAirInStep(0, 'car')">
+          <div class="step-card" id="airinCarStep-0" onclick="selectAirInStep(0, 'car')">
             <div class="step-header">
               <div class="step-badge" style="background:#ef4444;">1</div>
               <div style="flex:1;">
@@ -1375,7 +1457,7 @@
         <!-- Mode MTR / BUS Steps -->
         <div id="airInModeMtr" class="steps-container" style="display:none;">
           
-          <div class="step-card active" id="airinMtrStep-0" onclick="selectAirInStep(0, 'mtr')">
+          <div class="step-card" id="airinMtrStep-0" onclick="selectAirInStep(0, 'mtr')">
             <div class="step-header">
               <div class="step-badge" style="background:#0284c7;">1</div>
               <div style="flex:1;">
@@ -1425,7 +1507,9 @@
 
         </div>
 
-      </div>
+        </div> <!-- End Scrollable Steps Container -->
+
+      </div> <!-- End routePane-airport_in -->
 
       <!-- PANE 2: BP Hotel to Disneyland -->
       <div id="routePane-disney" class="transit-route-pane" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
@@ -4648,23 +4732,92 @@ let camState = { scale: 1, x: 0, y: 0 };
 
 
 
+let airinCamState = { scale: 1, x: 0, y: 0 };
+let airinPinsVisible = true;
+let airinMode = 'car';
+let airinActiveStepIdx = null;
+
+function applyAirInCamera() {
+  const canvas = document.getElementById('airinCanvas');
+  if (!canvas) return;
+  canvas.style.transform = `translate(${airinCamState.x}%, ${airinCamState.y}%) scale(${airinCamState.scale})`;
+}
+
+function resetAirInCamera() {
+  airinActiveStepIdx = null;
+  airinCamState = { scale: 1, x: 0, y: 0 };
+  applyAirInCamera();
+  document.querySelectorAll('#airinPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+}
+
+function manualAirInZoom(delta) {
+  airinCamState.scale = Math.min(2.2, Math.max(1, airinCamState.scale + delta));
+  if (airinCamState.scale === 1) {
+    airinCamState.x = 0;
+    airinCamState.y = 0;
+  }
+  applyAirInCamera();
+}
+
+function toggleAirInFullscreen() {
+  const vp = document.getElementById('airinViewport');
+  const btn = document.getElementById('fullscreenMapBtn');
+  if (!vp) return;
+  const isFs = vp.classList.toggle('fullscreen');
+  if (btn) btn.classList.toggle('active', isFs);
+  if (!isFs) resetAirInCamera();
+}
+
+function toggleAirInPins() {
+  const layer = document.getElementById('airinPinsLayer');
+  const btn = document.getElementById('togglePinsBtn');
+  if (!layer) return;
+  const isHidden = layer.classList.toggle('hidden');
+  if (btn) btn.classList.toggle('active', !isHidden);
+}
+
+function focusAirInPin(pinKey) {
+  const pinTargetMap = {
+    'airport': { pinId: 'airin-pin-airport', cam: { scale: 1.4, x: 22, y: 15 } },
+    'tsingma': { pinId: 'airin-pin-tsingma', cam: { scale: 1.35, x: -2, y: -8 } },
+    'hotel':   { pinId: 'airin-pin-hotel', cam: { scale: 1.45, x: -25, y: -22 } },
+    'mtr':     { pinId: 'airin-pin-mtr', cam: { scale: 1.45, x: -28, y: -26 } }
+  };
+  const target = pinTargetMap[pinKey];
+  if (!target) return;
+  airinCamState = { ...target.cam };
+  applyAirInCamera();
+  document.querySelectorAll('#airinPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+  const pinEl = document.getElementById(target.pinId);
+  if (pinEl) pinEl.classList.add('focused');
+}
+
 function openAirportInModal() { openTransitModal('airport_in'); }
 function closeAirportInModal() { closeTransitModal(); }
+
 function switchAirportInMode(mode) {
+  airinMode = mode;
   const tabCar = document.getElementById('tabAirInCar');
   const tabMtr = document.getElementById('tabAirInMtr');
   const paneCar = document.getElementById('airInModeCar');
   const paneMtr = document.getElementById('airInModeMtr');
+  const svgCar = document.getElementById('svgAirinCar');
+  const svgMtr = document.getElementById('svgAirinMtr');
+
   if (mode === 'car') {
-    tabCar.className = 'mode-tab active car';
-    tabMtr.className = 'mode-tab';
-    paneCar.style.display = 'block';
-    paneMtr.style.display = 'none';
+    if (tabCar) { tabCar.className = 'mode-tab active car'; }
+    if (tabMtr) { tabMtr.className = 'mode-tab'; }
+    if (paneCar) paneCar.style.display = 'block';
+    if (paneMtr) paneMtr.style.display = 'none';
+    if (svgCar) svgCar.style.display = 'block';
+    if (svgMtr) svgMtr.style.display = 'none';
   } else {
-    tabMtr.className = 'mode-tab active mtr';
-    tabCar.className = 'mode-tab';
-    paneMtr.style.display = 'block';
-    paneCar.style.display = 'none';
+    if (tabMtr) { tabMtr.className = 'mode-tab active mtr'; }
+    if (tabCar) { tabCar.className = 'mode-tab'; }
+    if (paneMtr) paneMtr.style.display = 'block';
+    if (paneCar) paneCar.style.display = 'none';
+    if (svgMtr) svgMtr.style.display = 'block';
+    if (svgCar) svgCar.style.display = 'none';
   }
 }
 
@@ -4687,7 +4840,8 @@ const TRANSIT_ROUTES_CONFIG = {
   'airport_in': {
     title: '✈️ Day 1: สนามบิน ➔ โรงแรม B P (5 ท่าน)',
     driverSign: 'airportToBPSign',
-    hasMap: false
+    hasMap: true,
+    mapType: 'airin'
   },
   'disney': {
     title: '🗺️ เส้นทางไป Disneyland (5 ท่าน)',
@@ -4762,7 +4916,10 @@ function switchTransitRoute(route) {
   const pinBtn = document.getElementById('togglePinsBtn');
   const fsBtn = document.getElementById('fullscreenMapBtn');
   if (pinBtn) {
-    if (route === 'disney') {
+    if (route === 'airport_in') {
+      pinBtn.style.display = 'inline-flex';
+      pinBtn.onclick = toggleAirInPins;
+    } else if (route === 'disney') {
       pinBtn.style.display = 'inline-flex';
       pinBtn.onclick = toggleMapPins;
     } else if (route === 'lym') {
@@ -4779,7 +4936,10 @@ function switchTransitRoute(route) {
     }
   }
   if (fsBtn) {
-    if (route === 'disney') {
+    if (route === 'airport_in') {
+      fsBtn.style.display = 'inline-flex';
+      fsBtn.onclick = toggleAirInFullscreen;
+    } else if (route === 'disney') {
       fsBtn.style.display = 'inline-flex';
       fsBtn.onclick = toggleMapFullscreen;
     } else if (route === 'lym') {
@@ -4797,7 +4957,9 @@ function switchTransitRoute(route) {
   }
 
   // 5. Initialize active sub-mode
-  if (route === 'disney') {
+  if (route === 'airport_in') {
+    if (typeof switchAirportInMode === 'function') switchAirportInMode(airinMode || 'car');
+  } else if (route === 'disney') {
     if (typeof setTransitMode === 'function') setTransitMode(transitMode || 'mtr');
   } else if (route === 'lym') {
     if (typeof setLymMode === 'function') setLymMode(lymMode || 'mtr');
@@ -6630,6 +6792,7 @@ function selectAirInStep(idx, mode) {
   if (isAlreadyActive) {
     targetCard.classList.remove('active');
     airinActiveStep[mode] = null;
+    resetAirInCamera();
     return;
   }
 
@@ -6637,6 +6800,36 @@ function selectAirInStep(idx, mode) {
     c.classList.toggle('active', i === idx);
   });
   airinActiveStep[mode] = idx;
+
+  // Animate map camera and pins
+  if (mode === 'car') {
+    const carCamMap = [
+      { scale: 1.4, x: 22, y: 15, pin: 'airin-pin-airport' },
+      { scale: 1.35, x: 20, y: 8, pin: 'airin-pin-airport' },
+      { scale: 1.35, x: -2, y: -8, pin: 'airin-pin-tsingma' },
+      { scale: 1.45, x: -25, y: -22, pin: 'airin-pin-hotel' }
+    ];
+    if (carCamMap[idx]) {
+      airinCamState = { scale: carCamMap[idx].scale, x: carCamMap[idx].x, y: carCamMap[idx].y };
+      applyAirInCamera();
+      document.querySelectorAll('#airinPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+      const pEl = document.getElementById(carCamMap[idx].pin);
+      if (pEl) pEl.classList.add('focused');
+    }
+  } else {
+    const mtrCamMap = [
+      { scale: 1.4, x: 22, y: 15, pin: 'airin-pin-airport' },
+      { scale: 1.35, x: -2, y: -8, pin: 'airin-pin-tsingma' },
+      { scale: 1.45, x: -26, y: -24, pin: 'airin-pin-mtr' }
+    ];
+    if (mtrCamMap[idx]) {
+      airinCamState = { scale: mtrCamMap[idx].scale, x: mtrCamMap[idx].x, y: mtrCamMap[idx].y };
+      applyAirInCamera();
+      document.querySelectorAll('#airinPinsLayer .map-pin').forEach(p => p.classList.remove('focused'));
+      const pEl = document.getElementById(mtrCamMap[idx].pin);
+      if (pEl) pEl.classList.add('focused');
+    }
+  }
 }
 
 var airoutActiveStepIdx = null;
