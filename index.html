@@ -991,6 +991,238 @@
     box-shadow: 0 2px 6px rgba(15,23,42,0.18);
   }
 
+
+/* Expense Diary & Currency Subtabs */
+.currency-subtabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+}
+.curr-subtab-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+.curr-subtab-btn.active {
+  background: #ffffff;
+  color: #047857;
+  font-weight: 800;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.add-expense-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  margin-bottom: 14px;
+  transition: transform 0.15s;
+}
+.add-expense-btn:active {
+  transform: scale(0.98);
+}
+.expense-card-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.expense-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.expense-details-col {
+  flex: 1;
+  min-width: 0;
+}
+.expense-title-text {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.expense-meta-text {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.expense-amount-col {
+  text-align: right;
+  flex-shrink: 0;
+}
+.expense-hkd-text {
+  font-size: 14.5px;
+  font-weight: 900;
+  color: #059669;
+}
+.expense-thb-text {
+  font-size: 11px;
+  color: #64748b;
+}
+.expense-del-btn {
+  background: #f1f5f9;
+  border: none;
+  color: #94a3b8;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: 0.15s;
+}
+.expense-del-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+
+/* Temple Passport Bar & Rituals */
+.temple-passport-bar {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1.5px solid #fed7aa;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.08);
+}
+.stamp-badge-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 58px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.stamp-badge-item:active {
+  transform: scale(0.95);
+}
+.stamp-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  color: #94a3b8;
+  position: relative;
+  transition: all 0.25s ease;
+}
+.stamp-badge-item.stamped .stamp-circle {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: 2px solid #fbbf24;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+}
+.stamp-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+}
+.stamp-badge-item.stamped .stamp-name {
+  color: #c2410c;
+  font-weight: 800;
+}
+.temple-ritual-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.25);
+  margin-top: 10px;
+  transition: all 0.15s ease;
+}
+.temple-ritual-btn:active {
+  transform: scale(0.98);
+  background: #9a3412;
+}
+.temple-ritual-btn.secondary {
+  background: #ffffff;
+  color: #c2410c;
+  border: 1.5px solid #fed7aa;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ritual-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  z-index: 10050;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeInModal 0.2s ease;
+}
+.ritual-overlay.active {
+  display: flex;
+}
+.ritual-box {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  border: 2px solid #fed7aa;
+  text-align: center;
+}
+
 </style>
 </head>
 <body>
@@ -2334,10 +2566,18 @@
     </div>
 
     <div class="fullscreen-container">
-      <!-- Title in Body -->
-      <div style="margin-bottom:12px;">
-        <h2 style="margin:0; font-size:18px; font-weight:800; color:#0f172a;">💱 คำนวณอัตราแลกเปลี่ยน HKD / THB</h2>
+      <!-- Sub-tabs: Calculator vs Expense Diary -->
+      <div class="currency-subtabs">
+        <button id="currTabBtnCalc" class="curr-subtab-btn active" onclick="switchCurrencySubTab('calc')">
+          💱 แปลงค่าเงินสด & กราฟ
+        </button>
+        <button id="currTabBtnDiary" class="curr-subtab-btn" onclick="switchCurrencySubTab('diary')">
+          📸 บันทึกบิล & รายจ่าย
+        </button>
       </div>
+
+      <!-- TAB 1: Currency Calculator & Rates -->
+      <div id="currTabPaneCalc" style="display:block;">
       
       <!-- Live Current Rate Hero Card -->
       <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:18px; margin-bottom:14px; box-shadow:0 8px 24px rgba(5, 150, 105, 0.25);">
@@ -2456,8 +2696,42 @@
         </div>
       </div>
 
-    </div>
-  </div>
+      </div> <!-- End currTabPaneCalc -->
+
+      <!-- TAB 2: Expense Diary & Receipt Scanner -->
+      <div id="currTabPaneDiary" style="display:none;">
+        
+        <!-- Expense Total Summary Card -->
+        <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:14px; box-shadow:0 6px 18px rgba(5, 150, 105, 0.22); display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:11.5px; opacity:0.9; font-weight:700;">ยอดรวมรายจ่ายทั้งทริป</div>
+            <div style="display:flex; align-items:baseline; gap:6px; margin:4px 0;">
+              <span id="expenseTotalHkd" style="font-size:32px; font-weight:900;">0.00</span>
+              <span style="font-size:14px; font-weight:700; opacity:0.9;">HKD</span>
+            </div>
+            <div id="expenseTotalThb" style="font-size:12px; opacity:0.92;">≈ 0.00 บาท (ตามเรตสด)</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:34px; margin-bottom:2px;">🧾</div>
+            <span id="expenseCountBadge" style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.22); padding:3px 9px; border-radius:10px;">0 รายการ</span>
+          </div>
+        </div>
+
+        <!-- Add Button & Hidden File Input -->
+        <input type="file" id="receiptFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleReceiptFile(event)">
+        <button class="add-expense-btn" onclick="triggerReceiptUpload()">
+          <span>📸</span> <span>ถ่ายรูปใบเสร็จ / บันทึกรายจ่าย</span>
+        </button>
+
+        <!-- List of Expenses -->
+        <div id="expenseListContainer">
+          <!-- Rendered dynamically by renderExpenses() -->
+        </div>
+
+      </div> <!-- End currTabPaneDiary -->
+
+    </div> <!-- End fullscreen-container -->
+  </div> <!-- End currencyModal -->
 
   <!-- =====================================================================
        FULLSCREEN SCREEN: 5 POPULAR HONG KONG TEMPLES (REAL PHOTOS & MAPS)
@@ -2476,6 +2750,19 @@
       <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="margin:0; font-size:18px; font-weight:800; color:#0f172a;">🛕 8 สุดยอดวัดดัง & ไหว้พระมูเตลู</h2>
         <span style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:3px 9px; border-radius:10px;">🧧 ทริปปีใหม่ 2027</span>
+      </div>
+
+      <!-- Stamp Passport Bar -->
+      <div class="temple-passport-bar">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12.5px; font-weight:800; color:#9a3412; display:flex; align-items:center; gap:6px;">
+            <span>🧧</span> <span>พาสปอร์ตมูเตลู 8 วัดดังฮ่องกง 2027</span>
+          </div>
+          <span id="templeStampCountBadge" style="font-size:11px; font-weight:800; background:#ea580c; color:#ffffff; padding:2px 8px; border-radius:10px;">0 / 8 วัด</span>
+        </div>
+        <div id="templeStampsRow" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
+          <!-- Rendered dynamically by renderTempleStamps() -->
+        </div>
       </div>
       
       <!-- Itinerary Suggestion Banner -->
@@ -2616,6 +2903,9 @@
             </button>
           </div>
         </div>
+        <button class="temple-ritual-btn" onclick="openTempleRitual('hunghom')">
+          <span>🪷</span> <span>ทำพิธียืมเงิน & รับซองอั่งเปาขวัญถุงเจ้าแม่กวนอิม</span>
+        </button>
       </div>
 
       <!-- TEMPLE 2: วัดหวังต้าเซียน -->
@@ -2729,6 +3019,14 @@
               🙏 วิธีทำมือล็อกด้ายแดง & ขอพรเทพจันทรา
             </button>
           </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+          <button class="temple-ritual-btn" style="margin-top:0;" onclick="openTempleRitual('wts_chim')">
+            <span>🎋</span> <span>เสี่ยงเซียมซีนำโชค</span>
+          </button>
+          <button class="temple-ritual-btn secondary" style="margin-top:0;" onclick="openTempleRitual('wts_redthread')">
+            <span>🎀</span> <span>วิธีผูกด้ายแดง</span>
+          </button>
         </div>
       </div>
 
@@ -2959,6 +3257,9 @@
             </button>
           </div>
         </div>
+        <button class="temple-ritual-btn" onclick="openTempleRitual('paktai')">
+          <span>☯️</span> <span>พิธีหมุนกระจกแปดทิศพลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</span>
+        </button>
       </div>
 
       <!-- TEMPLE 5: วัดหม่านโหม่ว ถนนฮอลลีวูด -->
@@ -3073,6 +3374,9 @@
             </button>
           </div>
         </div>
+        <button class="temple-ritual-btn" onclick="openTempleRitual('manmo')">
+          <span>🕯️</span> <span>จุดธูปขดยักษ์ขอพรปัญญา การงาน & สอบแข่งขัน</span>
+        </button>
       </div>
 
       <!-- TEMPLE 6: วัดเจ้าแม่ทับทิม ทินหัว ยามาเต -->
@@ -3199,6 +3503,9 @@
             </button>
           </div>
         </div>
+        <button class="temple-ritual-btn" onclick="openTempleRitual('tinhau')">
+          <span>🎗️</span> <span>ผูกริบบิ้นมงคลขอพรเดินทางปลอดภัยตลอดทริป</span>
+        </button>
       </div>
 
       <!-- TEMPLE 7: วัดเจ้าแม่กวนอิม รีพัลส์เบย์ -->
@@ -3313,6 +3620,9 @@
             </button>
           </div>
         </div>
+        <button class="temple-ritual-btn" onclick="openTempleRitual('repulse')">
+          <span>🌉</span> <span>ข้ามสะพานต่ออายุ (+3 วัน) & ลูบถุงทองไฉ่ซิงเอี้ย</span>
+        </button>
       </div>
 
       <!-- TEMPLE 5: วัดพระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง) -->
@@ -3691,13 +4001,69 @@
         <div style="font-size:26px; font-weight:900; color:#0f172a; margin:6px 0; letter-spacing:1px;">尖沙咀 龍堡國際賓館</div>
         <div style="font-size:14px; font-weight:700; color:#dc2626; margin-bottom:4px;">(柯士甸道 / ถนน Austin Rd.)</div>
         <div style="font-size:12px; color:#2563eb; margin-bottom:12px;">8 Austin Road, Tsim Sha Tsui, Kowloon</div>
-        <button class="action-shortcut-btn" style="background:#2563eb; width:100%; justify-content:center; padding:10px;" onclick="showSubInfo('chineseSignBPFull')">
-          🔍 ขยายป้ายโรงแรม B P เต็มจอ (ยื่นให้คนขับ)
-        </button>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="action-shortcut-btn" style="background:#2563eb; flex:1; justify-content:center; padding:10px;" onclick="showSubInfo('chineseSignBPFull')">
+            🔍 ขยายป้ายเต็มจอ
+          </button>
+          <button class="taxi-speak-btn" style="padding:10px 14px;" onclick="speakCantonese('唔該，去柯士甸道龍堡國際')">
+            <span>🔊</span> <span>พูดกวางตุ้ง</span>
+          </button>
+        </div>
         <div style="background:#eff6ff; border-radius:8px; padding:8px 12px; font-size:12px; color:#1e40af; margin-top:10px; text-align:left;">
           🗣️ <b>คำอ่านกวางตุ้ง:</b> หล่ง-โป๋ว-กวอก-ไจ๋ (จิ๊ม-ซ้า-โจ๋ย โอ๊ว-ซี-ติ๊น-โต่ว)
         </div>
       </div>
+
+      <!-- Section 1.5: Essential Taxi Phrases with Audio -->
+      <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:14px; padding:14px; margin-bottom:14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-size:13px; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+            <span>🗣️</span> <span>ประโยคคุยกับคนขับแท็กซี่ (กดฟังเสียงกวางตุ้ง)</span>
+          </div>
+          <span style="font-size:10px; font-weight:700; background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:8px;">Audio</span>
+        </div>
+
+        <div class="taxi-phrase-chip">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">唔該，前面停</div>
+            <div style="font-size:11px; color:#64748b;">(อู่ก๊อย ฉี่นหมี่นเถ่ง) • จอดข้างหน้านี้ครับ</div>
+          </div>
+          <button class="taxi-speak-btn" style="padding:6px 12px; font-size:11px;" onclick="speakCantonese('唔該，前面停')">
+            <span>🔊</span> ฟังเสียง
+          </button>
+        </div>
+
+        <div class="taxi-phrase-chip">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">唔該，印張收據</div>
+            <div style="font-size:11px; color:#64748b;">(อู่ก๊อย ยันเจิ้งเสาเกย) • ขอใบเสร็จด้วยครับ</div>
+          </div>
+          <button class="taxi-speak-btn" style="padding:6px 12px; font-size:11px;" onclick="speakCantonese('唔該，印張收據')">
+            <span>🔊</span> ฟังเสียง
+          </button>
+        </div>
+
+        <div class="taxi-phrase-chip">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">唔該，開後尾箱</div>
+            <div style="font-size:11px; color:#64748b;">(อู่ก๊อย ฮอยเห่าเหมยซ้อง) • ช่วยเปิดกระโปรงหลังเอากระเป๋าครับ</div>
+          </div>
+          <button class="taxi-speak-btn" style="padding:6px 12px; font-size:11px;" onclick="speakCantonese('唔該，開後尾箱')">
+            <span>🔊</span> ฟังเสียง
+          </button>
+        </div>
+
+        <div class="taxi-phrase-chip">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">唔該，去機場一號客運大樓</div>
+            <div style="font-size:11px; color:#64748b;">(อู่ก๊อย เฮยเก๊ยเฉิ่งยัดโหวฮักหวั่นต่ายเหล่า) • ไปสนามบิน T1</div>
+          </div>
+          <button class="taxi-speak-btn" style="padding:6px 12px; font-size:11px;" onclick="speakCantonese('唔該，去機場一號客運大樓')">
+            <span>🔊</span> ฟังเสียง
+          </button>
+        </div>
+      </div>
+
 
       <!-- Section 2: Taxi Rules & Baggage -->
       <div style="background:#fff7ed; border:1.5px solid #fed7aa; border-radius:14px; padding:14px; margin-bottom:14px;">
@@ -3754,7 +4120,80 @@
     </div>
   </div>
 
-  <div id="subInfoOverlay" class="sub-info-overlay" onclick="closeSubInfo()">
+  
+<!-- Temple Ritual Modal Overlay -->
+
+<!-- Add/Edit Expense Review Modal Overlay -->
+<div id="expenseReviewOverlay" class="ritual-overlay" onclick="closeExpenseReview()">
+  <div class="ritual-box" onclick="event.stopPropagation()" style="text-align:left;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="margin:0; font-size:16px; font-weight:900; color:#0f172a;">📸 บันทึกรายการรายจ่าย</h3>
+      <button style="border:none; background:none; font-size:18px; cursor:pointer;" onclick="closeExpenseReview()">✕</button>
+    </div>
+
+    <!-- Photo Preview -->
+    <div id="receiptPreviewWrap" style="text-align:center; margin-bottom:12px;">
+      <img id="receiptPreviewImg" src="" style="max-height:160px; max-width:100%; border-radius:10px; border:1px solid #cbd5e1; object-fit:contain;">
+    </div>
+
+    <!-- Category Selector -->
+    <div style="margin-bottom:10px;">
+      <label style="font-size:11px; font-weight:800; color:#475569; display:block; margin-bottom:4px;">หมวดหมู่:</label>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
+        <button type="button" class="weather-chip active" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('🍜 อาหาร', this)">🍜 อาหาร</button>
+        <button type="button" class="weather-chip" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('🚕 เดินทาง', this)">🚕 เดินทาง</button>
+        <button type="button" class="weather-chip" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('🛍️ ช้อปปิ้ง', this)">🛍️ ช้อปปิ้ง</button>
+        <button type="button" class="weather-chip" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('🎫 ตั๋ว/เข้าชม', this)">🎫 ตั๋ว/เข้าชม</button>
+        <button type="button" class="weather-chip" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('🏨 ที่พัก', this)">🏨 ที่พัก</button>
+        <button type="button" class="weather-chip" style="padding:6px; font-size:11px; justify-content:center;" onclick="setExpenseCat('📦 อื่นๆ', this)">📦 อื่นๆ</button>
+      </div>
+    </div>
+
+    <!-- Note / Store Name -->
+    <div style="margin-bottom:10px;">
+      <label style="font-size:11px; font-weight:800; color:#475569; display:block; margin-bottom:4px;">ชื่อร้าน / รายการ:</label>
+      <input id="expenseNoteInput" type="text" placeholder="เช่น ติ่มซำ Sun Kee, แท็กซี่ไป รร." style="width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; box-sizing:border-box;">
+    </div>
+
+    <!-- Amount in HKD -->
+    <div style="margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+        <label style="font-size:11px; font-weight:800; color:#475569;">ยอดเงิน (HKD):</label>
+        <span id="expenseThbPreview" style="font-size:11px; color:#059669; font-weight:700;">≈ 0.00 บาท</span>
+      </div>
+      <input id="expenseAmountInput" type="number" step="0.5" placeholder="0.00" oninput="updateExpenseThbPreview()" style="width:100%; padding:8px 10px; border:1.5px solid #059669; border-radius:8px; font-size:18px; font-weight:800; color:#047857; box-sizing:border-box;">
+    </div>
+
+    <!-- Date/Time Display -->
+    <div style="font-size:11px; color:#64748b; margin-bottom:14px; background:#f8fafc; padding:6px 10px; border-radius:6px;" id="expenseTimeDisplay">
+      🕒 วันเวลา: -
+    </div>
+
+    <!-- Save Button -->
+    <button class="add-expense-btn" style="margin-bottom:0;" onclick="saveCurrentExpense()">
+      <span>💾</span> <span>บันทึกรายการ</span>
+    </button>
+  </div>
+</div>
+
+<!-- Full Photo Viewer Modal -->
+<div id="fullPhotoOverlay" class="ritual-overlay" onclick="closeFullPhoto()">
+  <div style="max-width:90vw; max-height:90vh; position:relative;" onclick="event.stopPropagation()">
+    <img id="fullPhotoImg" src="" style="max-width:100%; max-height:85vh; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+    <button style="position:absolute; top:-12px; right:-12px; background:#ffffff; border:none; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.3);" onclick="closeFullPhoto()">✕</button>
+  </div>
+</div>
+
+<div id="templeRitualOverlay" class="ritual-overlay" onclick="closeTempleRitual()">
+  <div class="ritual-box" onclick="event.stopPropagation()">
+    <div id="templeRitualContent"></div>
+    <button class="action-shortcut-btn" style="margin-top:16px; width:100%; justify-content:center; background:#f1f5f9; color:#475569;" onclick="closeTempleRitual()">
+      ปิดหน้าต่าง
+    </button>
+  </div>
+</div>
+
+<div id="subInfoOverlay" class="sub-info-overlay" onclick="closeSubInfo()">
   <div class="sub-info-box" onclick="event.stopPropagation()">
     <div id="subInfoContent"></div>
     <button class="action-shortcut-btn" style="margin-top:16px;" onclick="closeSubInfo()">ปิดหน้าต่าง</button>
@@ -6194,6 +6633,22 @@ function toggleAirOutPins() {
   if (btn) btn.classList.toggle('active', !isHidden);
 }
 
+function speakCantonese(phrase) {
+  if (!('speechSynthesis' in window)) {
+    alert('อุปกรณ์ของคุณไม่รองรับเสียงพูดในเบราว์เซอร์');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(phrase);
+  utterance.lang = 'zh-HK';
+  utterance.rate = 0.88;
+  utterance.pitch = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const hkVoice = voices.find(v => v.lang === 'zh-HK' || v.lang === 'zh-TW' || v.lang.toLowerCase().includes('yue'));
+  if (hkVoice) utterance.voice = hkVoice;
+  window.speechSynthesis.speak(utterance);
+}
+
 function showSubInfo(type) {
   const box = document.getElementById('subInfoContent');
   const contents = {
@@ -6218,6 +6673,9 @@ function showSubInfo(type) {
         <div style="background:#eff6ff; border-radius:8px; padding:8px 12px; font-size:13px; color:#1e40af; font-weight:600; text-align:left;">
           🗣️ คำอ่าน: <b>หล่ง-โป๋ว-กวอก-ไจ๋</b> (จิ๊ม-ซ้า-โจ๋ย)
         </div>
+        <button class="taxi-speak-btn" style="width:100%; margin-top:10px; justify-content:center; padding:10px;" onclick="speakCantonese('唔該，去柯士甸道龍堡國際')">
+          <span>🔊</span> <span>กดส่งเสียงกวางตุ้งให้คนขับฟัง</span>
+        </button>
       </div>
     `,
     npToAirportSign: `
@@ -6887,6 +7345,607 @@ function closeSubInfo() {
     document.getElementById('subInfoOverlay').classList.remove('active');
   });
 }
+
+// ==========================================
+// 8 TEMPLES STAMP RALLY & INTERACTIVE RITUALS
+// ==========================================
+const TEMPLE_STAMP_CONFIG = [
+  { id: 'hunghom', name: 'ฮองฮำ', icon: '🪷', ritual: 'hunghom' },
+  { id: 'wts_chim', name: 'หวังต้าเซียน', icon: '🎋', ritual: 'wts_chim' },
+  { id: 'chekung', name: 'แชกงหมิว', icon: '🎡', ritual: 'chekung' },
+  { id: 'paktai', name: 'ปักไต', icon: '☯️', ritual: 'paktai' },
+  { id: 'manmo', name: 'หม่านโหม่ว', icon: '🕯️', ritual: 'manmo' },
+  { id: 'tinhau', name: 'ทินหัว', icon: '🎗️', ritual: 'tinhau' },
+  { id: 'repulse', name: 'รีพัลส์เบย์', icon: '🌉', ritual: 'repulse' },
+  { id: 'buddha', name: 'พระใหญ่', icon: '✨', ritual: 'buddha' }
+];
+
+function getTempleStamps() {
+  try {
+    return JSON.parse(localStorage.getItem('hk_temple_stamps') || '{}');
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveTempleStamp(templeId) {
+  try {
+    const stamps = getTempleStamps();
+    stamps[templeId] = new Date().toISOString();
+    localStorage.setItem('hk_temple_stamps', JSON.stringify(stamps));
+    renderTempleStamps();
+  } catch(e) {}
+}
+
+function renderTempleStamps() {
+  const row = document.getElementById('templeStampsRow');
+  const badge = document.getElementById('templeStampCountBadge');
+  if (!row) return;
+
+  const stamps = getTempleStamps();
+  const count = Object.keys(stamps).length;
+  if (badge) badge.innerText = `${count} / 8 วัด`;
+
+  row.innerHTML = TEMPLE_STAMP_CONFIG.map(t => {
+    const isStamped = !!stamps[t.id];
+    return `
+      <div class="stamp-badge-item ${isStamped ? 'stamped' : ''}" onclick="openTempleRitual('${t.ritual}')">
+        <div class="stamp-circle">
+          ${isStamped ? '✔️' : t.icon}
+        </div>
+        <div class="stamp-name">${t.name}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function closeTempleRitual() {
+  const overlay = document.getElementById('templeRitualOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function openTempleRitual(ritualKey) {
+  const overlay = document.getElementById('templeRitualOverlay');
+  const content = document.getElementById('templeRitualContent');
+  if (!overlay || !content) return;
+
+  if (ritualKey === 'hunghom') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🪷</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่กวนอิม ฮองฮำ</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">พิธียืมเงินเจ้าแม่กวนอิม & รับซองอั่งเปาขวัญถุง</div>
+      
+      <div id="angpaoBox" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color:#fef08a; border-radius:16px; padding:24px 16px; cursor:pointer; box-shadow:0 8px 20px rgba(220, 38, 38, 0.35); border:2px solid #facc15; transition:transform 0.2s;" onclick="openAngpaoEffect()">
+        <div style="font-size:48px; margin-bottom:8px;">🧧</div>
+        <div style="font-size:18px; font-weight:900; letter-spacing:1px;">แตะเพื่อเปิดซองอั่งเปามงคล</div>
+        <div style="font-size:11px; opacity:0.9; margin-top:4px;">(ขอยืมเงินเสริมทรัพย์รับปีใหม่ 2027)</div>
+      </div>
+    `;
+  } else if (ritualKey === 'wts_chim') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🎋</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดหวังต้าเซียน (Wong Tai Sin)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">เสี่ยงเซียมซีนำโชคดิจิทัลประจำปี 2027</div>
+      
+      <div id="chimBox" style="background:#fffbeb; border:2px dashed #f59e0b; border-radius:16px; padding:20px; margin-bottom:14px;">
+        <div id="chimIcon" style="font-size:48px; margin-bottom:8px; transition:transform 0.3s;">🎋</div>
+        <div style="font-size:13px; color:#78350f; font-weight:700;">ตั้งจิตอธิษฐานแล้วแตะปุ่มเขย่าเซียมซี</div>
+        <button class="temple-ritual-btn" style="margin-top:12px; background:#d97706;" onclick="shakeChimEffect()">
+          <span>🎋</span> <span>เขย่ากระบอกเซียมซี</span>
+        </button>
+      </div>
+    `;
+  } else if (ritualKey === 'wts_redthread') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🎀</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วิธีผูกด้ายแดงเฒ่าจันทรา (เทพหยุกลก)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ท่าประสานนิ้ว 4 สเต็ปขอพรคู่ครอง & มิตรภาพ</div>
+      
+      <div style="text-align:left; background:#fff1f2; border:1px solid #fecdd3; border-radius:14px; padding:12px 14px; font-size:12px; line-height:1.6; color:#9f1239;">
+        <div style="margin-bottom:6px;"><b>1. กางมือทั้งสองข้าง:</b> นิ้วโป้งกดที่ปลายนิ้วนางทั้งสองข้าง</div>
+        <div style="margin-bottom:6px;"><b>2. เกี่ยวปลายนิ้ว:</b> ใช้นิ้วก้อยสอดเกี่ยวกับนิ้วกลางฝั่งตรงข้าม</div>
+        <div style="margin-bottom:6px;"><b>3. หนีบด้ายแดง:</b> นำด้ายแดงที่ได้รับสอดระหว่างนิ้วชี้และนิ้วโป้ง</div>
+        <div><b>4. คำอธิษฐาน:</b> ไหว้บอกชื่อ-สกุล สเปกที่ปรารถนา แล้วเดินไปผูกด้ายแดงที่รูปปั้น</div>
+      </div>
+      <button class="temple-ritual-btn" style="margin-top:14px; background:#e11d48;" onclick="completeTempleAction('wts_chim', 'จดจำท่าผูกด้ายแดงสำเร็จ ขอให้สมหวังในความรักและมิตรภาพ!')">
+        <span>✔️</span> <span>เข้าใจแล้ว & ประทับตราสำเร็จ</span>
+      </button>
+    `;
+  } else if (ritualKey === 'chekung') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🎡</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดแชกงหมิว (วัดกังหันนำโชค)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">หมุนกังหัน 4 ทิศด้วยมือซ้าย & เคาะกลอง 3 ครั้ง</div>
+      
+      <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="windmillEl" style="font-size:54px; display:inline-block; transition:transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); cursor:pointer;" onclick="spinWindmillEffect()">
+          ☸️
+        </div>
+        <div style="font-size:12px; color:#991b1b; font-weight:700; margin-top:8px;">แตะที่กังหันเพื่อหมุนตามเข็มนาฬิกา</div>
+      </div>
+      <button id="drumBtn" class="temple-ritual-btn" style="background:#b91c1c;" onclick="hitDrumEffect()">
+        <span>🥁</span> <span>เคาะกลอง 3 ครั้ง (ปัดเป่าอุปสรรค)</span>
+      </button>
+    `;
+  } else if (ritualKey === 'paktai') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">☯️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดปักไต หว่านไจ๋ (Pak Tai Temple)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">พิธีเทพเจ้าเปลี่ยนใจ & หมุนกระจกแปดทิศพลิกดวง</div>
+      
+      <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="baguaEl" style="font-size:50px; display:inline-block; transition:transform 1.2s ease; cursor:pointer;" onclick="spinBaguaEffect()">
+          🪞
+        </div>
+        <div style="font-size:12px; color:#334155; font-weight:700; margin-top:8px;">แตะกระจกแปดทิศเพื่อพลิกดวงชะตา</div>
+      </div>
+      <button class="temple-ritual-btn" style="background:#0f172a;" onclick="spinBaguaEffect()">
+        <span>☯️</span> <span>หมุนพลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</span>
+      </button>
+    `;
+  } else if (ritualKey === 'manmo') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🕯️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดหม่านโหม่ว (Man Mo Temple)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">จุดธูปขดยักษ์ขอพรปัญญา การงาน & ธุรกิจรุ่งเรือง</div>
+      
+      <div style="background:#fffbeb; border:1.5px solid #fef3c7; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="incenseEl" style="font-size:50px; display:inline-block; transition:all 0.5s;">
+          🌀
+        </div>
+        <div id="incenseSmoke" style="font-size:18px; opacity:0; transition:opacity 0.6s;">☁️✨ คำอธิษฐานส่งถึงสวรรค์</div>
+        <div style="font-size:12px; color:#92400e; font-weight:700; margin-top:8px;">แตะจุดธูปขดยักษ์ถวายเทพหม่านไช่ซิน & กวนอู</div>
+      </div>
+      <button class="temple-ritual-btn" style="background:#b45309;" onclick="lightIncenseEffect()">
+        <span>🕯️</span> <span>จุดธูปขดขอพรปัญญา & สัมผัสปากกาทอง</span>
+      </button>
+    `;
+  } else if (ritualKey === 'tinhau') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🎗️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่ทับทิม ทินหัว ยามาเต</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ผูกริบบิ้นมงคลขอพรเดินทางปลอดภัยตลอด 3 วัน</div>
+      
+      <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="ribbonEl" style="font-size:50px; display:inline-block; transition:transform 0.4s;">
+          🎗️
+        </div>
+        <div style="font-size:12px; color:#166534; font-weight:700; margin-top:8px;">แตะผูกริบบิ้นแดงถวายเจ้าแม่ทับทิมแห่งท้องทะเล</div>
+      </div>
+      <button class="temple-ritual-btn" style="background:#15803d;" onclick="tieRibbonEffect()">
+        <span>🎗️</span> <span>ผูกริบบิ้นคุ้มครองการเดินทาง</span>
+      </button>
+    `;
+  } else if (ritualKey === 'repulse') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">🌉</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่กวนอิม รีพัลส์เบย์</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">เดินข้ามสะพานต่ออายุ & ลูบถุงทองไฉ่ซิงเอี้ย</div>
+      
+      <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="bridgeSteps" style="font-size:42px; display:flex; justify-content:center; gap:8px;">
+          <span>🦶</span><span>🌉</span><span>💰</span>
+        </div>
+        <div id="bridgeText" style="font-size:12px; color:#1e40af; font-weight:700; margin-top:8px;">ก้าวเท้าซ้ายขึ้นสะพาน ห้ามเดินย้อนกลับ</div>
+      </div>
+      <button class="temple-ritual-btn" style="background:#1d4ed8;" onclick="crossBridgeEffect()">
+        <span>🌉</span> <span>ก้าวข้ามสะพานต่ออายุ (+3 วัน) & รับถุงทอง</span>
+      </button>
+    `;
+  } else if (ritualKey === 'buddha') {
+    content.innerHTML = `
+      <div style="font-size:36px; margin-bottom:6px;">✨</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">พระใหญ่เทียนถาน (Ngong Ping 360)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ยืนรับพลังจักรวาล ณ แผ่นหินวงกลม Echo Center</div>
+      
+      <div style="background:#faf5ff; border:1.5px solid #e9d5ff; border-radius:16px; padding:18px; margin-bottom:12px;">
+        <div id="echoCircleEl" style="width:70px; height:70px; border-radius:50%; border:3px solid #9333ea; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:30px; transition:all 0.5s;">
+          🧘
+        </div>
+        <div style="font-size:12px; color:#6b21a8; font-weight:700; margin-top:8px;">จุดกึ่งกลางรับพลังสะท้อนเสียงถึงสวรรค์</div>
+      </div>
+      <button class="temple-ritual-btn" style="background:#7e22ce;" onclick="receiveEchoEnergyEffect()">
+        <span>✨</span> <span>ยืนหงายฝ่ามือรับพลังบวกสูงสุด</span>
+      </button>
+    `;
+  }
+
+  overlay.classList.add('active');
+}
+
+// Interactive Ritual Effects
+function openAngpaoEffect() {
+  const box = document.getElementById('angpaoBox');
+  if (!box) return;
+  box.style.transform = 'scale(1.05)';
+  setTimeout(() => {
+    box.innerHTML = `
+      <div style="font-size:42px; margin-bottom:6px;">🎉💰✨</div>
+      <div style="font-size:22px; font-weight:900; color:#fef08a;">ยินดีด้วย! รับเงินขวัญถุง</div>
+      <div style="font-size:28px; font-weight:900; color:#ffffff; margin:6px 0;">888,000,000 HKD</div>
+      <div style="font-size:12px; opacity:0.95; line-height:1.5;">ขอพรสำเร็จ! เจ้าแม่กวนอิมประทานทรัพย์ นำพาความมั่งคั่ง ร่ำรวย และโชคลาภตลอดปี 2027</div>
+      <div style="background:rgba(0,0,0,0.25); border-radius:10px; padding:6px 10px; font-size:11px; margin-top:10px; color:#fef08a;">
+        ✔️ บันทึกตราประทับวัดฮองฮำลงพาสปอร์ตแล้ว!
+      </div>
+    `;
+    saveTempleStamp('hunghom');
+  }, 300);
+}
+
+function shakeChimEffect() {
+  const icon = document.getElementById('chimIcon');
+  if (icon) icon.style.transform = 'rotate(-25deg) scale(1.15)';
+  setTimeout(() => {
+    if (icon) icon.style.transform = 'rotate(25deg) scale(1.15)';
+  }, 150);
+  setTimeout(() => {
+    if (icon) icon.style.transform = 'rotate(0deg) scale(1)';
+    const chimList = [
+      { num: 1, title: 'ไม้ที่ 1 (มหาลาภเอก)', text: 'การงานก้าวหน้า ค้าขายได้กำไรสูง คนรอบตัวเมตตา สุขภาพแข็งแรง ไร้โรคา' },
+      { num: 8, title: 'ไม้ที่ 8 (โชคลาภมหาศาล)', text: 'เงินทองไหลมาเทมา มีลาภลอยรับปีใหม่ สิ่งที่ลงทุนไว้จะออกดอกผลเกินคาด' },
+      { num: 28, title: 'ไม้ที่ 28 (ราบรื่นมงคล)', text: 'ความรักสมปรารถนา มิตรภาพแน่นแฟ้น เดินทางปลอดภัย มีผู้ใหญ่อุปถัมภ์' },
+      { num: 99, title: 'ไม้ที่ 99 (ยอดแห่งความสำเร็จ)', text: 'อุปสรรคทั้งปวงคลี่คลาย ปรารถนาสิ่งใดจะได้ดั่งใจหวัง สุขภาพจิตผ่องใส' }
+    ];
+    const picked = chimList[Math.floor(Math.random() * chimList.length)];
+    const box = document.getElementById('chimBox');
+    if (box) {
+      box.innerHTML = `
+        <div style="font-size:38px; margin-bottom:4px;">📜✨</div>
+        <div style="font-size:18px; font-weight:900; color:#b45309;">${picked.title}</div>
+        <div style="font-size:13px; line-height:1.5; color:#78350f; margin:10px 0;">"${picked.text}"</div>
+        <div style="background:#fef3c7; border-radius:8px; padding:6px 10px; font-size:11px; color:#92400e; font-weight:700;">
+          ✔️ บันทึกตราประทับวัดหวังต้าเซียนลงพาสปอร์ตแล้ว!
+        </div>
+      `;
+    }
+    saveTempleStamp('wts_chim');
+  }, 400);
+}
+
+function spinWindmillEffect() {
+  const el = document.getElementById('windmillEl');
+  if (el) el.style.transform = 'rotate(720deg)';
+}
+
+function hitDrumEffect() {
+  const btn = document.getElementById('drumBtn');
+  if (btn) {
+    btn.innerHTML = '<span>🥁</span> <span>ตึง! ตึง! ตึง! (เสียงกลองดังกังวาน)</span>';
+    btn.style.background = '#15803d';
+  }
+  spinWindmillEffect();
+  setTimeout(() => {
+    completeTempleAction('chekung', 'หมุนกังหัน 4 ทิศ & เคาะกลองสำเร็จ! พัดสิ่งไม่ดีออกไป พัดพาโชคลาภและสุขภาพดีเข้าตัว');
+  }, 500);
+}
+
+function spinBaguaEffect() {
+  const el = document.getElementById('baguaEl');
+  if (el) el.style.transform = 'rotate(360deg) scale(1.15)';
+  setTimeout(() => {
+    completeTempleAction('paktai', 'พลิกดวงชะตาสำเร็จ! กระจกแปดทิศปัดเป่าพลังลบ เปลี่ยนร้ายกลายเป็นดี ศัตรูกลายเป็นมิตร');
+  }, 600);
+}
+
+function lightIncenseEffect() {
+  const smoke = document.getElementById('incenseSmoke');
+  if (smoke) smoke.style.opacity = '1';
+  setTimeout(() => {
+    completeTempleAction('manmo', 'จุดธูปขดยักษ์สำเร็จ! คำอธิษฐานส่งตรงถึงสวรรค์ สติปัญญาเฉียบแหลม การงานและธุรกิจราบรื่น');
+  }, 600);
+}
+
+function tieRibbonEffect() {
+  const el = document.getElementById('ribbonEl');
+  if (el) el.style.transform = 'scale(1.2) rotate(15deg)';
+  setTimeout(() => {
+    completeTempleAction('tinhau', 'ผูกริบบิ้นมงคลสำเร็จ! เจ้าแม่ทับทิมคุ้มครองการเดินทาง 3 วันในฮ่องกงให้แคล้วคลาดปลอดภัย');
+  }, 500);
+}
+
+function crossBridgeEffect() {
+  completeTempleAction('repulse', 'ก้าวเท้าซ้ายข้ามสะพานต่ออายุสำเร็จ! อายุยืนยาวขึ้น +3 วัน และลูบถุงทองไฉ่ซิงเอี้ยเข้ากระเป๋าเรียบร้อย');
+}
+
+function receiveEchoEnergyEffect() {
+  const c = document.getElementById('echoCircleEl');
+  if (c) {
+    c.style.transform = 'scale(1.2)';
+    c.style.borderColor = '#eab308';
+    c.style.boxShadow = '0 0 20px rgba(234, 179, 8, 0.6)';
+  }
+  setTimeout(() => {
+    completeTempleAction('buddha', 'รับพลังจักรวาลสมบูรณ์! พลังบวกเต็มเปี่ยมจากองค์พระใหญ่ เติมพลังใจรับปีใหม่ 2027');
+  }, 600);
+}
+
+function completeTempleAction(templeId, message) {
+  const content = document.getElementById('templeRitualContent');
+  if (content) {
+    content.innerHTML = `
+      <div style="font-size:46px; margin-bottom:8px;">🎉✨🙏</div>
+      <div style="font-size:18px; font-weight:900; color:#0f172a; margin-bottom:6px;">ทำพิธีสำเร็จ!</div>
+      <div style="font-size:13px; line-height:1.6; color:#334155; margin-bottom:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px;">
+        ${message}
+      </div>
+      <div style="display:inline-block; background:#dcfce7; color:#15803d; font-size:12px; font-weight:800; padding:4px 12px; border-radius:16px;">
+        ✔️ บันทึกตราประทับลงพาสปอร์ตเรียบร้อย!
+      </div>
+    `;
+  }
+  saveTempleStamp(templeId);
+}
+
+// Initial stamp render on page load
+document.addEventListener('DOMContentLoaded', () => {
+  renderTempleStamps();
+});
+
+
+// ==========================================
+// EXPENSE DIARY & RECEIPT SCANNER (INDEXEDDB)
+// ==========================================
+let currentExpenseCategory = '🍜 อาหาร';
+let currentReceiptDataUrl = '';
+
+function switchCurrencySubTab(tab) {
+  const btnCalc = document.getElementById('currTabBtnCalc');
+  const btnDiary = document.getElementById('currTabBtnDiary');
+  const paneCalc = document.getElementById('currTabPaneCalc');
+  const paneDiary = document.getElementById('currTabPaneDiary');
+
+  if (tab === 'diary') {
+    if (btnDiary) btnDiary.classList.add('active');
+    if (btnCalc) btnCalc.classList.remove('active');
+    if (paneDiary) paneDiary.style.display = 'block';
+    if (paneCalc) paneCalc.style.display = 'none';
+    loadAndRenderExpenses();
+  } else {
+    if (btnCalc) btnCalc.classList.add('active');
+    if (btnDiary) btnDiary.classList.remove('active');
+    if (paneCalc) paneCalc.style.display = 'block';
+    if (paneDiary) paneDiary.style.display = 'none';
+  }
+}
+
+// IndexedDB Helper
+function openExpenseDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('hk_expenses_db', 1);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('expenses')) {
+        db.createObjectStore('expenses', { keyPath: 'id' });
+      }
+    };
+    request.onsuccess = (e) => resolve(e.target.result);
+    request.onerror = (e) => reject(e);
+  });
+}
+
+async function dbAddExpense(item) {
+  const db = await openExpenseDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('expenses', 'readwrite');
+    const store = tx.objectStore('expenses');
+    store.put(item);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+async function dbGetExpenses() {
+  const db = await openExpenseDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('expenses', 'readonly');
+    const store = tx.objectStore('expenses');
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function dbDeleteExpense(id) {
+  const db = await openExpenseDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('expenses', 'readwrite');
+    const store = tx.objectStore('expenses');
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+function triggerReceiptUpload() {
+  const fileInput = document.getElementById('receiptFileInput');
+  if (fileInput) {
+    fileInput.value = '';
+    fileInput.click();
+  }
+}
+
+function handleReceiptFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      // Compress image via canvas
+      const maxDim = 900;
+      let width = img.width;
+      let height = img.height;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      currentReceiptDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+      // Open review modal
+      const previewImg = document.getElementById('receiptPreviewImg');
+      if (previewImg) previewImg.src = currentReceiptDataUrl;
+
+      const timeDisplay = document.getElementById('expenseTimeDisplay');
+      const now = new Date();
+      const timeStr = now.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' }) + ' • ' + now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+      if (timeDisplay) timeDisplay.innerText = '🕒 วันเวลา: ' + timeStr;
+
+      const amountInput = document.getElementById('expenseAmountInput');
+      if (amountInput) amountInput.value = '';
+      updateExpenseThbPreview();
+
+      const noteInput = document.getElementById('expenseNoteInput');
+      if (noteInput) noteInput.value = '';
+
+      const overlay = document.getElementById('expenseReviewOverlay');
+      if (overlay) overlay.classList.add('active');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function setExpenseCat(cat, btn) {
+  currentExpenseCategory = cat;
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateExpenseThbPreview() {
+  const amountInput = document.getElementById('expenseAmountInput');
+  const thbPreview = document.getElementById('expenseThbPreview');
+  const rateInput = document.getElementById('calcExchangeRate');
+  const rate = rateInput ? parseFloat(rateInput.value) || 4.33 : 4.33;
+  const hkd = amountInput ? parseFloat(amountInput.value) || 0 : 0;
+  const thb = (hkd * rate).toFixed(2);
+  if (thbPreview) thbPreview.innerText = `≈ ${thb} บาท`;
+}
+
+function closeExpenseReview() {
+  const overlay = document.getElementById('expenseReviewOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+async function saveCurrentExpense() {
+  const amountInput = document.getElementById('expenseAmountInput');
+  const noteInput = document.getElementById('expenseNoteInput');
+  const rateInput = document.getElementById('calcExchangeRate');
+  const rate = rateInput ? parseFloat(rateInput.value) || 4.33 : 4.33;
+
+  const hkd = amountInput ? parseFloat(amountInput.value) || 0 : 0;
+  const thb = parseFloat((hkd * rate).toFixed(2));
+  const note = (noteInput && noteInput.value.trim()) ? noteInput.value.trim() : currentExpenseCategory;
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' }) + ' • ' + now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+
+  const item = {
+    id: 'exp_' + Date.now(),
+    photo: currentReceiptDataUrl,
+    category: currentExpenseCategory,
+    note: note,
+    amountHkd: hkd,
+    amountThb: thb,
+    dateStr: timeStr,
+    timestamp: Date.now()
+  };
+
+  await dbAddExpense(item);
+  closeExpenseReview();
+  loadAndRenderExpenses();
+}
+
+async function loadAndRenderExpenses() {
+  const container = document.getElementById('expenseListContainer');
+  const totalHkdEl = document.getElementById('expenseTotalHkd');
+  const totalThbEl = document.getElementById('expenseTotalThb');
+  const badgeEl = document.getElementById('expenseCountBadge');
+  if (!container) return;
+
+  try {
+    const list = await dbGetExpenses();
+    list.sort((a, b) => b.timestamp - a.timestamp);
+
+    let totalHkd = 0;
+    let totalThb = 0;
+    list.forEach(item => {
+      totalHkd += item.amountHkd || 0;
+      totalThb += item.amountThb || 0;
+    });
+
+    if (totalHkdEl) totalHkdEl.innerText = totalHkd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (totalThbEl) totalThbEl.innerText = `≈ ${totalThb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท`;
+    if (badgeEl) badgeEl.innerText = `${list.length} รายการ`;
+
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div style="background:#ffffff; border:1.5px dashed #cbd5e1; border-radius:14px; padding:24px 16px; text-align:center; color:#64748b; margin-top:10px;">
+          <div style="font-size:36px; margin-bottom:8px;">🧾</div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:4px;">ยังไม่มีรายการรายจ่าย</div>
+          <div style="font-size:12px; line-height:1.5;">แตะปุ่ม "ถ่ายรูปใบเสร็จ" ด้านบนเพื่อบันทึกบิล ค่าอาหาร ค่าแท็กซี่ หรือสลิปช้อปปิ้งได้เลย!</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = list.map(item => `
+      <div class="expense-card-item">
+        <img src="${item.photo || 'thumb_bg.png'}" class="expense-thumb" onclick="viewFullPhoto('${item.id}')" title="แตะเพื่อดูรูปเต็ม">
+        <div class="expense-details-col" onclick="viewFullPhoto('${item.id}')" style="cursor:pointer;">
+          <div class="expense-title-text">${item.category} • ${item.note}</div>
+          <div class="expense-meta-text">🕒 ${item.dateStr}</div>
+        </div>
+        <div class="expense-amount-col">
+          <div class="expense-hkd-text">${(item.amountHkd || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} HKD</div>
+          <div class="expense-thb-text">≈ ${(item.amountThb || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿</div>
+        </div>
+        <button class="expense-del-btn" onclick="deleteExpenseItem('${item.id}')" title="ลบรายการ">✕</button>
+      </div>
+    `).join('');
+  } catch(e) {
+    console.error('Error loading expenses:', e);
+  }
+}
+
+async function viewFullPhoto(id) {
+  try {
+    const list = await dbGetExpenses();
+    const item = list.find(x => x.id === id);
+    if (!item || !item.photo) return;
+    const img = document.getElementById('fullPhotoImg');
+    const overlay = document.getElementById('fullPhotoOverlay');
+    if (img && overlay) {
+      img.src = item.photo;
+      overlay.classList.add('active');
+    }
+  } catch(e) {}
+}
+
+function closeFullPhoto() {
+  const overlay = document.getElementById('fullPhotoOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+async function deleteExpenseItem(id) {
+  if (confirm('ต้องการลบรายการนี้ใช่หรือไม่?')) {
+    await dbDeleteExpense(id);
+    loadAndRenderExpenses();
+  }
+}
+
 </script>
 </body>
 </html>
