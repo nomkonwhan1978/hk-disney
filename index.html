@@ -1223,6 +1223,180 @@
   text-align: center;
 }
 
+
+/* === TEMPLE ACCORDION & 8 WOW RITUALS CSS === */
+.temple-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.temple-toggle-btn:active {
+  background: #f1f5f9;
+  transform: scale(0.98);
+}
+.temple-toggle-btn.active {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #c2410c;
+}
+.temple-header-action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.temple-header-action-row .temple-toggle-btn {
+  margin-top: 0;
+  flex: 1;
+}
+.temple-quick-ritual-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 12px;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.25);
+  transition: transform 0.15s;
+}
+.temple-quick-ritual-btn:active {
+  transform: scale(0.96);
+}
+
+/* WOW Ritual Animations */
+@keyframes coinFountainBurst {
+  0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  25% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-110px) scale(1.2) rotate(45deg); opacity: 0; }
+}
+@keyframes chimVigorousShake {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-18deg) scale(1.08); }
+  40% { transform: rotate(18deg) scale(1.08); }
+  60% { transform: rotate(-14deg) scale(1.05); }
+  80% { transform: rotate(14deg) scale(1.05); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes stickEjectRise {
+  0% { transform: translateY(50px) scale(0.7) rotateX(40deg); opacity: 0; }
+  70% { transform: translateY(-40px) scale(1.12) rotateX(0deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes windmillSpinDecel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(1800deg); }
+}
+@keyframes drumHitRipple {
+  0% { transform: scale(1); }
+  25% { transform: scale(0.86); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+@keyframes baguaFlip3D {
+  0% { transform: perspective(600px) rotateY(0deg) scale(1); }
+  50% { transform: perspective(600px) rotateY(180deg) scale(1.22); filter: drop-shadow(0 0 25px #facc15); }
+  100% { transform: perspective(600px) rotateY(360deg) scale(1); }
+}
+@keyframes smokeRiseCurling {
+  0% { transform: translateY(0) scale(0.8); opacity: 0.3; }
+  50% { transform: translateY(-25px) scale(1.2) translateX(8px); opacity: 0.9; }
+  100% { transform: translateY(-60px) scale(1.5) translateX(-8px); opacity: 0; }
+}
+@keyframes ribbonTieAnimation {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2) rotate(15deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes echoEnergyExpandingWave {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Date-Grouped Expense Diary Styles */
+.expense-date-group-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.expense-date-group-header {
+  padding: 11px 14px;
+  background: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  user-select: none;
+}
+.expense-date-group-header:active {
+  background: #f1f5f9;
+}
+.expense-date-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.expense-date-subtotal {
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.expense-date-hkd {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #059669;
+}
+.expense-date-chevron {
+  font-size: 11px;
+  color: #64748b;
+  transition: transform 0.2s;
+}
+.expense-date-group-body {
+  padding: 8px 12px;
+}
+.expense-date-chip {
+  padding: 5px 11px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.expense-date-chip.active {
+  background: #059669;
+  border-color: #059669;
+  color: #ffffff;
+}
 </style>
 </head>
 <body>
@@ -2701,20 +2875,25 @@
       <!-- TAB 2: Expense Diary & Receipt Scanner -->
       <div id="currTabPaneDiary" style="display:none;">
         
-        <!-- Expense Total Summary Card -->
-        <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:14px; box-shadow:0 6px 18px rgba(5, 150, 105, 0.22); display:flex; justify-content:space-between; align-items:center;">
+        <!-- Expense Total Summary Card (Dynamic Grand vs Daily) -->
+        <div style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:12px; box-shadow:0 6px 18px rgba(5, 150, 105, 0.22); display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-size:11.5px; opacity:0.9; font-weight:700;">ยอดรวมรายจ่ายทั้งทริป</div>
+            <div id="expenseSummaryTitle" style="font-size:11.5px; opacity:0.9; font-weight:700;">💰 ยอดรวมรายจ่ายทั้งหมด (ทุกวัน)</div>
             <div style="display:flex; align-items:baseline; gap:6px; margin:4px 0;">
-              <span id="expenseTotalHkd" style="font-size:32px; font-weight:900;">0.00</span>
+              <span id="expenseTotalHkd" style="font-size:30px; font-weight:900;">0.00</span>
               <span style="font-size:14px; font-weight:700; opacity:0.9;">HKD</span>
             </div>
             <div id="expenseTotalThb" style="font-size:12px; opacity:0.92;">≈ 0.00 บาท (ตามเรตสด)</div>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:34px; margin-bottom:2px;">🧾</div>
+          <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
             <span id="expenseCountBadge" style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.22); padding:3px 9px; border-radius:10px;">0 รายการ</span>
+            <button onclick="resetAllExpenses()" style="background:rgba(239,68,68,0.28); border:1px solid rgba(255,255,255,0.35); color:#ffffff; font-size:10px; font-weight:800; padding:3px 8px; border-radius:8px; cursor:pointer;">🗑️ ล้างทั้งหมด</button>
           </div>
+        </div>
+
+        <!-- Date Filter Pills Row -->
+        <div id="expenseDateChipsRow" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:12px; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
+          <!-- Rendered dynamically by loadAndRenderExpenses() -->
         </div>
 
         <!-- Add Button & Hidden File Input -->
@@ -2723,9 +2902,9 @@
           <span>📸</span> <span>ถ่ายรูปใบเสร็จ / บันทึกรายจ่าย</span>
         </button>
 
-        <!-- List of Expenses -->
+        <!-- List of Expenses (Grouped by Date) -->
         <div id="expenseListContainer">
-          <!-- Rendered dynamically by renderExpenses() -->
+          <!-- Rendered dynamically by loadAndRenderExpenses() -->
         </div>
 
       </div> <!-- End currTabPaneDiary -->
@@ -2758,23 +2937,33 @@
           <div style="font-size:12.5px; font-weight:800; color:#9a3412; display:flex; align-items:center; gap:6px;">
             <span>🧧</span> <span>พาสปอร์ตมูเตลู 8 วัดดังฮ่องกง 2027</span>
           </div>
-          <span id="templeStampCountBadge" style="font-size:11px; font-weight:800; background:#ea580c; color:#ffffff; padding:2px 8px; border-radius:10px;">0 / 8 วัด</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span id="templeStampCountBadge" style="font-size:11px; font-weight:800; background:#ea580c; color:#ffffff; padding:2px 8px; border-radius:10px;">0 / 8 วัด</span>
+            <button onclick="resetTempleStamps()" title="รีเซ็ตพาสปอร์ตสะสมใหม่" style="background:#fee2e2; border:1px solid #fca5a5; color:#b91c1c; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:8px; cursor:pointer;">🔄 รีเซ็ต</button>
+          </div>
         </div>
         <div id="templeStampsRow" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
           <!-- Rendered dynamically by renderTempleStamps() -->
         </div>
       </div>
       
-      <!-- Itinerary Suggestion Banner -->
-      <div style="background:linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color:#ffffff; border-radius:18px; padding:16px 18px; margin-bottom:14px; box-shadow:0 8px 20px rgba(194, 65, 12, 0.25);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div style="font-size:13.5px; font-weight:900; letter-spacing:0.3px;">💡 แนะนำการจัดเวลาไหว้พระสำหรับทริป 5 ท่าน:</div>
-          <span style="font-size:24px;">🙏</span>
+      <!-- Itinerary Suggestion Banner (Collapsible) -->
+      <div style="background:linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color:#ffffff; border-radius:18px; padding:14px 16px; margin-bottom:14px; box-shadow:0 8px 20px rgba(194, 65, 12, 0.25);">
+        <div onclick="toggleTempleItinBanner()" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">💡</span>
+            <span style="font-size:13px; font-weight:900; letter-spacing:0.3px;">แนะนำจัดเวลาไหว้พระ (ทริป 5 ท่าน)</span>
+          </div>
+          <span id="templeItinChevron" style="font-size:11.5px; font-weight:800; background:rgba(255,255,255,0.22); padding:3px 9px; border-radius:8px;">▼ กางดูตาราง 3 วัน</span>
         </div>
-        <div style="font-size:12px; line-height:1.6; opacity:0.95; display:flex; flex-direction:column; gap:4px;">
-          <div>• <b>1 ม.ค. (วันถึง):</b> เช็กอิน รร. B P แล้วเดินเพียง 8 นาทีไป <b>วัดเจ้าแม่ทับทิม ยามาเต</b> ขอพรเดินทางปลอดภัย หรือนั่งแท็กซี่ 8 นาทีไป <b>วัดเจ้าแม่กวนอิม ฮองฮำ</b> เพื่อทำพิธียืมเงินเสริมดวงปีใหม่</div>
-          <div>• <b>2 ม.ค. (วัน Disney):</b> สวนสนุก Hong Kong Disneyland เต็มวัน</div>
-          <div>• <b>3 ม.ค. (วันกลับ):</b> มูเตลูฝั่งเกาะฮ่องกง <b>วัดปักไต หว่านไจ๋ (เทพเจ้าเปลี่ยนใจ & พลิกดวง)</b> และ <b>วัดหม่านโหม่ว (ธูปขดยักษ์)</b> หรือแวะ <b>วัดแชกงหมิว / หวังต้าเซียน</b> ก่อนปิดท้ายด้วย <b>พระใหญ่เทียนถาน เกาะลันเตา</b> และไปสนามบิน</div>
+        <div id="templeItinBody" style="display:none; margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.2); font-size:12px; line-height:1.6; opacity:0.95; flex-direction:column; gap:8px;">
+          <div>• <b>1 ม.ค. (วันถึง & บ่าย):</b> เช็กอิน รร. B P แล้วนั่งแท็กซี่ 8 นาทีไป <b>วัดเจ้าแม่กวนอิม ฮองฮำ</b> ทำพิธียืมเงินเสริมทรัพย์รับโชควันแรกของปีใหม่ 2027 <i>(หรือเดิน 8 นาทีไป วัดเจ้าแม่ทับทิม ยามาเต ขอพรปลอดภัย)</i></div>
+          <div>• <b>2 ม.ค. (วัน Disney):</b> สวนสนุก Hong Kong Disneyland เต็มวันตั้งแต่เช้าถึงพลุค่ำ Momentous</div>
+          <div>• <b>3 ม.ค. (วันกลับ & เช้านองปิง):</b><br>
+            &nbsp;&nbsp;🌄 <b>เช้า (09:00 - 13:30 น.):</b> นั่งกระเช้านองปิง 360 ขึ้นยอดเขาไหว้ <b>พระใหญ่เทียนถาน & วัดโป๋หลิน</b> (วัดที่ 8) ยืนรับพลัง ณ ลาน Echo Center และทานมื้อเที่ยงที่หมู่บ้านนองปิง<br>
+            &nbsp;&nbsp;⭐ <b>บ่าย (14:00 - 17:00 น.):</b> ลงจากนองปิง แนะนำนั่งรถมา <b>วัดแชกงหมิว</b> เพื่อหมุนกังหันทองเหลือง 4 ใบพัด & ตีกลองฟ้า 3 ครั้ง นำพาโชคลาภสุขภาพดีติดตัวกลับไทยก่อนไปสนามบิน <i>(หรือเลือกแวะ วัดหวังต้าเซียน)</i><br>
+            &nbsp;&nbsp;✈️ <b>เย็น 17:30 น.:</b> มุ่งหน้าสู่สนามบินฮ่องกง (HKG) เช็กอินเดินทางกลับไทย
+          </div>
         </div>
       </div>
 
@@ -2825,7 +3014,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">紅磡觀音廟 • เก่าแก่ที่สุดแห่งหนึ่งในฮ่องกง (สร้างปี 1873)</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-hunghom" onclick="toggleTempleAccordion('hunghom')">
+              <span id="temple-arrow-hunghom">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('hunghom')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-hunghom" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 17:45 น. (เปิดทุกวัน)</div>
             <div>🚇 <b>การเดินทาง:</b><br>แท็กซี่ 8 นาที (~35 HKD) หรือ MTR Whampoa Exit B</div>
           </div>
@@ -2902,11 +3103,12 @@
               🙏 ขั้นตอนและเคล็ดลับการยืมเงินเจ้าแม่กวนอิม
             </button>
           </div>
-        </div>
-        <button class="temple-ritual-btn" onclick="openTempleRitual('hunghom')">
-          <span>🪷</span> <span>ทำพิธียืมเงิน & รับซองอั่งเปาขวัญถุงเจ้าแม่กวนอิม</span>
-        </button>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('hunghom')">
+            <span>🪷</span> <span>ทำพิธียืมเงิน & รับซองอั่งเปาขวัญถุงเจ้าแม่กวนอิม</span>
+          </button>
+        </div> <!-- End temple-body-hunghom -->
       </div>
+    </div>
 
       <!-- TEMPLE 2: วัดหวังต้าเซียน -->
       <div id="temple-card-wts" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -2942,7 +3144,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">嗇色園黃大仙祠 • ศูนย์รวมศรัทธา 3 ศาสนา (เต๋า-พุทธ-ขงจื๊อ)</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-wts" onclick="toggleTempleAccordion('wts')">
+              <span id="temple-arrow-wts">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('wts_chim')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-wts" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>07:30 – 16:30 น. (เปิดทุกวัน)</div>
             <div>🚇 <b>การเดินทาง:</b><br>MTR สายสีเขียว สถานี Wong Tai Sin (Exit B2)</div>
           </div>
@@ -3028,7 +3242,8 @@
             <span>🎀</span> <span>วิธีผูกด้ายแดง</span>
           </button>
         </div>
-      </div>
+      </div> <!-- End temple-body-wts -->
+    </div>
 
       <!-- TEMPLE 3: วัดแชกงหมิว / วัดกังหัน -->
       <div id="temple-card-chekung" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -3064,7 +3279,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">沙田車公廟 • วัดท่านแม่ทัพผู้เกรียงไกรแห่งราชวงศ์ซ่ง</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-chekung" onclick="toggleTempleAccordion('chekung')">
+              <span id="temple-arrow-chekung">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('chekung')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-chekung" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>07:00 – 18:00 น. (เปิดทุกวัน)</div>
             <div>🚇 <b>การเดินทาง:</b><br>MTR Che Kung Temple (Exit B) หรือ Tai Wai Station</div>
           </div>
@@ -3141,8 +3368,12 @@
               🙏 เคล็ดลับหมุนกังหัน 4 ใบพัด & ตีกลอง 3 ครั้ง
             </button>
           </div>
-        </div>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('chekung')">
+            <span>🌀</span> <span>หมุนกังหัน 4 ใบพัด & ตีกลองฟ้า 3 ครั้งส่งสารสวรรค์</span>
+          </button>
+        </div> <!-- End temple-body-chekung -->
       </div>
+    </div>
 
       
       <!-- TEMPLE 4: วัดปักไต หว่านไจ๋ -->
@@ -3179,7 +3410,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">灣仔玉虛宮 (北帝廟) • โบราณสถานระดับ 1 อายุกว่า 160 ปี</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-paktai" onclick="toggleTempleAccordion('paktai')">
+              <span id="temple-arrow-paktai">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('paktai')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-paktai" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 17:00 น. (เปิดทุกวัน)</div>
             <div>🚇 <b>การเดินทาง:</b><br>MTR Wan Chai (Exit A3) เดิน 8-10 นาที หรือแท็กซี่</div>
           </div>
@@ -3256,11 +3499,12 @@
               📜 เคล็ดลับไหว้ขอพรเทพเจ้าเปลี่ยนใจ & พลิกดวง
             </button>
           </div>
-        </div>
-        <button class="temple-ritual-btn" onclick="openTempleRitual('paktai')">
-          <span>☯️</span> <span>พิธีหมุนกระจกแปดทิศพลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</span>
-        </button>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('paktai')">
+            <span>☯️</span> <span>พิธีหมุนกระจกแปดทิศพลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</span>
+          </button>
+        </div> <!-- End temple-body-paktai -->
       </div>
+    </div>
 
       <!-- TEMPLE 5: วัดหม่านโหม่ว ถนนฮอลลีวูด -->
       <div id="temple-card-manmo" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -3296,7 +3540,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">上環文武廟 • วัดที่เก่าแก่และขลังที่สุดบนเกาะฮ่องกง (สร้างปี 1847)</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-manmo" onclick="toggleTempleAccordion('manmo')">
+              <span id="temple-arrow-manmo">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('manmo')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-manmo" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 18:00 น. (เปิดทุกวัน)</div>
             <div>🚇 <b>การเดินทาง:</b><br>MTR Sheung Wan (Exit A2) เดิน 8-10 นาที หรือ Central Escalator</div>
           </div>
@@ -3373,11 +3629,12 @@
               📜 เคล็ดลับการไหว้สัมผัสพู่กันทองเหลือง & เทพกวนอู
             </button>
           </div>
-        </div>
-        <button class="temple-ritual-btn" onclick="openTempleRitual('manmo')">
-          <span>🕯️</span> <span>จุดธูปขดยักษ์ขอพรปัญญา การงาน & สอบแข่งขัน</span>
-        </button>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('manmo')">
+            <span>🕯️</span> <span>จุดธูปขดยักษ์ขอพรปัญญา การงาน & สอบแข่งขัน</span>
+          </button>
+        </div> <!-- End temple-body-manmo -->
       </div>
+    </div>
 
       <!-- TEMPLE 6: วัดเจ้าแม่ทับทิม ทินหัว ยามาเต -->
       <div id="temple-card-tinhau" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -3413,7 +3670,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">油麻地天后廟 • อารามโบราณสถานระดับ 1 ร่มรื่นใต้ต้นไทรใหญ่ใจกลางเกาลูน</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-tinhau" onclick="toggleTempleAccordion('tinhau')">
+              <span id="temple-arrow-tinhau">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('tinhau')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-tinhau" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>09:00 – 17:00 น. (เปิดทุกวัน)</div>
             <div>🚶 <b>การเดินทาง:</b><br>เดินจาก รร. B P เพียง 800 ม. (8 นาที) ผ่านถนน Nathan Rd</div>
           </div>
@@ -3502,11 +3771,12 @@
               📜 เคล็ดลับการขอพรเดินทางปลอดภัย & ค้าขายคล่องตัว
             </button>
           </div>
-        </div>
-        <button class="temple-ritual-btn" onclick="openTempleRitual('tinhau')">
-          <span>🎗️</span> <span>ผูกริบบิ้นมงคลขอพรเดินทางปลอดภัยตลอดทริป</span>
-        </button>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('tinhau')">
+            <span>🎗️</span> <span>ผูกริบบิ้นมงคลขอพรเดินทางปลอดภัยตลอดทริป</span>
+          </button>
+        </div> <!-- End temple-body-tinhau -->
       </div>
+    </div>
 
       <!-- TEMPLE 7: วัดเจ้าแม่กวนอิม รีพัลส์เบย์ -->
       <div id="temple-card-repulse" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -3538,11 +3808,23 @@
         <div style="padding:16px;">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
             <div>
-              <div style="font-size:17px; font-weight:900; color:#0f172a;">4. วัดเจ้าแม่กวนอิม รีพัลส์เบย์ (Repulse Bay)</div>
+              <div style="font-size:17px; font-weight:900; color:#0f172a;">7. วัดเจ้าแม่กวนอิม รีพัลส์เบย์ (Repulse Bay)</div>
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">淺水灣觀音廟 • ริมหาดทรายชื่อดังฝั่งเกาะฮ่องกงตอนใต้</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-repulse" onclick="toggleTempleAccordion('repulse')">
+              <span id="temple-arrow-repulse">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('repulse')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-repulse" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>08:00 – 18:00 น. (เปิดทุกวัน)</div>
             <div>🚌 <b>การเดินทาง:</b><br>รถบัสสาย 6, 6X, 260 หรือแท็กซี่ข้ามเกาะ ~20 นาที</div>
           </div>
@@ -3619,11 +3901,12 @@
               🙏 เคล็ดลับข้ามสะพานต่ออายุ & ลูบเคราไฉ่ซิงเอี้ย
             </button>
           </div>
-        </div>
-        <button class="temple-ritual-btn" onclick="openTempleRitual('repulse')">
-          <span>🌉</span> <span>ข้ามสะพานต่ออายุ (+3 วัน) & ลูบถุงทองไฉ่ซิงเอี้ย</span>
-        </button>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('repulse')">
+            <span>🌉</span> <span>ข้ามสะพานต่ออายุ (+3 วัน) & ลูบถุงทองไฉ่ซิงเอี้ย</span>
+          </button>
+        </div> <!-- End temple-body-repulse -->
       </div>
+    </div>
 
       <!-- TEMPLE 5: วัดพระใหญ่เทียนถาน & วัดโป่หลิน (นองปิง) -->
       <div id="temple-card-polin" class="temple-item-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; overflow:hidden; margin-bottom:16px; box-shadow:0 3px 12px rgba(0,0,0,0.04);">
@@ -3659,7 +3942,19 @@
               <div style="font-size:12.5px; color:#64748b; font-weight:600;">大嶼山天壇大佛 寶蓮禪寺 • ศูนย์รวมจิตวิญญาณแห่งเกาะลันเตา</div>
             </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
+                    <!-- Accordion Toggle & Quick Ritual Row -->
+          <div class="temple-header-action-row">
+            <button class="temple-toggle-btn" id="temple-btn-polin" onclick="toggleTempleAccordion('polin')">
+              <span id="temple-arrow-polin">▼ ดูวิธีไหว้ & วิธีเดินทาง</span>
+            </button>
+            <button class="temple-quick-ritual-btn" onclick="openTempleRitual('buddha')">
+              <span>🧧</span> <span>ทำพิธีมูเตลู</span>
+            </button>
+          </div>
+
+          <!-- Collapsible Temple Body -->
+          <div id="temple-body-polin" class="temple-accordion-body" style="display:none; margin-top:12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 12px; background:#f8fafc; padding:10px; border-radius:12px; font-size:11.5px; color:#334155;">
             <div>⏰ <b>เวลาเปิด-ปิด:</b><br>10:00 – 17:30 น. (เปิดทุกวัน)</div>
             <div>🚠 <b>การเดินทาง:</b><br>กระเช้า Ngong Ping 360 จาก Tung Chung (~25 นาที)</div>
           </div>
@@ -3736,8 +4031,12 @@
               🚠 เปิดระบบนำทาง & ฝากกระเป๋านองปิง 360
             </button>
           </div>
-        </div>
+          <button class="temple-ritual-btn" onclick="openTempleRitual('buddha')">
+            <span>✨</span> <span>ยืนจุดสะท้อนเสียง Echo Center รับคลื่นพลังจักรวาลฟ้าดิน</span>
+          </button>
+        </div> <!-- End temple-body-polin -->
       </div>
+    </div>
 
     </div>
   </div>
@@ -7349,10 +7648,67 @@ function closeSubInfo() {
 // ==========================================
 // 8 TEMPLES STAMP RALLY & INTERACTIVE RITUALS
 // ==========================================
+// =====================================================================
+// 🛕 TEMPLE ACCORDION & ITINERARY LOGIC
+// =====================================================================
+const ALL_TEMPLE_KEYS = ['hunghom', 'wts', 'chekung', 'paktai', 'manmo', 'tinhau', 'repulse', 'polin'];
+let currentOpenTemple = null;
+
+function toggleTempleAccordion(key) {
+  const body = document.getElementById('temple-body-' + key);
+  const btn = document.getElementById('temple-btn-' + key);
+  const arrow = document.getElementById('temple-arrow-' + key);
+  if (!body) return;
+
+  const isCurrentlyOpen = body.style.display !== 'none';
+
+  // Single Accordion rule: Close any other open temple first!
+  ALL_TEMPLE_KEYS.forEach(k => {
+    const b = document.getElementById('temple-body-' + k);
+    const bt = document.getElementById('temple-btn-' + k);
+    const ar = document.getElementById('temple-arrow-' + k);
+    if (b) b.style.display = 'none';
+    if (bt) bt.classList.remove('active');
+    if (ar) ar.innerHTML = '▼ ดูวิธีไหว้ & วิธีเดินทาง';
+  });
+
+  if (!isCurrentlyOpen) {
+    body.style.display = 'block';
+    if (btn) btn.classList.add('active');
+    if (arrow) arrow.innerHTML = '▲ ยุบพับเก็บเนื้อหา';
+    currentOpenTemple = key;
+    // Scroll smoothly to this temple card
+    const card = document.getElementById('temple-card-' + key);
+    if (card) {
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  } else {
+    currentOpenTemple = null;
+  }
+}
+
+function toggleTempleItinBanner() {
+  const body = document.getElementById('templeItinBody');
+  const chevron = document.getElementById('templeItinChevron');
+  if (!body) return;
+  if (body.style.display === 'none' || body.style.display === '') {
+    body.style.display = 'flex';
+    if (chevron) chevron.innerHTML = '▲ พับเก็บ';
+  } else {
+    body.style.display = 'none';
+    if (chevron) chevron.innerHTML = '▼ กางดูตาราง 3 วัน';
+  }
+}
+
+// =====================================================================
+// 🧧 8 TEMPLES MUTELU STAMP PASSPORT & WOW RITUALS
+// =====================================================================
 const TEMPLE_STAMP_CONFIG = [
   { id: 'hunghom', name: 'ฮองฮำ', icon: '🪷', ritual: 'hunghom' },
   { id: 'wts_chim', name: 'หวังต้าเซียน', icon: '🎋', ritual: 'wts_chim' },
-  { id: 'chekung', name: 'แชกงหมิว', icon: '🎡', ritual: 'chekung' },
+  { id: 'chekung', name: 'แชกงหมิว', icon: '🌀', ritual: 'chekung' },
   { id: 'paktai', name: 'ปักไต', icon: '☯️', ritual: 'paktai' },
   { id: 'manmo', name: 'หม่านโหม่ว', icon: '🕯️', ritual: 'manmo' },
   { id: 'tinhau', name: 'ทินหัว', icon: '🎗️', ritual: 'tinhau' },
@@ -7377,6 +7733,13 @@ function saveTempleStamp(templeId) {
   } catch(e) {}
 }
 
+function resetTempleStamps() {
+  if (confirm('ต้องการรีเซ็ตตราประทับพาสปอร์ตทั้ง 8 วัด เพื่อเริ่มเล่นสะสมใหม่หรือไม่?')) {
+    localStorage.removeItem('hk_temple_stamps');
+    renderTempleStamps();
+  }
+}
+
 function renderTempleStamps() {
   const row = document.getElementById('templeStampsRow');
   const badge = document.getElementById('templeStampCountBadge');
@@ -7384,7 +7747,7 @@ function renderTempleStamps() {
 
   const stamps = getTempleStamps();
   const count = Object.keys(stamps).length;
-  if (badge) badge.innerText = `${count} / 8 วัด`;
+  if (badge) badge.innerText = count + ' / 8 วัด';
 
   row.innerHTML = TEMPLE_STAMP_CONFIG.map(t => {
     const isStamped = !!stamps[t.id];
@@ -7402,44 +7765,74 @@ function renderTempleStamps() {
 function closeTempleRitual() {
   const overlay = document.getElementById('templeRitualOverlay');
   if (overlay) overlay.classList.remove('active');
+  // Clean up device motion listener if active
+  if (window._chimMotionHandler) {
+    window.removeEventListener('devicemotion', window._chimMotionHandler);
+    window._chimMotionHandler = null;
+  }
 }
+
+// ---------------------------------------------------------------------
+// 8 WOW RITUALS MODAL ROUTER
+// ---------------------------------------------------------------------
+let drumHitCounter = 0;
+let ribbonKnotStep = 0;
+let bridgeWalkStep = 0;
+let caiShenSwipeStep = 0;
+let echoHoldTimer = null;
 
 function openTempleRitual(ritualKey) {
   const overlay = document.getElementById('templeRitualOverlay');
   const content = document.getElementById('templeRitualContent');
   if (!overlay || !content) return;
 
+  // 1. วัดเจ้าแม่กวนอิม ฮองฮำ: ยืมเงิน & ซองอั่งเปา 888,000,000 HKD
   if (ritualKey === 'hunghom') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🪷</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่กวนอิม ฮองฮำ</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">พิธียืมเงินเจ้าแม่กวนอิม & รับซองอั่งเปาขวัญถุง</div>
+      <div style="font-size:36px; margin-bottom:4px;">🪷</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดเจ้าแม่กวนอิม ฮองฮำ</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">พิธียืมเงินเจ้าแม่กวนอิม & รับอั่งเปาขวัญถุงมงคล 2027</div>
       
-      <div id="angpaoBox" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color:#fef08a; border-radius:16px; padding:24px 16px; cursor:pointer; box-shadow:0 8px 20px rgba(220, 38, 38, 0.35); border:2px solid #facc15; transition:transform 0.2s;" onclick="openAngpaoEffect()">
-        <div style="font-size:48px; margin-bottom:8px;">🧧</div>
-        <div style="font-size:18px; font-weight:900; letter-spacing:1px;">แตะเพื่อเปิดซองอั่งเปามงคล</div>
-        <div style="font-size:11px; opacity:0.9; margin-top:4px;">(ขอยืมเงินเสริมทรัพย์รับปีใหม่ 2027)</div>
+      <div id="angpaoStage" style="position:relative; min-height:190px; display:flex; align-items:center; justify-content:center;">
+        <div id="angpaoEnvelope" onclick="openAngpaoEffect()" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color:#fef08a; border-radius:18px; padding:24px 20px; cursor:pointer; box-shadow:0 10px 25px rgba(220, 38, 38, 0.4); border:2.5px solid #facc15; transition:transform 0.3s; text-align:center; width:88%; max-width:300px; margin:0 auto;">
+          <div style="font-size:52px; margin-bottom:6px; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));">🧧</div>
+          <div style="font-size:17px; font-weight:900; letter-spacing:0.5px;">แตะเพื่อเปิดซองอั่งเปามงคล</div>
+          <div style="font-size:11.5px; opacity:0.92; margin-top:4px;">(ยืมเงินเสริมทรัพย์รับโชคปีใหม่ 2027)</div>
+        </div>
       </div>
     `;
-  } else if (ritualKey === 'wts_chim') {
+  }
+  // 2. วัดหวังต้าเซียน: เซียมซีดิจิทัล & ตรวจจับการเขย่ามือถือจริง
+  else if (ritualKey === 'wts_chim') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🎋</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดหวังต้าเซียน (Wong Tai Sin)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">เสี่ยงเซียมซีนำโชคดิจิทัลประจำปี 2027</div>
+      <div style="font-size:36px; margin-bottom:4px;">🎋</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดหวังต้าเซียน (Wong Tai Sin)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">เซียมซีนำโชคดิจิทัล 2027 (เขย่ามือถือจริงได้)</div>
       
-      <div id="chimBox" style="background:#fffbeb; border:2px dashed #f59e0b; border-radius:16px; padding:20px; margin-bottom:14px;">
-        <div id="chimIcon" style="font-size:48px; margin-bottom:8px; transition:transform 0.3s;">🎋</div>
-        <div style="font-size:13px; color:#78350f; font-weight:700;">ตั้งจิตอธิษฐานแล้วแตะปุ่มเขย่าเซียมซี</div>
-        <button class="temple-ritual-btn" style="margin-top:12px; background:#d97706;" onclick="shakeChimEffect()">
-          <span>🎋</span> <span>เขย่ากระบอกเซียมซี</span>
+      <div id="chimStage" style="background:#fffbeb; border:2px dashed #f59e0b; border-radius:18px; padding:22px 16px; margin-bottom:14px; text-align:center;">
+        <div id="chimCylinder" style="font-size:54px; margin-bottom:6px; display:inline-block; transition:transform 0.15s;">
+          🎋
+        </div>
+        <div id="chimPromptText" style="font-size:12.5px; color:#78350f; font-weight:700; line-height:1.4;">
+          📱 ตั้งจิตอธิษฐาน แล้ว <b>"เขย่าโทรศัพท์ของคุณ"</b><br><span style="font-size:11px; opacity:0.85;">(หรือแตะปุ่มเขย่าด้านล่าง)</span>
+        </div>
+        <button id="chimShakeBtn" class="temple-ritual-btn" style="margin-top:14px; background:#d97706;" onclick="shakeChimEffect()">
+          <span>🎋</span> <span>แตะเขย่ากระบอกเซียมซี</span>
         </button>
       </div>
+
+      <button class="action-shortcut-btn" style="background:#e11d48; width:100%; justify-content:center;" onclick="openTempleRitual('wts_redthread')">
+        <span>🎀</span> <span>ดูขั้นตอนผูกด้ายแดงเฒ่าจันทรา (ขอคู่/มิตรภาพ)</span>
+      </button>
     `;
-  } else if (ritualKey === 'wts_redthread') {
+    setupPhoneShakeDetector();
+  }
+  // วัดหวังต้าเซียน: ผูกด้ายแดงเฒ่าจันทรา
+  else if (ritualKey === 'wts_redthread') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🎀</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วิธีผูกด้ายแดงเฒ่าจันทรา (เทพหยุกลก)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ท่าประสานนิ้ว 4 สเต็ปขอพรคู่ครอง & มิตรภาพ</div>
+      <div style="font-size:36px; margin-bottom:4px;">🎀</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วิธีผูกด้ายแดงเฒ่าจันทรา (เทพหยุกลก)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ท่าประสานนิ้ว 4 สเต็ปขอพรคู่ครอง & มิตรภาพที่ดี</div>
       
       <div style="text-align:left; background:#fff1f2; border:1px solid #fecdd3; border-radius:14px; padding:12px 14px; font-size:12px; line-height:1.6; color:#9f1239;">
         <div style="margin-bottom:6px;"><b>1. กางมือทั้งสองข้าง:</b> นิ้วโป้งกดที่ปลายนิ้วนางทั้งสองข้าง</div>
@@ -7451,101 +7844,198 @@ function openTempleRitual(ritualKey) {
         <span>✔️</span> <span>เข้าใจแล้ว & ประทับตราสำเร็จ</span>
       </button>
     `;
-  } else if (ritualKey === 'chekung') {
+  }
+  // 3. วัดแชกงหมิว: กังหัน 4 ใบพัด & ตีกลองฟ้า 3 ครั้ง
+  else if (ritualKey === 'chekung') {
+    drumHitCounter = 0;
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🎡</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดแชกงหมิว (วัดกังหันนำโชค)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">หมุนกังหัน 4 ทิศด้วยมือซ้าย & เคาะกลอง 3 ครั้ง</div>
+      <div style="font-size:36px; margin-bottom:4px;">🌀</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดแชกงหมิว (Che Kung Temple)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">หมุนกังหัน 4 ใบพัด & ตีกลองฟ้า 3 ครั้งส่งสารสวรรค์</div>
       
-      <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="windmillEl" style="font-size:54px; display:inline-block; transition:transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); cursor:pointer;" onclick="spinWindmillEffect()">
-          ☸️
+      <div id="chekungStage" style="background:#fffbeb; border:2px solid #fde68a; border-radius:18px; padding:18px 14px; margin-bottom:12px; text-align:center;">
+        <!-- Phase 1: Windmill -->
+        <div id="chekungPhaseWindmill">
+          <div id="windmillFan" onclick="spinWindmillEffect()" style="font-size:56px; display:inline-block; cursor:pointer; transition:transform 3s cubic-bezier(0.2, 0.9, 0.3, 1);">
+            🌀
+          </div>
+          <div style="font-size:13px; font-weight:800; color:#78350f; margin-top:8px;">สเต็ปที่ 1: แตะที่กังหันทองเหลือง</div>
+          <div style="font-size:11px; color:#92400e; margin-top:2px;">(หมุนกังหันเพื่อพัดสิ่งไม่ดีออกไป พัดพาโชคลาภเข้าตัว)</div>
+          <button class="temple-ritual-btn" style="margin-top:12px; background:#ca8a04;" onclick="spinWindmillEffect()">
+            <span>🌀</span> <span>แตะหมุนกังหันนำโชค</span>
+          </button>
         </div>
-        <div style="font-size:12px; color:#991b1b; font-weight:700; margin-top:8px;">แตะที่กังหันเพื่อหมุนตามเข็มนาฬิกา</div>
+
+        <!-- Phase 2: Drum (Initially hidden) -->
+        <div id="chekungPhaseDrum" style="display:none;">
+          <div id="chekungDrumEl" onclick="hitDrumStep()" style="font-size:58px; display:inline-block; cursor:pointer; margin-bottom:6px; transition:transform 0.15s;">
+            🥁
+          </div>
+          <div style="font-size:14px; font-weight:900; color:#15803d;" id="drumTitleText">สเต็ปที่ 2: เคาะกลองฟ้า 3 ครั้ง</div>
+          <div style="font-size:11.5px; color:#166534; margin:4px 0 10px;" id="drumSubText">แตะที่หน้ากลองจริงๆ 3 ครั้งเพื่อส่งสารคำขอถึงสวรรค์</div>
+          
+          <div style="display:flex; justify-content:center; gap:8px; margin-bottom:12px;">
+            <span id="drumLight1" style="width:30px; height:30px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#64748b;">1</span>
+            <span id="drumLight2" style="width:30px; height:30px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#64748b;">2</span>
+            <span id="drumLight3" style="width:30px; height:30px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#64748b;">3</span>
+          </div>
+
+          <button id="drumHitBtn" class="temple-ritual-btn" style="background:#15803d; margin-top:0;" onclick="hitDrumStep()">
+            <span>🥁</span> <span>แตะเคาะกลองสวรรค์</span>
+          </button>
+        </div>
       </div>
-      <button id="drumBtn" class="temple-ritual-btn" style="background:#b91c1c;" onclick="hitDrumEffect()">
-        <span>🥁</span> <span>เคาะกลอง 3 ครั้ง (ปัดเป่าอุปสรรค)</span>
-      </button>
     `;
-  } else if (ritualKey === 'paktai') {
+  }
+  // 4. วัดปักไต หว่านไจ๋: กระจกแปดทิศ 3D พลิกดวงชะตา
+  else if (ritualKey === 'paktai') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">☯️</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดปักไต หว่านไจ๋ (Pak Tai Temple)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">พิธีเทพเจ้าเปลี่ยนใจ & หมุนกระจกแปดทิศพลิกดวง</div>
+      <div style="font-size:36px; margin-bottom:4px;">☯️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดปักไต หว่านไจ๋ (Wan Chai)</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">กระจกแปดทิศ 3D พลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</div>
       
-      <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="baguaEl" style="font-size:50px; display:inline-block; transition:transform 1.2s ease; cursor:pointer;" onclick="spinBaguaEffect()">
-          🪞
+      <div style="background:#f8fafc; border:2px solid #cbd5e1; border-radius:18px; padding:22px 14px; margin-bottom:12px; text-align:center;">
+        <div id="baguaMirror" onclick="spinBaguaEffect()" style="font-size:62px; display:inline-block; cursor:pointer; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.25)); transition:transform 1.2s cubic-bezier(0.2, 0.8, 0.3, 1);">
+          ☯️
         </div>
-        <div style="font-size:12px; color:#334155; font-weight:700; margin-top:8px;">แตะกระจกแปดทิศเพื่อพลิกดวงชะตา</div>
+        <div id="baguaText" style="font-size:13px; font-weight:800; color:#0f172a; margin-top:10px;">
+          แตะที่กระจกแปดทิศเพื่อหมุนพลิกเปลี่ยนชะตาชีวิต
+        </div>
+        <div style="font-size:11px; color:#64748b; margin-top:2px;">(สลายพลังเคราะห์ ปัดเป่าสิ่งอัปมงคล เสริมดวงปีใหม่)</div>
       </div>
       <button class="temple-ritual-btn" style="background:#0f172a;" onclick="spinBaguaEffect()">
-        <span>☯️</span> <span>หมุนพลิกดวงชะตา (เปลี่ยนร้ายกลายเป็นดี)</span>
+        <span>☯️</span> <span>หมุนพลิกดวงชะตา 3D</span>
       </button>
     `;
-  } else if (ritualKey === 'manmo') {
+  }
+  // 5. วัดหม่านโหม่ว: จุดธูปขดยักษ์ & สัมผัสพู่กันทองคำปัญญา
+  else if (ritualKey === 'manmo') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🕯️</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดหม่านโหม่ว (Man Mo Temple)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">จุดธูปขดยักษ์ขอพรปัญญา การงาน & ธุรกิจรุ่งเรือง</div>
+      <div style="font-size:36px; margin-bottom:4px;">🕯️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดหม่านโหม่ว ถนนฮอลลีวูด</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">จุดธูปขดยักษ์ถวายเทพ & สัมผัสพู่กันทองคำแห่งปัญญา</div>
       
-      <div style="background:#fffbeb; border:1.5px solid #fef3c7; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="incenseEl" style="font-size:50px; display:inline-block; transition:all 0.5s;">
+      <div style="background:#fffbeb; border:2px solid #fde68a; border-radius:18px; padding:18px 14px; margin-bottom:12px; text-align:center;">
+        <div id="incenseCoil" style="font-size:54px; display:inline-block; transition:all 0.4s;">
           🌀
         </div>
-        <div id="incenseSmoke" style="font-size:18px; opacity:0; transition:opacity 0.6s;">☁️✨ คำอธิษฐานส่งถึงสวรรค์</div>
-        <div style="font-size:12px; color:#92400e; font-weight:700; margin-top:8px;">แตะจุดธูปขดยักษ์ถวายเทพหม่านไช่ซิน & กวนอู</div>
+        <div id="incenseSmoke" style="font-size:13px; font-weight:800; color:#b45309; min-height:22px; margin-top:6px;">
+          แตะเพื่อจุดไฟที่ปลายธูปขดสีแดง
+        </div>
+        <div style="font-size:11px; color:#92400e; margin-top:2px;">(ส่งคำอธิษฐานขึ้นสู่สรวงสวรรค์ตลอดวันคืน)</div>
+        
+        <div id="wisdomBrushBox" style="display:none; margin-top:14px; background:#ffffff; border-radius:12px; padding:10px; border:1px solid #fde68a;">
+          <div style="font-size:42px; cursor:pointer;" onclick="touchBrushStep()">🖌️✨</div>
+          <div style="font-size:12px; font-weight:800; color:#b45309;">แตะสัมผัสพู่กันทองคำ "หม่านไช่ซิน"</div>
+          <div style="font-size:10.5px; color:#64748b;">(ขอพรสอบผ่าน ชนะการแข่งขัน และธุรกิจก้าวไกล)</div>
+        </div>
       </div>
-      <button class="temple-ritual-btn" style="background:#b45309;" onclick="lightIncenseEffect()">
-        <span>🕯️</span> <span>จุดธูปขดขอพรปัญญา & สัมผัสปากกาทอง</span>
+      <button id="incenseBtn" class="temple-ritual-btn" style="background:#b45309;" onclick="lightIncenseEffect()">
+        <span>🕯️</span> <span>จุดธูปขดถวายสวรรค์</span>
       </button>
     `;
-  } else if (ritualKey === 'tinhau') {
+  }
+  // 6. วัดเจ้าแม่ทับทิม ยามาเต: ผูกริบบิ้น 3 ปมมงคล
+  else if (ritualKey === 'tinhau') {
+    ribbonKnotStep = 0;
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🎗️</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่ทับทิม ทินหัว ยามาเต</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ผูกริบบิ้นมงคลขอพรเดินทางปลอดภัยตลอด 3 วัน</div>
+      <div style="font-size:36px; margin-bottom:4px;">🎗️</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดเจ้าแม่ทับทิม ทินหัว ยามาเต</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">ผูกริบบิ้นแดง 3 ปมมงคล คุ้มครองการเดินทาง 3 วัน</div>
       
-      <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="ribbonEl" style="font-size:50px; display:inline-block; transition:transform 0.4s;">
+      <div style="background:#f0fdf4; border:2px solid #bbf7d0; border-radius:18px; padding:18px 14px; margin-bottom:12px; text-align:center;">
+        <div id="ribbonIcon" style="font-size:52px; display:inline-block; transition:transform 0.3s;">
           🎗️
         </div>
-        <div style="font-size:12px; color:#166534; font-weight:700; margin-top:8px;">แตะผูกริบบิ้นแดงถวายเจ้าแม่ทับทิมแห่งท้องทะเล</div>
+        <div id="ribbonStepText" style="font-size:13px; font-weight:800; color:#15803d; margin-top:6px;">
+          แตะผูกปมที่ 1: เดินทางแคล้วคลาดปลอดภัย
+        </div>
+        <div style="font-size:11px; color:#166534; margin-top:2px;">(ขอพรเจ้าแม่ทับทิมคุ้มครองทุกการเดินทาง)</div>
+        
+        <div style="display:flex; justify-content:center; gap:8px; margin-top:12px;">
+          <span id="ribbonKnot1" style="width:28px; height:28px; border-radius:50%; background:#dcfce7; color:#15803d; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #86efac;">1</span>
+          <span id="ribbonKnot2" style="width:28px; height:28px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">2</span>
+          <span id="ribbonKnot3" style="width:28px; height:28px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">3</span>
+        </div>
       </div>
-      <button class="temple-ritual-btn" style="background:#15803d;" onclick="tieRibbonEffect()">
-        <span>🎗️</span> <span>ผูกริบบิ้นคุ้มครองการเดินทาง</span>
+      <button id="ribbonBtn" class="temple-ritual-btn" style="background:#15803d;" onclick="tieRibbonStep()">
+        <span>🎗️</span> <span>แตะผูกปมมงคล</span>
       </button>
     `;
-  } else if (ritualKey === 'repulse') {
+  }
+  // 7. วัดเจ้าแม่กวนอิม รีพัลส์เบย์: สะพานต่ออายุ & ลูบก้อนทองไฉ่ซิงเอี้ย
+  else if (ritualKey === 'repulse') {
+    bridgeWalkStep = 0;
+    caiShenSwipeStep = 0;
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">🌉</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">วัดเจ้าแม่กวนอิม รีพัลส์เบย์</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">เดินข้ามสะพานต่ออายุ & ลูบถุงทองไฉ่ซิงเอี้ย</div>
+      <div style="font-size:36px; margin-bottom:4px;">🌉</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">วัดเจ้าแม่กวนอิม รีพัลส์เบย์</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">ก้าวข้ามสะพานต่ออายุ (+3 วัน) & ลูบก้อนทองไฉ่ซิงเอี้ย</div>
       
-      <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="bridgeSteps" style="font-size:42px; display:flex; justify-content:center; gap:8px;">
-          <span>🦶</span><span>🌉</span><span>💰</span>
+      <div style="background:#eff6ff; border:2px solid #bfdbfe; border-radius:18px; padding:18px 14px; margin-bottom:12px; text-align:center;">
+        <!-- Phase 1: Bridge -->
+        <div id="repulseBridgePhase">
+          <div style="font-size:46px; margin-bottom:4px;">🌉</div>
+          <div id="bridgeStepTitle" style="font-size:13px; font-weight:800; color:#1e40af;">
+            สเต็ปที่ 1: ก้าวเท้าซ้ายขึ้นสะพาน (ห้ามเดินย้อนกลับ)
+          </div>
+          <div id="bridgeStepCounter" style="font-size:11px; color:#3b82f6; margin:4px 0 10px;">
+            ก้าวไปข้างหน้าเพื่อต่ออายุขัย (+3 วัน 3 คืน)
+          </div>
+          <div style="display:flex; justify-content:center; gap:8px; margin-bottom:12px;">
+            <span id="stepIcon1" style="width:32px; height:32px; border-radius:50%; background:#dbeafe; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #93c5fd;">👣 1</span>
+            <span id="stepIcon2" style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">👣 2</span>
+            <span id="stepIcon3" style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">👣 3</span>
+          </div>
+          <button id="bridgeWalkBtn" class="temple-ritual-btn" style="background:#1d4ed8; margin-top:0;" onclick="walkBridgeStep()">
+            <span>👣</span> <span>ก้าวเท้าข้ามสะพาน</span>
+          </button>
         </div>
-        <div id="bridgeText" style="font-size:12px; color:#1e40af; font-weight:700; margin-top:8px;">ก้าวเท้าซ้ายขึ้นสะพาน ห้ามเดินย้อนกลับ</div>
+
+        <!-- Phase 2: Cai Shen Gold (Initially hidden) -->
+        <div id="repulseGoldPhase" style="display:none;">
+          <div id="caiShenGoldEl" onclick="swipeGoldStep()" style="font-size:58px; display:inline-block; cursor:pointer; margin-bottom:6px; transition:transform 0.2s;">
+            💰
+          </div>
+          <div id="goldTitleText" style="font-size:13.5px; font-weight:900; color:#b45309;">
+            สเต็ปที่ 2: ลูบก้อนทองคำไฉ่ซิงเอี้ย 3 ครั้ง
+          </div>
+          <div id="goldSubText" style="font-size:11px; color:#78350f; margin:4px 0 10px;">
+            แตะลูบก้อนทองคำขึ้น เพื่อกวาดเงินทองเข้ากระเป๋า
+          </div>
+          <div style="display:flex; justify-content:center; gap:8px; margin-bottom:12px;">
+            <span id="goldIcon1" style="width:32px; height:32px; border-radius:50%; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #fcd34d;">1</span>
+            <span id="goldIcon2" style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">2</span>
+            <span id="goldIcon3" style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid #cbd5e1;">3</span>
+          </div>
+          <button id="goldSwipeBtn" class="temple-ritual-btn" style="background:#d97706; margin-top:0;" onclick="swipeGoldStep()">
+            <span>💰</span> <span>แตะลูบรับทรัพย์เข้ากระเป๋า</span>
+          </button>
+        </div>
       </div>
-      <button class="temple-ritual-btn" style="background:#1d4ed8;" onclick="crossBridgeEffect()">
-        <span>🌉</span> <span>ก้าวข้ามสะพานต่ออายุ (+3 วัน) & รับถุงทอง</span>
-      </button>
     `;
-  } else if (ritualKey === 'buddha') {
+  }
+  // 8. พระใหญ่เทียนถาน & วัดโป่หลิน: จุดรับพลังฟ้าดิน Echo Center
+  else if (ritualKey === 'buddha') {
     content.innerHTML = `
-      <div style="font-size:36px; margin-bottom:6px;">✨</div>
-      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">พระใหญ่เทียนถาน (Ngong Ping 360)</div>
-      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:14px;">ยืนรับพลังจักรวาล ณ แผ่นหินวงกลม Echo Center</div>
+      <div style="font-size:36px; margin-bottom:4px;">✨</div>
+      <div style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:2px;">พระใหญ่เทียนถาน & วัดโป่หลิน</div>
+      <div style="font-size:12px; color:#c2410c; font-weight:700; margin-bottom:12px;">จุดสะท้อนเสียง Echo Center รับคลื่นพลังจักรวาลฟ้าดิน</div>
       
-      <div style="background:#faf5ff; border:1.5px solid #e9d5ff; border-radius:16px; padding:18px; margin-bottom:12px;">
-        <div id="echoCircleEl" style="width:70px; height:70px; border-radius:50%; border:3px solid #9333ea; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:30px; transition:all 0.5s;">
-          🧘
+      <div style="background:#faf5ff; border:2px solid #e9d5ff; border-radius:18px; padding:20px 14px; margin-bottom:12px; text-align:center;">
+        <div id="echoCircleStage" style="position:relative; width:90px; height:90px; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+          <div id="echoWaveRing" style="position:absolute; inset:0; border-radius:50%; border:2px solid #a855f7; opacity:0; transition:all 0.5s;"></div>
+          <div id="echoCenterIcon" style="width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg, #9333ea 0%, #6b21a8 100%); color:#ffffff; display:flex; align-items:center; justify-content:center; font-size:32px; cursor:pointer; box-shadow:0 6px 18px rgba(147, 51, 234, 0.35);">
+            🧘
+          </div>
         </div>
-        <div style="font-size:12px; color:#6b21a8; font-weight:700; margin-top:8px;">จุดกึ่งกลางรับพลังสะท้อนเสียงถึงสวรรค์</div>
+        <div id="echoStatusText" style="font-size:13px; font-weight:800; color:#6b21a8; margin-top:10px;">
+          แตะปุ่มเพื่อเริ่มรับคลื่นพลังสะท้อนเสียงฟ้าดิน
+        </div>
+        <div id="echoPercentText" style="font-size:11px; color:#9333ea; margin-top:2px;">(ยืนหงายฝ่ามือทำสมาธิ ณ ศูนย์กลางวงกลมหิน)</div>
       </div>
-      <button class="temple-ritual-btn" style="background:#7e22ce;" onclick="receiveEchoEnergyEffect()">
-        <span>✨</span> <span>ยืนหงายฝ่ามือรับพลังบวกสูงสุด</span>
+      <button id="echoStartBtn" class="temple-ritual-btn" style="background:#7e22ce;" onclick="startEchoEnergyFlow()">
+        <span>✨</span> <span>แตะเปิดรับพลังฟ้าดิน</span>
       </button>
     `;
   }
@@ -7553,141 +8043,360 @@ function openTempleRitual(ritualKey) {
   overlay.classList.add('active');
 }
 
-// Interactive Ritual Effects
+// ---------------------------------------------------------------------
+// EFFECT IMPLEMENTATIONS
+// ---------------------------------------------------------------------
+
+// 1. Angpao Fountain Effect
 function openAngpaoEffect() {
-  const box = document.getElementById('angpaoBox');
-  if (!box) return;
-  box.style.transform = 'scale(1.05)';
-  setTimeout(() => {
-    box.innerHTML = `
-      <div style="font-size:42px; margin-bottom:6px;">🎉💰✨</div>
-      <div style="font-size:22px; font-weight:900; color:#fef08a;">ยินดีด้วย! รับเงินขวัญถุง</div>
-      <div style="font-size:28px; font-weight:900; color:#ffffff; margin:6px 0;">888,000,000 HKD</div>
-      <div style="font-size:12px; opacity:0.95; line-height:1.5;">ขอพรสำเร็จ! เจ้าแม่กวนอิมประทานทรัพย์ นำพาความมั่งคั่ง ร่ำรวย และโชคลาภตลอดปี 2027</div>
-      <div style="background:rgba(0,0,0,0.25); border-radius:10px; padding:6px 10px; font-size:11px; margin-top:10px; color:#fef08a;">
-        ✔️ บันทึกตราประทับวัดฮองฮำลงพาสปอร์ตแล้ว!
-      </div>
+  const env = document.getElementById('angpaoEnvelope');
+  const stage = document.getElementById('angpaoStage');
+  if (!env || !stage) return;
+
+  if (navigator.vibrate) navigator.vibrate([40, 40, 80]);
+
+  // Fountain coins eruption
+  for (let i = 0; i < 10; i++) {
+    const coin = document.createElement('div');
+    coin.innerText = (i % 2 === 0) ? '💰' : ((i % 3 === 0) ? '💸' : '🪙');
+    coin.style.cssText = `
+      position: absolute;
+      left: ${30 + Math.random() * 40}%;
+      top: 50%;
+      font-size: ${22 + Math.random() * 14}px;
+      animation: coinFountainBurst 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 10;
     `;
-    saveTempleStamp('hunghom');
-  }, 300);
+    stage.appendChild(coin);
+    setTimeout(() => coin.remove(), 1000);
+  }
+
+  env.style.transform = 'scale(1.06)';
+  env.innerHTML = `
+    <div style="font-size:44px; margin-bottom:4px;">🎉💰✨</div>
+    <div style="font-size:18px; font-weight:900; color:#fef08a;">เปิดคลังสมบัติสำเร็จ!</div>
+    <div id="angpaoOdometer" style="font-size:26px; font-weight:900; color:#ffffff; margin:6px 0;">0 HKD</div>
+    <div style="font-size:11.5px; opacity:0.95; line-height:1.5;">
+      เจ้าแม่กวนอิมประทานทรัพย์ขวัญถุง นำพาความมั่งคั่ง ร่ำรวย ปิดยอดขาย และปลดหนี้สินตลอดปี 2027!
+    </div>
+    <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:6px 10px; font-size:11px; margin-top:10px; color:#fef08a; font-weight:700;">
+      ✔️ ประทับตราพาสปอร์ตวัดฮองฮำแล้ว!
+    </div>
+  `;
+
+  // Number Odometer animation up to 888,000,000
+  const odo = document.getElementById('angpaoOdometer');
+  const targets = ['88,888 HKD', '8,888,888 HKD', '88,888,888 HKD', '888,000,000 HKD'];
+  let step = 0;
+  const odoInterval = setInterval(() => {
+    if (step < targets.length) {
+      if (odo) odo.innerText = targets[step];
+      step++;
+    } else {
+      clearInterval(odoInterval);
+      saveTempleStamp('hunghom');
+    }
+  }, 250);
+}
+
+// 2. Shake Chim Phone Motion & Button
+function setupPhoneShakeDetector() {
+  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+    // iOS permission trigger on shake button
+  } else if ('ondevicemotion' in window) {
+    let lastX = 0, lastY = 0, lastZ = 0;
+    let lastTime = 0;
+    window._chimMotionHandler = function(e) {
+      const curTime = Date.now();
+      if ((curTime - lastTime) > 100) {
+        const diffTime = curTime - lastTime;
+        lastTime = curTime;
+        const acc = e.accelerationIncludingGravity;
+        if (!acc) return;
+        const speed = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ) / diffTime * 10000;
+        if (speed > 800) {
+          shakeChimEffect();
+        }
+        lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+      }
+    };
+    window.addEventListener('devicemotion', window._chimMotionHandler);
+  }
 }
 
 function shakeChimEffect() {
-  const icon = document.getElementById('chimIcon');
-  if (icon) icon.style.transform = 'rotate(-25deg) scale(1.15)';
+  const cyl = document.getElementById('chimCylinder');
+  const stage = document.getElementById('chimStage');
+  const btn = document.getElementById('chimShakeBtn');
+  if (!cyl || !stage) return;
+
+  if (navigator.vibrate) navigator.vibrate([30, 40, 50, 40]);
+
+  cyl.style.animation = 'chimVigorousShake 0.6s ease-in-out infinite';
+  if (btn) btn.disabled = true;
+
   setTimeout(() => {
-    if (icon) icon.style.transform = 'rotate(25deg) scale(1.15)';
-  }, 150);
-  setTimeout(() => {
-    if (icon) icon.style.transform = 'rotate(0deg) scale(1)';
+    cyl.style.animation = '';
     const chimList = [
-      { num: 1, title: 'ไม้ที่ 1 (มหาลาภเอก)', text: 'การงานก้าวหน้า ค้าขายได้กำไรสูง คนรอบตัวเมตตา สุขภาพแข็งแรง ไร้โรคา' },
-      { num: 8, title: 'ไม้ที่ 8 (โชคลาภมหาศาล)', text: 'เงินทองไหลมาเทมา มีลาภลอยรับปีใหม่ สิ่งที่ลงทุนไว้จะออกดอกผลเกินคาด' },
-      { num: 28, title: 'ไม้ที่ 28 (ราบรื่นมงคล)', text: 'ความรักสมปรารถนา มิตรภาพแน่นแฟ้น เดินทางปลอดภัย มีผู้ใหญ่อุปถัมภ์' },
-      { num: 99, title: 'ไม้ที่ 99 (ยอดแห่งความสำเร็จ)', text: 'อุปสรรคทั้งปวงคลี่คลาย ปรารถนาสิ่งใดจะได้ดั่งใจหวัง สุขภาพจิตผ่องใส' }
+      { num: 8, title: 'ไม้ที่ 8 (มหาลาภเอก)', text: 'เงินทองไหลมาเทมา มีลาภลอยรับปีใหม่ สิ่งที่ลงทุนไว้จะออกดอกผลเกินคาด ร่ำรวยมั่งคั่ง' },
+      { num: 1, title: 'ไม้ที่ 1 (ยอดแห่งความสำเร็จ)', text: 'การงานก้าวหน้า ค้าขายได้กำไรสูง คนรอบตัวเมตตา สุขภาพแข็งแรง ไร้โรคา ปรารถนาสิ่งใดสำเร็จ' },
+      { num: 28, title: 'ไม้ที่ 28 (มงคลคู่ชะตา)', text: 'ความรักสมปรารถนา มิตรภาพแน่นแฟ้น เดินทางปลอดภัย มีผู้ใหญ่อุปถัมภ์ค้ำชูตลอดทั้งปี' },
+      { num: 99, title: 'ไม้ที่ 99 (ยอดพรอุดมสุข)', text: 'อุปสรรคทั้งปวงคลี่คลาย ปรารถนาสิ่งใดจะได้ดั่งใจหวัง สุขภาพจิตผ่องใส มีแต่ความสุขรื่นรมย์' }
     ];
     const picked = chimList[Math.floor(Math.random() * chimList.length)];
-    const box = document.getElementById('chimBox');
-    if (box) {
-      box.innerHTML = `
-        <div style="font-size:38px; margin-bottom:4px;">📜✨</div>
+
+    stage.innerHTML = `
+      <div style="animation:stickEjectRise 0.6s ease-out;">
+        <div style="font-size:46px; margin-bottom:4px;">📜🎋✨</div>
         <div style="font-size:18px; font-weight:900; color:#b45309;">${picked.title}</div>
-        <div style="font-size:13px; line-height:1.5; color:#78350f; margin:10px 0;">"${picked.text}"</div>
-        <div style="background:#fef3c7; border-radius:8px; padding:6px 10px; font-size:11px; color:#92400e; font-weight:700;">
+        <div style="font-size:12.5px; line-height:1.55; color:#78350f; margin:10px 0; background:#fef3c7; padding:10px 12px; border-radius:12px;">
+          "${picked.text}"
+        </div>
+        <div style="background:#fde68a; border-radius:8px; padding:6px 10px; font-size:11px; color:#92400e; font-weight:800;">
           ✔️ บันทึกตราประทับวัดหวังต้าเซียนลงพาสปอร์ตแล้ว!
         </div>
-      `;
-    }
+      </div>
+    `;
     saveTempleStamp('wts_chim');
+  }, 1000);
+}
+
+// 3. Che Kung: Windmill & 3 Drum Hits
+function spinWindmillEffect() {
+  const fan = document.getElementById('windmillFan');
+  if (fan) {
+    fan.style.transform = 'rotate(1800deg)';
+  }
+  if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+
+  setTimeout(() => {
+    const phase1 = document.getElementById('chekungPhaseWindmill');
+    const phase2 = document.getElementById('chekungPhaseDrum');
+    if (phase1) phase1.style.display = 'none';
+    if (phase2) phase2.style.display = 'block';
+  }, 2200);
+}
+
+function hitDrumStep() {
+  drumHitCounter++;
+  const drumEl = document.getElementById('chekungDrumEl');
+  const light = document.getElementById('drumLight' + drumHitCounter);
+  const subText = document.getElementById('drumSubText');
+  const btn = document.getElementById('drumHitBtn');
+
+  if (drumEl) {
+    drumEl.style.transform = 'scale(0.86)';
+    setTimeout(() => drumEl.style.transform = 'scale(1)', 150);
+  }
+  if (navigator.vibrate) navigator.vibrate([60, 50, 80]);
+
+  if (light) {
+    light.style.background = '#15803d';
+    light.style.color = '#ffffff';
+    light.innerText = '✔️';
+  }
+
+  if (drumHitCounter === 1) {
+    if (subText) subText.innerHTML = '💥 <b>ตึง! (ครั้งที่ 1):</b> สุขภาพร่างกายแข็งแรง ไร้โรคภัยเบียดเบียน';
+  } else if (drumHitCounter === 2) {
+    if (subText) subText.innerHTML = '💥 <b>ตึง! (ครั้งที่ 2):</b> โชคลาภเงินทองหลั่งไหล ธุรกิจการค้ารุ่งเรือง';
+  } else if (drumHitCounter >= 3) {
+    if (subText) subText.innerHTML = '🎉 <b>ตึง! (ครั้งที่ 3):</b> สารส่งถึงสวรรค์ สมปรารถนาทุกประการ!';
+    if (btn) btn.disabled = true;
+
+    setTimeout(() => {
+      const stage = document.getElementById('chekungStage');
+      if (stage) {
+        stage.innerHTML = `
+          <div style="font-size:46px; margin-bottom:4px;">🌀🥁✨</div>
+          <div style="font-size:18px; font-weight:900; color:#15803d;">หมุนกังหัน & ตีกลองฟ้าสำเร็จ!</div>
+          <div style="font-size:12px; color:#166534; margin:8px 0; line-height:1.5;">
+            ท่านแชกงรับรู้คำอธิษฐานแล้ว! พัดสิ่งอัปมงคลออกไป นำพาโชคลาภ อำนาจวาสนา และความแคล้วคลาดกลับประเทศไทย
+          </div>
+          <div style="background:#dcfce7; border-radius:8px; padding:6px 10px; font-size:11px; color:#15803d; font-weight:800;">
+            ✔️ บันทึกตราประทับวัดแชกงหมิวลงพาสปอร์ตแล้ว!
+          </div>
+        `;
+      }
+      saveTempleStamp('chekung');
+    }, 800);
+  }
+}
+
+// 4. Pak Tai: 3D Bagua Reversal
+function spinBaguaEffect() {
+  const mirror = document.getElementById('baguaMirror');
+  const text = document.getElementById('baguaText');
+  if (mirror) mirror.style.animation = 'baguaFlip3D 1.2s ease-in-out forwards';
+  if (navigator.vibrate) navigator.vibrate([50, 60, 100]);
+
+  setTimeout(() => {
+    if (text) text.innerHTML = '✨ <b>พลิกดวงชะตาสำเร็จ!</b> เปลี่ยนร้ายกลายเป็นดี';
+    saveTempleStamp('paktai');
+    completeTempleAction('paktai', 'พลิกดวงชะตาสำเร็จ! กระจกแปดทิศปัดเป่าเคราะห์ร้าย กลืนกินพลังลบ เปลี่ยนศัตรูกลายเป็นมิตร เมตตามหานิยมตลอดปี 2027!');
+  }, 1200);
+}
+
+// 5. Man Mo: Spiral Incense & Brush
+function lightIncenseEffect() {
+  const smoke = document.getElementById('incenseSmoke');
+  const brushBox = document.getElementById('wisdomBrushBox');
+  const btn = document.getElementById('incenseBtn');
+  if (smoke) {
+    smoke.innerHTML = '☁️✨ <b>ธูปขดติดไฟแล้ว!</b> ควันหอมลอยวนส่งถึงสวรรค์';
+    smoke.style.color = '#15803d';
+  }
+  if (brushBox) brushBox.style.display = 'block';
+  if (btn) btn.style.display = 'none';
+  if (navigator.vibrate) navigator.vibrate([40, 40]);
+}
+
+function touchBrushStep() {
+  if (navigator.vibrate) navigator.vibrate([50, 80]);
+  completeTempleAction('manmo', 'สัมผัสพู่กันทองคำสำเร็จ! เสริมสติปัญญา การงานก้าวหน้า สอบแข่งขันได้ดั่งใจ ธุรกิจสำเร็จไร้อุปสรรค!');
+}
+
+// 6. Tin Hau: 3 Ribbon Knots
+function tieRibbonStep() {
+  ribbonKnotStep++;
+  const icon = document.getElementById('ribbonIcon');
+  const knot = document.getElementById('ribbonKnot' + ribbonKnotStep);
+  const text = document.getElementById('ribbonStepText');
+  const btn = document.getElementById('ribbonBtn');
+
+  if (icon) {
+    icon.style.animation = 'ribbonTieAnimation 0.35s ease-out';
+    setTimeout(() => icon.style.animation = '', 350);
+  }
+  if (navigator.vibrate) navigator.vibrate([40, 50]);
+
+  if (knot) {
+    knot.style.background = '#15803d';
+    knot.style.color = '#ffffff';
+    knot.innerText = '✔️';
+  }
+
+  if (ribbonKnotStep === 1) {
+    if (text) text.innerHTML = 'แตะผูกปมที่ 2: คลื่นลมสงบ ไร้อุปสรรคขวากหนาม';
+  } else if (ribbonKnotStep === 2) {
+    if (text) text.innerHTML = 'แตะผูกปมที่ 3: คุ้มครองครอบครัวทั้ง 5 ท่านตลอดปี 2027';
+  } else if (ribbonKnotStep >= 3) {
+    if (btn) btn.disabled = true;
+    completeTempleAction('tinhau', 'ผูกริบบิ้นมงคล 3 ปมสำเร็จ! เจ้าแม่ทับทิมคุ้มครองการเดินทางทั้ง 3 วัน แคล้วคลาดปลอดภัยทุกเส้นทาง!');
+  }
+}
+
+// 7. Repulse Bay: Bridge & Cai Shen Gold
+function walkBridgeStep() {
+  bridgeWalkStep++;
+  const icon = document.getElementById('stepIcon' + bridgeWalkStep);
+  const title = document.getElementById('bridgeStepTitle');
+  const counter = document.getElementById('bridgeStepCounter');
+
+  if (navigator.vibrate) navigator.vibrate([40, 40]);
+
+  if (icon) {
+    icon.style.background = '#1d4ed8';
+    icon.style.color = '#ffffff';
+  }
+
+  if (bridgeWalkStep === 1) {
+    if (title) title.innerHTML = '👣 ก้าวที่ 1 (+อายุขัย 1 วัน)';
+  } else if (bridgeWalkStep === 2) {
+    if (title) title.innerHTML = '👣 ก้าวที่ 2 (+อายุขัย 2 วัน)';
+  } else if (bridgeWalkStep >= 3) {
+    if (title) title.innerHTML = '🎉 ข้ามสะพานสำเร็จ (+อายุขัย 3 วัน 3 คืน!)';
+    setTimeout(() => {
+      const p1 = document.getElementById('repulseBridgePhase');
+      const p2 = document.getElementById('repulseGoldPhase');
+      if (p1) p1.style.display = 'none';
+      if (p2) p2.style.display = 'block';
+    }, 500);
+  }
+}
+
+function swipeGoldStep() {
+  caiShenSwipeStep++;
+  const goldEl = document.getElementById('caiShenGoldEl');
+  const icon = document.getElementById('goldIcon' + caiShenSwipeStep);
+  const title = document.getElementById('goldTitleText');
+  const btn = document.getElementById('goldSwipeBtn');
+
+  if (goldEl) {
+    goldEl.style.transform = 'translateY(-10px) scale(1.1)';
+    setTimeout(() => goldEl.style.transform = 'translateY(0) scale(1)', 200);
+  }
+  if (navigator.vibrate) navigator.vibrate([50, 60]);
+
+  if (icon) {
+    icon.style.background = '#d97706';
+    icon.style.color = '#ffffff';
+    icon.innerText = '✔️';
+  }
+
+  if (caiShenSwipeStep === 1) {
+    if (title) title.innerHTML = '🪙 ลูบครั้งที่ 1: รับทรัพย์เข้ากระเป๋า';
+  } else if (caiShenSwipeStep === 2) {
+    if (title) title.innerHTML = '🪙 ลูบครั้งที่ 2: โชคลาภพูนทวี';
+  } else if (caiShenSwipeStep >= 3) {
+    if (title) title.innerHTML = '💰 ลูบครั้งที่ 3: เงินทองไม่รั่วไหลตลอดปี!';
+    if (btn) btn.disabled = true;
+    completeTempleAction('repulse', 'ข้ามสะพานต่ออายุ (+3 วัน) และลูบรับทองคำไฉ่ซิงเอี้ยสำเร็จ! สุขภาพแข็งแรงยืนยาว เงินทองไหลมาเทมาตลอดปี 2027!');
+  }
+}
+
+// 8. Buddha: Echo Center Meditation
+function startEchoEnergyFlow() {
+  const ring = document.getElementById('echoWaveRing');
+  const icon = document.getElementById('echoCenterIcon');
+  const status = document.getElementById('echoStatusText');
+  const percent = document.getElementById('echoPercentText');
+  const btn = document.getElementById('echoStartBtn');
+
+  if (btn) btn.disabled = true;
+  if (ring) ring.style.animation = 'echoEnergyExpandingWave 1s ease-out infinite';
+
+  let p = 0;
+  const pInterval = setInterval(() => {
+    p += 25;
+    if (navigator.vibrate) navigator.vibrate([30, 30]);
+    if (percent) percent.innerText = 'กำลังดูดซับพลังจักรวาล: ' + p + '%';
+    if (p >= 100) {
+      clearInterval(pInterval);
+      if (icon) icon.innerText = '✨';
+      if (status) status.innerHTML = '🙏 <b>รับคลื่นพลังฟ้าดินเต็มเปี่ยม 100%!</b>';
+      completeTempleAction('buddha', 'ยืนรับพลัง ณ จุดสะท้อนเสียง Echo Center สำเร็จ! ฟ้าดินเปิดทาง จิตใจสงบผ่องใส พลังกายพลังใจเต็มเปี่ยมตลอดปี 2027!');
+    }
   }, 400);
 }
 
-function spinWindmillEffect() {
-  const el = document.getElementById('windmillEl');
-  if (el) el.style.transform = 'rotate(720deg)';
-}
-
-function hitDrumEffect() {
-  const btn = document.getElementById('drumBtn');
-  if (btn) {
-    btn.innerHTML = '<span>🥁</span> <span>ตึง! ตึง! ตึง! (เสียงกลองดังกังวาน)</span>';
-    btn.style.background = '#15803d';
-  }
-  spinWindmillEffect();
-  setTimeout(() => {
-    completeTempleAction('chekung', 'หมุนกังหัน 4 ทิศ & เคาะกลองสำเร็จ! พัดสิ่งไม่ดีออกไป พัดพาโชคลาภและสุขภาพดีเข้าตัว');
-  }, 500);
-}
-
-function spinBaguaEffect() {
-  const el = document.getElementById('baguaEl');
-  if (el) el.style.transform = 'rotate(360deg) scale(1.15)';
-  setTimeout(() => {
-    completeTempleAction('paktai', 'พลิกดวงชะตาสำเร็จ! กระจกแปดทิศปัดเป่าพลังลบ เปลี่ยนร้ายกลายเป็นดี ศัตรูกลายเป็นมิตร');
-  }, 600);
-}
-
-function lightIncenseEffect() {
-  const smoke = document.getElementById('incenseSmoke');
-  if (smoke) smoke.style.opacity = '1';
-  setTimeout(() => {
-    completeTempleAction('manmo', 'จุดธูปขดยักษ์สำเร็จ! คำอธิษฐานส่งตรงถึงสวรรค์ สติปัญญาเฉียบแหลม การงานและธุรกิจราบรื่น');
-  }, 600);
-}
-
-function tieRibbonEffect() {
-  const el = document.getElementById('ribbonEl');
-  if (el) el.style.transform = 'scale(1.2) rotate(15deg)';
-  setTimeout(() => {
-    completeTempleAction('tinhau', 'ผูกริบบิ้นมงคลสำเร็จ! เจ้าแม่ทับทิมคุ้มครองการเดินทาง 3 วันในฮ่องกงให้แคล้วคลาดปลอดภัย');
-  }, 500);
-}
-
-function crossBridgeEffect() {
-  completeTempleAction('repulse', 'ก้าวเท้าซ้ายข้ามสะพานต่ออายุสำเร็จ! อายุยืนยาวขึ้น +3 วัน และลูบถุงทองไฉ่ซิงเอี้ยเข้ากระเป๋าเรียบร้อย');
-}
-
-function receiveEchoEnergyEffect() {
-  const c = document.getElementById('echoCircleEl');
-  if (c) {
-    c.style.transform = 'scale(1.2)';
-    c.style.borderColor = '#eab308';
-    c.style.boxShadow = '0 0 20px rgba(234, 179, 8, 0.6)';
-  }
-  setTimeout(() => {
-    completeTempleAction('buddha', 'รับพลังจักรวาลสมบูรณ์! พลังบวกเต็มเปี่ยมจากองค์พระใหญ่ เติมพลังใจรับปีใหม่ 2027');
-  }, 600);
-}
-
-function completeTempleAction(templeId, message) {
-  const content = document.getElementById('templeRitualContent');
-  if (content) {
-    content.innerHTML = `
-      <div style="font-size:46px; margin-bottom:8px;">🎉✨🙏</div>
-      <div style="font-size:18px; font-weight:900; color:#0f172a; margin-bottom:6px;">ทำพิธีสำเร็จ!</div>
-      <div style="font-size:13px; line-height:1.6; color:#334155; margin-bottom:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px;">
-        ${message}
-      </div>
-      <div style="display:inline-block; background:#dcfce7; color:#15803d; font-size:12px; font-weight:800; padding:4px 12px; border-radius:16px;">
-        ✔️ บันทึกตราประทับลงพาสปอร์ตเรียบร้อย!
-      </div>
-    `;
-  }
+function completeTempleAction(templeId, blessingMessage) {
   saveTempleStamp(templeId);
+  setTimeout(() => {
+    const content = document.getElementById('templeRitualContent');
+    if (!content) return;
+    content.innerHTML = `
+      <div style="font-size:48px; margin-bottom:6px;">🎉✨🙏</div>
+      <div style="font-size:18px; font-weight:900; color:#0f172a; margin-bottom:6px;">ขอพรสำเร็จสมปรารถนา!</div>
+      <div style="font-size:13px; line-height:1.6; color:#475569; margin:10px 0; background:#f8fafc; padding:12px; border-radius:12px; border:1px solid #e2e8f0;">
+        ${blessingMessage}
+      </div>
+      <div style="background:#ffedd5; color:#c2410c; padding:8px 12px; border-radius:10px; font-size:12px; font-weight:800; margin-bottom:12px;">
+        ✔️ บันทึกตราประทับลงในพาสปอร์ตเรียบร้อยแล้ว
+      </div>
+      <button class="action-shortcut-btn" style="width:100%; justify-content:center; background:#ea580c;" onclick="closeTempleRitual()">
+        เปิดดูตราประทับในพาสปอร์ต
+      </button>
+    `;
+  }, 400);
 }
 
-// Initial stamp render on page load
-document.addEventListener('DOMContentLoaded', () => {
-  renderTempleStamps();
-});
+// =====================================================================
 
-
-// ==========================================
-// EXPENSE DIARY & RECEIPT SCANNER (INDEXEDDB)
-// ==========================================
-let currentExpenseCategory = '🍜 อาหาร';
-let currentReceiptDataUrl = '';
-
+// =====================================================================
+// 💱 CURRENCY & PHOTO EXPENSE DIARY LOGIC
+// =====================================================================
 function switchCurrencySubTab(tab) {
   const btnCalc = document.getElementById('currTabBtnCalc');
   const btnDiary = document.getElementById('currTabBtnDiary');
@@ -7868,29 +8577,74 @@ async function saveCurrentExpense() {
   loadAndRenderExpenses();
 }
 
+
+// 📸 DATE-GROUPED EXPENSE DIARY & INDEXEDDB
+// =====================================================================
+let currentDiaryDateFilter = 'all';
+let openedDateGroups = {};
+
+async function dbClearExpenses() {
+  const db = await openExpenseDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('expenses', 'readwrite');
+    const store = tx.objectStore('expenses');
+    store.clear();
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+async function resetAllExpenses() {
+  if (confirm('ต้องการลบประวัติรายจ่ายและรูปถ่ายใบเสร็จทั้งหมดใช่หรือไม่? (การกระทำนี้ไม่สามารถย้อนกลับได้)')) {
+    await dbClearExpenses();
+    currentDiaryDateFilter = 'all';
+    openedDateGroups = {};
+    loadAndRenderExpenses();
+  }
+}
+
+function filterExpensesByDate(dateKey) {
+  currentDiaryDateFilter = dateKey;
+  if (dateKey !== 'all') {
+    openedDateGroups[dateKey] = true;
+  }
+  loadAndRenderExpenses();
+}
+
+function toggleDateGroup(dateKey) {
+  openedDateGroups[dateKey] = !openedDateGroups[dateKey];
+  currentDiaryDateFilter = dateKey;
+  loadAndRenderExpenses();
+}
+
 async function loadAndRenderExpenses() {
   const container = document.getElementById('expenseListContainer');
+  const chipsRow = document.getElementById('expenseDateChipsRow');
   const totalHkdEl = document.getElementById('expenseTotalHkd');
   const totalThbEl = document.getElementById('expenseTotalThb');
   const badgeEl = document.getElementById('expenseCountBadge');
+  const titleEl = document.getElementById('expenseSummaryTitle');
   if (!container) return;
 
   try {
     const list = await dbGetExpenses();
     list.sort((a, b) => b.timestamp - a.timestamp);
 
-    let totalHkd = 0;
-    let totalThb = 0;
+    // Calculate grand totals
+    let grandTotalHkd = 0;
+    let grandTotalThb = 0;
     list.forEach(item => {
-      totalHkd += item.amountHkd || 0;
-      totalThb += item.amountThb || 0;
+      grandTotalHkd += (item.amountHkd || 0);
+      grandTotalThb += (item.amountThb || 0);
     });
 
-    if (totalHkdEl) totalHkdEl.innerText = totalHkd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (totalThbEl) totalThbEl.innerText = `≈ ${totalThb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท`;
-    if (badgeEl) badgeEl.innerText = `${list.length} รายการ`;
+    if (badgeEl) badgeEl.innerText = list.length + ' รายการ';
 
     if (list.length === 0) {
+      if (totalHkdEl) totalHkdEl.innerText = '0.00';
+      if (totalThbEl) totalThbEl.innerText = '≈ 0.00 บาท';
+      if (titleEl) titleEl.innerText = '💰 ยอดรวมรายจ่ายทั้งหมด (ทุกวัน)';
+      if (chipsRow) chipsRow.innerHTML = '';
       container.innerHTML = `
         <div style="background:#ffffff; border:1.5px dashed #cbd5e1; border-radius:14px; padding:24px 16px; text-align:center; color:#64748b; margin-top:10px;">
           <div style="font-size:36px; margin-bottom:8px;">🧾</div>
@@ -7901,24 +8655,104 @@ async function loadAndRenderExpenses() {
       return;
     }
 
-    container.innerHTML = list.map(item => `
-      <div class="expense-card-item">
-        <img src="${item.photo || 'thumb_bg.png'}" class="expense-thumb" onclick="viewFullPhoto('${item.id}')" title="แตะเพื่อดูรูปเต็ม">
-        <div class="expense-details-col" onclick="viewFullPhoto('${item.id}')" style="cursor:pointer;">
-          <div class="expense-title-text">${item.category} • ${item.note}</div>
-          <div class="expense-meta-text">🕒 ${item.dateStr}</div>
+    // Group items by date
+    const dateGroups = {};
+    list.forEach(item => {
+      const dKey = item.dateStr ? item.dateStr.split(' • ')[0] : 'ไม่ระบุวันที่';
+      if (!dateGroups[dKey]) {
+        dateGroups[dKey] = {
+          key: dKey,
+          items: [],
+          totalHkd: 0,
+          totalThb: 0,
+          maxTs: item.timestamp || 0
+        };
+      }
+      dateGroups[dKey].items.push(item);
+      dateGroups[dKey].totalHkd += (item.amountHkd || 0);
+      dateGroups[dKey].totalThb += (item.amountThb || 0);
+      if (item.timestamp && item.timestamp > dateGroups[dKey].maxTs) {
+        dateGroups[dKey].maxTs = item.timestamp;
+      }
+    });
+
+    const sortedGroups = Object.values(dateGroups).sort((a, b) => b.maxTs - a.maxTs);
+
+    // Latest day defaults to OPEN if not explicitly set
+    if (sortedGroups.length > 0) {
+      const latestKey = sortedGroups[0].key;
+      if (openedDateGroups[latestKey] === undefined) {
+        openedDateGroups[latestKey] = true;
+      }
+    }
+
+    // Update Green Summary Card (Grand vs Daily)
+    if (currentDiaryDateFilter === 'all' || !dateGroups[currentDiaryDateFilter]) {
+      if (titleEl) titleEl.innerText = '💰 ยอดรวมรายจ่ายทั้งหมด (ทุกวัน)';
+      if (totalHkdEl) totalHkdEl.innerText = grandTotalHkd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (totalThbEl) totalThbEl.innerText = '≈ ' + grandTotalThb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' บาท';
+    } else {
+      const g = dateGroups[currentDiaryDateFilter];
+      if (titleEl) titleEl.innerText = '📅 ยอดรวมวันที่ ' + g.key;
+      if (totalHkdEl) totalHkdEl.innerText = g.totalHkd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (totalThbEl) totalThbEl.innerText = '≈ ' + g.totalThb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' บาท';
+    }
+
+    // Render Filter Chips Row
+    if (chipsRow) {
+      chipsRow.innerHTML = `
+        <button class="expense-date-chip ${currentDiaryDateFilter === 'all' ? 'active' : ''}" onclick="filterExpensesByDate('all')">
+          🌐 รวมทุกวัน (${grandTotalHkd.toLocaleString('en-US', { maximumFractionDigits: 0 })} HKD)
+        </button>
+      ` + sortedGroups.map(g => `
+        <button class="expense-date-chip ${currentDiaryDateFilter === g.key ? 'active' : ''}" onclick="filterExpensesByDate('${g.key}')">
+          📅 ${g.key} (${g.totalHkd.toLocaleString('en-US', { maximumFractionDigits: 0 })} HKD)
+        </button>
+      `).join('');
+    }
+
+    // Render Date Groups
+    container.innerHTML = sortedGroups.map(g => {
+      const isOpen = !!openedDateGroups[g.key];
+      return `
+        <div class="expense-date-group-card">
+          <div class="expense-date-group-header" onclick="toggleDateGroup('${g.key}')">
+            <div class="expense-date-title">
+              <span>📅</span> <span>${g.key}</span>
+              <span style="font-size:11px; font-weight:700; background:#e2e8f0; color:#475569; padding:2px 7px; border-radius:10px;">${g.items.length} ใบ</span>
+            </div>
+            <div class="expense-date-subtotal">
+              <div>
+                <div class="expense-date-hkd">${g.totalHkd.toLocaleString('en-US', { minimumFractionDigits: 2 })} HKD</div>
+                <div style="font-size:10px; color:#64748b;">≈ ${g.totalThb.toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿</div>
+              </div>
+              <span class="expense-date-chevron">${isOpen ? '▲' : '▼'}</span>
+            </div>
+          </div>
+          <div class="expense-date-group-body" style="display:${isOpen ? 'block' : 'none'};">
+            ${g.items.map(item => `
+              <div class="expense-card-item">
+                <img src="${item.photo || 'thumb_bg.png'}" class="expense-thumb" onclick="viewFullPhoto('${item.id}')" title="แตะเพื่อดูรูปเต็ม">
+                <div class="expense-details-col" onclick="viewFullPhoto('${item.id}')" style="cursor:pointer;">
+                  <div class="expense-title-text">${item.category} • ${item.note}</div>
+                  <div class="expense-meta-text">🕒 ${item.dateStr}</div>
+                </div>
+                <div class="expense-amount-col">
+                  <div class="expense-hkd-text">${(item.amountHkd || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} HKD</div>
+                  <div class="expense-thb-text">≈ ${(item.amountThb || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿</div>
+                </div>
+                <button class="expense-del-btn" onclick="deleteExpenseItem('${item.id}')" title="ลบรายการ">✕</button>
+              </div>
+            `).join('')}
+          </div>
         </div>
-        <div class="expense-amount-col">
-          <div class="expense-hkd-text">${(item.amountHkd || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })} HKD</div>
-          <div class="expense-thb-text">≈ ${(item.amountThb || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿</div>
-        </div>
-        <button class="expense-del-btn" onclick="deleteExpenseItem('${item.id}')" title="ลบรายการ">✕</button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   } catch(e) {
     console.error('Error loading expenses:', e);
   }
 }
+
 
 async function viewFullPhoto(id) {
   try {
@@ -7945,7 +8779,6 @@ async function deleteExpenseItem(id) {
     loadAndRenderExpenses();
   }
 }
-
 </script>
 </body>
 </html>
